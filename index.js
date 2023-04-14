@@ -3,8 +3,8 @@
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 
-const url = "yoyaku.json";	// JSONファイル名
-import fetch from "node-fetch"
+const data = JSON.parse(fs.readFileSync("yoyaku.json"))
+
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -38,7 +38,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {
                     type: "text",
-                    text: fetch(url)
+                    text: fetch(data)
                     .then( response => response.json())
                 }));
             }
