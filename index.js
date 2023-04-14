@@ -6,10 +6,6 @@ const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const url = "yoyaku.json";	// JSONファイル名
 let result;
 
-function formatJSON(){
-	result.innerHTML = html;
-}
-
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -44,7 +40,6 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     type: "text",
                     text: fetch(url)
                     .then( response => response.json())
-                    .then( data => formatJSON(data))
                 }));
             }
         }
