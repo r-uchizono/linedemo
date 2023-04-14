@@ -50,73 +50,71 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
             if (event.message.text == "こんにちは"){
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, {
-    
-    
-                    "type": "bubble",
-                    "header": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
+                events_processed.push(bot.replyMessage(event.replyToken, {   
+                    type: "bubble",
+                    header: {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
                         {
-                        "type": "text",
-                        "text": "○○/○○会場",
-                        "size": "xl",
-                        "position": "relative",
-                        "align": "center",
-                        "color": "#FFFFFF"
+                        type: "text",
+                        text: "○○/○○会場",
+                        size: "xl",
+                        position: "relative",
+                        align: "center",
+                        color: "#FFFFFF"
                         }
                     ]
                     },
-                    "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
+                    body: {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
                         {
-                        "type": "text",
-                        "text": "OOOO年OO月OO日（O）",
-                        "size": "lg",
-                        "margin": "none"
+                        type: "text",
+                        text: "OOOO年OO月OO日（O）",
+                        size: "lg",
+                        margin: "none"
                         },
                         {
-                        "type": "text",
-                        "text": "開催場所　○○:○○～○○:○○",
-                        "size": "sm"
+                        type: "text",
+                        text: "開催場所　○○:○○～○○:○○",
+                        size: "sm"
                         },
                         {
-                        "type": "text",
-                        "text": "場所　○○○○",
-                        "size": "sm"
+                        type: "text",
+                        text: "場所　○○○○",
+                        size: "sm"
                         },
                         {
-                        "type": "text",
-                        "text": "　　　○○○○",
-                        "size": "sm"
+                        type: "text",
+                        text: "　　　○○○○",
+                        size: "sm"
                         }
                     ],
-                    "backgroundColor": "#fbdac8"
+                    backgroundColor: "#fbdac8"
                     },
-                    "footer": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
+                    footer: {
+                    type: "box",
+                    layout: "vertical",
+                    contents: [
                         {
-                        "type": "button",
-                        "action": {
-                            "type": "postback",
-                            "label": "イベント予約>>",
-                            "data": "yoyaku"
+                        type: "button",
+                        action: {
+                            type: "postback",
+                            label: "イベント予約>>",
+                            data: "yoyaku"
                         },
-                        "color": "#FFFFFF"
+                        color: "#FFFFFF"
                         }
                     ]
                     },
-                    "styles": {
-                    "header": {
-                        "backgroundColor": "#f3981d"
+                    styles: {
+                    header: {
+                        backgroundColor: "#f3981d"
                     },
-                    "footer": {
-                        "backgroundColor": "#f3981d"
+                    footer: {
+                        backgroundColor: "#f3981d"
                     }
                     }
                 
