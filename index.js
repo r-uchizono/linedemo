@@ -4,7 +4,7 @@ const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 
 const url = "yoyaku.json";	// JSONファイル名
-let result;
+import fetch from "node-fetch"
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
