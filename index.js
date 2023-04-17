@@ -135,10 +135,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
-    /*Promise.all(events_processed).then(
+    Promise.all(events_processed).then(
         (response) => {
             console.log(`${response.length} event(s) processed.`);
         }
     );
-    */
+    
 });
