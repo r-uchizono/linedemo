@@ -3,7 +3,7 @@
 //import fetch from 'node-fetch';
 //import server from "express";
 //import line from '@line/bot-sdk';
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 
