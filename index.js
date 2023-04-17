@@ -32,7 +32,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-      fetch("yoyaku.json")
+     let url = 'yoyaku.json';
+      fetch(url)
       .then(res => res.json)
       .then(data => {
           req.body.events.forEach((event) => {
