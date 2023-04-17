@@ -29,22 +29,22 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
     let events_processed = [];
 
-    // fetch("yoyaku.json")
-    // .then(res => res.json)
-    // .then(data => {
-    //     req.body.events.forEach((event) => {
-    //         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-    //         if (event.type == "message" && event.message.type == "text"){
-    //             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-    //             if (event.message.text == "こんにちは"){
-    //                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-    //                 events_processed.push(bot.replyMessage(event.replyToken, data));
-    //             }
-    //         }
-    //     });
-    // })
+     fetch("yoyaku.json")
+     .then(res => res.json)
+     .then(data => {
+         req.body.events.forEach((event) => {
+             // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+             if (event.type == "message" && event.message.type == "text"){
+                 // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
+                 if (event.message.text == "こんにちは"){
+                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                     events_processed.push(bot.replyMessage(event.replyToken, data));
+                 }
+             }
+         });
+     })
     // イベントオブジェクトを順次処理。
-    req.body.events.forEach((event) => {
+    /*req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
@@ -126,6 +126,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             }
         }
     });
+    */
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
