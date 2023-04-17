@@ -2,8 +2,8 @@ import fetch from 'node-fetch'
 
 // -----------------------------------------------------------------------------
 // モジュールのインポート
-const server = require("express")();
-const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+const server = "express"();
+const line = "@line/bot-sdk"; // Messaging APIのSDKをインポート
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
