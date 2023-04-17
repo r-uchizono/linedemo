@@ -3,9 +3,6 @@
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 
-import fetch from "node-fetch"
-
-
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -19,6 +16,8 @@ server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config);
+
+import fetch from "node-fetch"
 
 // -----------------------------------------------------------------------------
 // ルーター設定
