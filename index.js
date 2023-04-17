@@ -5,7 +5,7 @@ import express from 'express';
 //import line from '@line/bot-sdk';
 
 import fetch from 'node-fetch';
-const server = express;
+const server = express();
 import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 
 
