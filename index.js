@@ -1,11 +1,12 @@
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 //import fetch from 'node-fetch';
-//import server from "express";
+//import server from 'express'; 
 //import line from '@line/bot-sdk';
-//const fetch = require('node-fetch-commonjs');
-const server = require("express")();
-const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+
+import fetch from 'node-fetch';
+//const server = require("express")();
+import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 
 
 // -----------------------------------------------------------------------------
@@ -20,37 +21,37 @@ const line_config = {
 server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
-const bot = new line.Client(line_config);
+const bot = new Client(line_config);
 
 // -----------------------------------------------------------------------------
 // ルーター設定
-server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
+server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-    //  fetch("yoyaku.json")
-    //  .then(res => res.json)
-    //  .then(data => {
-    //      req.body.events.forEach((event) => {
-    //          // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-    //          if (event.type == "message" && event.message.type == "text"){
-    //              // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-    //              if (event.message.text == "こんにちは"){
-    //                  // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-    //                  events_processed.push(bot.replyMessage(event.replyToken, data));
-    //              }
-    //          }
-    //      });
-    //  }).then(promise => Promise.all(events_processed).then(
-    //     (response) => {
-    //         console.log(`${response.length} event(s) processed.`);
-    //     }
-    // ));
+      fetch("yoyaku.json")
+      .then(res => res.json)
+      .then(data => {
+          req.body.events.forEach((event) => {
+              // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+              if (event.type == "message" && event.message.type == "text"){
+                  // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
+                  if (event.message.text == "こんにちは"){
+                      // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                      events_processed.push(bot.replyMessage(event.replyToken, data));
+                  }
+              }
+          });
+      }).then(promise => Promise.all(events_processed).then(
+         (response) => {
+             console.log(`${response.length} event(s) processed.`);
+         }
+     ));
     // イベントオブジェクトを順次処理。
-    req.body.events.forEach((event) => {
+    /*req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
@@ -132,7 +133,7 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             }
         }
     });
-    
+    */
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
