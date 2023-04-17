@@ -65,38 +65,8 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             color: "#FFFFFF"
                             }
                         ]
-                        },
-                            
-
-                            body: {
-                                type: "box",
-                                layout: "vertical",
-                                contents: [
-                                    {
-                                    type: "text",
-                                    text: "OOOO年OO月OO日（O）",
-                                    size: "lg",
-                                    margin: "none"
-                                    },
-                                    {
-                                    type: "text",
-                                    text: "開催場所　○○:○○～○○:○○",
-                                    size: "sm"
-                                    },
-                                    {
-                                    type: "text",
-                                    text: "場所　○○○○",
-                                    size: "sm"
-                                    },
-                                    {
-                                    type: "text",
-                                    text: "　　　○○○○",
-                                    size: "sm"
-                                    }
-                                ],
-                                backgroundColor: "#fbdac8"
-                            },
-                           
+                    },
+                                                     
                 }));
             }
         }
