@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@line/bot-sdk": "^7.5.2",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-fetch-commonjs": "^3.2.4"
   }
 }
