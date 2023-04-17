@@ -52,13 +52,50 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, {   
 
+                    header: {
+                        type: "box",
+                        layout: "vertical",
+                        contents: [
+                            {
                             type: "text",
                             text: "○○/○○会場",
                             size: "xl",
                             position: "relative",
                             align: "center",
                             color: "#FFFFFF"
+                            }
+                        ]
+                        },
                             
+
+                            body: {
+                                type: "box",
+                                layout: "vertical",
+                                contents: [
+                                    {
+                                    type: "text",
+                                    text: "OOOO年OO月OO日（O）",
+                                    size: "lg",
+                                    margin: "none"
+                                    },
+                                    {
+                                    type: "text",
+                                    text: "開催場所　○○:○○～○○:○○",
+                                    size: "sm"
+                                    },
+                                    {
+                                    type: "text",
+                                    text: "場所　○○○○",
+                                    size: "sm"
+                                    },
+                                    {
+                                    type: "text",
+                                    text: "　　　○○○○",
+                                    size: "sm"
+                                    }
+                                ],
+                                backgroundColor: "#fbdac8"
+                            },
                            
                 }));
             }
