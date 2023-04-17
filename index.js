@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 const server = require("express")();
@@ -16,8 +18,6 @@ server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config);
-
-import fetch from "node-fetch"
 
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -41,7 +41,11 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                  }
              }
          });
-     })
+     }).then(promise => Promise.all(events_processed).then(
+        (response) => {
+            console.log(`${response.length} event(s) processed.`);
+        }
+    ));
     // イベントオブジェクトを順次処理。
     /*req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
@@ -128,9 +132,10 @@ server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     */
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
-    Promise.all(events_processed).then(
+    /*Promise.all(events_processed).then(
         (response) => {
             console.log(`${response.length} event(s) processed.`);
         }
     );
+    */
 });
