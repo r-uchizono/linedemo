@@ -7,7 +7,6 @@
 const server = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 
-
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
