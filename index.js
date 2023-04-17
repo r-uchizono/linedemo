@@ -1,10 +1,11 @@
 // -----------------------------------------------------------------------------
 // モジュールのインポート
-//import server from "express"
+//import fetch from 'node-fetch';
+//import server from "express";
 //import line from '@line/bot-sdk';
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 const server = require("express")();
-const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
+import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -18,11 +19,11 @@ const line_config = {
 server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
-const bot = new line.Client(line_config);
+const bot = new Client(line_config);
 
 // -----------------------------------------------------------------------------
 // ルーター設定
-server.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
+server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
