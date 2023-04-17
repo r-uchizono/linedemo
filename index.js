@@ -1,11 +1,11 @@
 // -----------------------------------------------------------------------------
 // モジュールのインポート
 //import fetch from 'node-fetch';
-//import server from 'express'; 
+import express from 'express'; 
 //import line from '@line/bot-sdk';
 
 import fetch from 'node-fetch';
-//const server = require("express")();
+const server = express;
 import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 
 
