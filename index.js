@@ -60,9 +60,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       // 最後にchangeArray[0]ではなくchangeArrayでpushすると
                       // 更新されたデータだけ配列型で入ってしまう。
                       
-                      bufferData = newData;
-                    //bufferData.header.text = '鹿児島会場'
-                //    bufferData.contents.header.contents.text = '鹿児島会場'
+                    bufferData = newData;
                 //}
 
 
