@@ -42,6 +42,9 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
+
+
+
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
@@ -49,18 +52,20 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(data)
 
                 //if (鹿児島だったら) {
-                    console.log(data.text);
-                    var changeData = data.filter(function(item, index){
-                        if (item.text == '○○/○○会場')  return true;
-                      });
-                     changeData.text = '鹿児島会場';
+                    console.log(data.altText);
+                    console.log(data.contents);
+
+                    // var changeData = data.filter(function(item, index){
+                    //     if (item.text == '○○/○○会場')  return true;
+                    //   });
+                    //  changeData.text = '鹿児島会場';
                       
-                      newData.push(changeData);
-                      // [注意]
-                      // 最後にchangeArray[0]ではなくchangeArrayでpushすると
-                      // 更新されたデータだけ配列型で入ってしまう。
+                    //   newData.push(changeData);
+                    //   // [注意]
+                    //   // 最後にchangeArray[0]ではなくchangeArrayでpushすると
+                    //   // 更新されたデータだけ配列型で入ってしまう。
                       
-                    data = newData;
+                    // data = newData;
                 //}
 
 
