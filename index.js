@@ -1,8 +1,6 @@
 // -----------------------------------------------------------------------------
 // モジュールのインポート
-//import fetch from 'node-fetch';
 import express from 'express'; 
-//import line from '@line/bot-sdk';
 
 import fetch from 'node-fetch';
 const server = express();
@@ -32,8 +30,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-     //const fs = require('fs');
-
     //  const url = 'https://github.com/r-uchizono/linedemo/blob/934b72beb46fcee856009c2e3083a46c4e0f4eeb/yoyaku.json';
     //   fetch(url)
     //   .then(res => res.json)
@@ -46,6 +42,9 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
+
+                bufferData.header.text = '鹿児島会場';
+
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
