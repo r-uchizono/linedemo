@@ -45,7 +45,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
 
-                dataJSON.header.contents.text = '鹿児島会場';
+                dataJSON['header']['text'] = '鹿児島会場'
 
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
