@@ -33,33 +33,41 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
      let events_processed = [];
 
      //const fs = require('fs');
-     
 
-     // カレントディレクトリ
-     const path = process.cwd();
-     // ファイル名の一覧
-     const filenames = fs.readdirSync(path);
-     console.log(filenames);
+    //  const url = 'https://github.com/r-uchizono/linedemo/blob/934b72beb46fcee856009c2e3083a46c4e0f4eeb/yoyaku.json';
+    //   fetch(url)
+    //   .then(res => res.json)
+    //   .then(data => {
+    req.body.events.forEach((event) => {
+        // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+        if (event.type == "message" && event.message.type == "text"){
+            // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
+            if (event.message.text == "こんにちは"){
+                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                //データを取りだす
+                const bufferData = fs.readFileSync('yoyaku.json')
+                // データを文字列に変換
+                const dataJSON = bufferData.toString()
+                //JSONのデータをJavascriptのオブジェクトに
+                const data = JSON.parse(dataJSON)
+                console.log(data)
+                events_processed.push(bot.replyMessage(event.replyToken, data));
+            }
+        }
+    });
 
-     const url = 'https://github.com/r-uchizono/linedemo/blob/934b72beb46fcee856009c2e3083a46c4e0f4eeb/yoyaku.json';
-      fetch(url)
-      .then(res => res.json)
-      .then(data => {
-          req.body.events.forEach((event) => {
-              // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-              if (event.type == "message" && event.message.type == "text"){
-                  // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-                  if (event.message.text == "こんにちは"){
-                      // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                      events_processed.push(bot.replyMessage(event.replyToken, data));
-                  }
-              }
-          });
-      }).then(promise => Promise.all(events_processed).then(
-         (response) => {
-             console.log(`${response.length} event(s) processed.`);
-         }
-     ));
+    // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
+    Promise.all(events_processed).then(
+        (response) => {
+            console.log(`${response.length} event(s) processed.`);
+        }
+    );
+
+    //   }).then(promise => Promise.all(events_processed).then(
+    //      (response) => {
+    //          console.log(`${response.length} event(s) processed.`);
+    //      }
+    //  ));
     // イベントオブジェクトを順次処理。
     /*req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
