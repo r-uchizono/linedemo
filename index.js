@@ -8,7 +8,6 @@ import fetch from 'node-fetch';
 const server = express();
 import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 
-
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -32,7 +31,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-     const url = JSON.parse('yoyaku.json');
+     const url = 'https://linedemo.onrender.com/yoyaku.json';
       fetch(url)
       .then(res => res.json)
       .then(data => {
