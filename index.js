@@ -55,6 +55,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     console.log(data.contents.header);
                     console.log(data.contents.header.contents);
 
+                    data.contents.header.contents.text = '鹿児島会場'
+
                     // var changeData = data.filter(function(item, index){
                     //     if (item.text == '○○/○○会場')  return true;
                     //   });
