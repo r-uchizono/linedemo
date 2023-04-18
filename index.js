@@ -42,11 +42,11 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
+
+                bufferData.header.contents.text = '鹿児島会場'
+
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
-
-                dataJSON['header']['contents']['text'] = '鹿児島会場'
-
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
                 console.log(data)
