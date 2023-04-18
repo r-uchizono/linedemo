@@ -38,14 +38,14 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            if (event.message.text == "こんにちは"){
+            if (event.message.text == "イベント情報"){
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
 
-                dataJSON['header']['text'] = '鹿児島会場'
+                dataJSON['header']['contents']['text'] = '鹿児島会場'
 
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
