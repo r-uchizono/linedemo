@@ -45,7 +45,18 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 //if (鹿児島だったら) {
                     console.log(bufferData.header.text);
-                    bufferData.header.text = '鹿児島会場'
+                    var changeData = bufferData.filter(function(item, index){
+                        if (item.text == '○○/○○会場') return true;
+                      });
+                      changeData[0].header.text = '鹿児島会場';
+                      
+                      newData.push(changeArray[0]);
+                      // [注意]
+                      // 最後にchangeArray[0]ではなくchangeArrayでpushすると
+                      // 更新されたデータだけ配列型で入ってしまう。
+                      
+                      bufferData = newData;
+                    //bufferData.header.text = '鹿児島会場'
                 //    bufferData.contents.header.contents.text = '鹿児島会場'
                 //}
 
