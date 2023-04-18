@@ -55,9 +55,9 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     console.log(data.contents.header);
                     console.log(data.contents.header.contents);
 
-                    data.contents.header.contents.text = '鹿児島会場'
+                    data.contents.header.contents[0].text = '鹿児島会場'
 
-                    console.log(data.contents.header.contents.text);
+                    console.log(data.contents.header.contents[0].text);
                     console.log(data.contents.header.contents);
 
                     // var changeData = data.filter(function(item, index){
