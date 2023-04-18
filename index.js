@@ -44,7 +44,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const bufferData = fs.readFileSync('yoyaku.json')
 
                 //if (鹿児島だったら) {
-                    console.log(bufferData.header.text);
+                    console.log(bufferData[0].text);
                     var changeData = bufferData.filter(function(item, index){
                         if (item.text == '○○/○○会場') return true;
                       });
