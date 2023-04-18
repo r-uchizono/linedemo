@@ -43,7 +43,12 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
 
-                bufferData.contents.header.contents.text = '鹿児島会場'
+                //if (鹿児島だったら) {
+                    console.log(bufferData.header.text);
+                    bufferData.header.text = '鹿児島会場'
+                //    bufferData.contents.header.contents.text = '鹿児島会場'
+                //}
+
 
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
