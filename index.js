@@ -31,7 +31,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-     const url = 'https://linedemo.onrender.com/yoyaku.json';
+     const url = 'https://github.com/r-uchizono/linedemo/blob/934b72beb46fcee856009c2e3083a46c4e0f4eeb/yoyaku.json';
       fetch(url)
       .then(res => res.json)
       .then(data => {
