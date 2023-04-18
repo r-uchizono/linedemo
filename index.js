@@ -48,20 +48,20 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const data = JSON.parse(dataJSON)
                 console.log(data)
 
-                // if (鹿児島だったら) {
-                //     console.log(data.text);
-                //     var changeData = data.filter(function(item, index){
-                //         if (item.text == '○○/○○会場') return true;
-                //       });
-                //      // text = '鹿児島会場';
+                //if (鹿児島だったら) {
+                    console.log(data.text);
+                    var changeData = data.filter(function(item, index){
+                        if (item.text == '○○/○○会場')  return true;
+                      });
+                     changeData.text = '鹿児島会場';
                       
-                //       newData.push(changeArray[0]);
-                //       // [注意]
-                //       // 最後にchangeArray[0]ではなくchangeArrayでpushすると
-                //       // 更新されたデータだけ配列型で入ってしまう。
+                      newData.push(changeData);
+                      // [注意]
+                      // 最後にchangeArray[0]ではなくchangeArrayでpushすると
+                      // 更新されたデータだけ配列型で入ってしまう。
                       
-                //     data = newData;
-                // }
+                    data = newData;
+                //}
 
 
 
