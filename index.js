@@ -7,6 +7,7 @@ import express from 'express';
 import fetch from 'node-fetch';
 const server = express();
 import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
+import fs from 'fs';
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -31,7 +32,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-     const fs = require('fs');
+     //const fs = require('fs');
+     
 
      // カレントディレクトリ
      const path = process.cwd();
