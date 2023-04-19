@@ -59,13 +59,13 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         }
     });
 
-    function doPost(e) {
+    doPost((e) => {
         // スクリプトプロパティのオブジェクトを格納
-    //   PropertiesService.getScriptProperties().setProperties({
-    //     "TOKEN": "{チャネルアクセストークン}",
-    //     "USERID": '{ユーザーID}',
-    //     "REPLYURL": "https://api.line.me/v2/bot/message/reply"
-    //   });
+       PropertiesService.getScriptProperties().setProperties({
+         "TOKEN": "nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
+         "USERID": '1660859088',
+         "REPLYURL": "https://api.line.me/v2/bot/message/reply"
+       });
         // スクリプトプロパティのオブジェクトを取得
         const prop = PropertiesService.getScriptProperties().getProperties();
         // レスポンス取得
@@ -89,7 +89,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 "notificationDisabled": false // trueだとユーザーに通知されない
             }),
         });
-    }
+    });
 
 
 
