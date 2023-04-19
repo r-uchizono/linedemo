@@ -5,6 +5,7 @@ import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをイ
 import fs from 'fs';
 import pg from 'pg';
 import QRCode from 'qrcode'; 
+import { error } from 'console';
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -55,13 +56,11 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             }
 
 
-            else if (event.message.text == "会員ID"){    
-                const url = '123456789'                
-                QRCode.toDataURL('test qr code sample.', (error, url) => {
-                    if (error) {
-                      console.log(url);  
-                      console.log(error);
-                      return;
+            else if (event.message.text == "会員ID"){                   
+                QRCode.toDataURL('123456789!ui', function (err, url) {
+                    if(error){
+                        console.log(err);
+                        return;
                     }
                     console.log(url);
                   });
