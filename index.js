@@ -59,7 +59,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         }
     });
 
-    doPost((e) => {
+    server.post((e) => {
         // スクリプトプロパティのオブジェクトを格納
        PropertiesService.getScriptProperties().setProperties({
          "TOKEN": "nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
