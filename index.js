@@ -43,20 +43,19 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const data = JSON.parse(dataJSON)
                 console.log(data)
 
-                //if (鹿児島だったら) {
-                    console.log(data.contents.header);
-                    console.log(data.contents.header.contents);
+                console.log(data.contents.header);
+                console.log(data.contents.header.contents);
 
-                    data.contents.header.contents[0].text = '鹿児島会場'
+                data.contents.header.contents[0].text = '鹿児島会場'
 
-                    console.log(data.contents.header.contents[0].text);
-                    console.log(data.contents.header.contents);
+                console.log(data.contents.header.contents[0].text);
+                console.log(data.contents.header.contents);
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
         }
 
-        console.log(JSON.parse(event));
+        console.log(JSON.parse(event.toString()));
 
         if(event.type != "message"){      
           const message = {
