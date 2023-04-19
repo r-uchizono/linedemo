@@ -44,7 +44,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
-        } else if (event.type == "postback" && event.postback.data.split('&')[0] == "yoyaku"){
+        } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
             console.log(event.source.userId);
             console.log(event.postback.params.datetime);
             events_processed.push(bot.replyMessage(event.replyToken, '予約が完了しました'));
