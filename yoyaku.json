@@ -53,9 +53,9 @@
             "type": "button",
             "action": {
               "type": "datetimepicker",
-              "label": "日時を選択してください",
-              "data": "yoyaku",
-              "mode": "datetime",
+              "label": "来場予定の時間を選択してください",
+              "data": "yoyaku&event_id=100",
+              "mode": "time",
               "initial": "2023-04-01t00:00",
               "max": "2025-03-31t23:59",
               "min": "2020-04-01t00:00"
