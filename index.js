@@ -57,62 +57,22 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
         }
-
-        const prop = PropertiesService.getScriptProperties().getProperties();
-        // レスポンス取得
-        const responseLine = e.postData.getDataAsString();
-        // JSON形式に変換する
-      var resDatetime = JSON.parse(responseLine).events[0].postback.params.datetime;
-      var replyToken = JSON.parse(responseLine).events[0]['replyToken'];
-    
-        UrlFetchApp.fetch(prop.REPLYURL, {
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + prop.TOKEN, // スクリプトプロパティにトークンは事前に追加しておく
-            },
-            'method': 'POST',
-            'payload': JSON.stringify({
-          'replyToken': replyToken,
-                "messages": [{
-                    "type": "text",
-                    "text": resDatetime // レスポンスを送る
-                }],
-                "notificationDisabled": false // trueだとユーザーに通知されない
-            }),
-        });
     });
 
-    // server.post((e) => {
-    //     // スクリプトプロパティのオブジェクトを格納
-    //    PropertiesService.getScriptProperties().setProperties({
-    //      "TOKEN": "nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
-    //      "USERID": '1660859088',
-    //      "REPLYURL": "https://api.line.me/v2/bot/message/reply"
-    //    });
-    //     // スクリプトプロパティのオブジェクトを取得
-    //     const prop = PropertiesService.getScriptProperties().getProperties();
-    //     // レスポンス取得
-    //     const responseLine = e.postData.getDataAsString();
-    //     // JSON形式に変換する
-    //   var resDatetime = JSON.parse(responseLine).events[0].postback.params.datetime;
-    //   var replyToken = JSON.parse(responseLine).events[0]['replyToken'];
+    app.post('/ore', async (req, res) => {
+
+        const weo = req.body.events[0];
+        if(weo.type === 'postback'){
+                console.log(weo.postback.params.date);
+                const mes = `${weo.postback.params.date}ね。その日は予定があるんだ、ごめんね。`;
+                const smo = [{type: 'text', text: mes}];
+                const res = await reply({replyToken: weo.replyToken, messages: smo});
+                console.log(res.status);
+                return;
+            }
     
-    //     UrlFetchApp.fetch(prop.REPLYURL, {
-    //         'headers': {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': 'Bearer ' + prop.TOKEN, // スクリプトプロパティにトークンは事前に追加しておく
-    //         },
-    //         'method': 'POST',
-    //         'payload': JSON.stringify({
-    //       'replyToken': replyToken,
-    //             "messages": [{
-    //                 "type": "text",
-    //                 "text": resDatetime // レスポンスを送る
-    //             }],
-    //             "notificationDisabled": false // trueだとユーザーに通知されない
-    //         }),
-    //     });
-    // });
+         /*色々省略*/
+    });
 
 
 
