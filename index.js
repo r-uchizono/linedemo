@@ -55,7 +55,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             }
         }
 
-        console.log(JSON.parse(event.toString()));
+        console.log(event.type);
+        console.log(event.postback.data);
 
         if(event.type != "message"){      
           const message = {
