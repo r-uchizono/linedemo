@@ -59,6 +59,40 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         }
     });
 
+    function doPost(e) {
+        // スクリプトプロパティのオブジェクトを格納
+    //   PropertiesService.getScriptProperties().setProperties({
+    //     "TOKEN": "{チャネルアクセストークン}",
+    //     "USERID": '{ユーザーID}',
+    //     "REPLYURL": "https://api.line.me/v2/bot/message/reply"
+    //   });
+        // スクリプトプロパティのオブジェクトを取得
+        const prop = PropertiesService.getScriptProperties().getProperties();
+        // レスポンス取得
+        const responseLine = e.postData.getDataAsString();
+        // JSON形式に変換する
+      var resDatetime = JSON.parse(responseLine).events[0].postback.params.datetime;
+      var replyToken = JSON.parse(responseLine).events[0]['replyToken'];
+    
+        UrlFetchApp.fetch(prop.REPLYURL, {
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + prop.TOKEN, // スクリプトプロパティにトークンは事前に追加しておく
+            },
+            'method': 'POST',
+            'payload': JSON.stringify({
+          'replyToken': replyToken,
+                "messages": [{
+                    "type": "text",
+                    "text": resDatetime // レスポンスを送る
+                }],
+                "notificationDisabled": false // trueだとユーザーに通知されない
+            }),
+        });
+    }
+
+
+
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
     Promise.all(events_processed).then(
         (response) => {
