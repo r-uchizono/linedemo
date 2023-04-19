@@ -33,28 +33,21 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
             if (event.message.text == "イベント情報"){
-                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
-
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
                 console.log(data)
-
-                console.log(data.contents.header);
-                console.log(data.contents.header.contents);
-
                 data.contents.header.contents[0].text = '鹿児島会場'
-
-                console.log(data.contents.header.contents[0].text);
-                console.log(data.contents.header.contents);
-
+                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
         } else if (event.type == "postback" && event.postback.data == "yoyaku"){
+            console.log(event.source.userId);
             console.log(event.postback.params.datetime);
+            events_processed.push(bot.replyMessage(event.replyToken, '予約が完了しました'));
         }
         else {
             const message = {
