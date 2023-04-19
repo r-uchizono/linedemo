@@ -63,8 +63,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       console.log(url);
                       return;
                     }
-                    console.log(url);
-                    console.log(url);
 
                     let message = {
                         type: 'imaga',
