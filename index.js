@@ -67,6 +67,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             .then(res => console.log(res.rows[0]))
             .catch(e => console.error(e.stack))
 
+            client.end();
+
   
             let message = {
                 type: 'text',
