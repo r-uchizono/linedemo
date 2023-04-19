@@ -64,6 +64,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       return;
                     }
                     console.log(url);
+                    console.log(error);
                   });
                 events_processed.push(bot.replyMessage(event.replyToken, url));
             }
