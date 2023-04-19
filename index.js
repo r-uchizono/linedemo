@@ -62,7 +62,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             text: 'Hello World!'
           };
           
-          bot.replyMessage(event.replayToken, message)
+          events_processed.push(bot.replyMessage(event.replyToken, message));
     });
 
 
