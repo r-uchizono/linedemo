@@ -58,30 +58,9 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             }
         }      
           const message = {
-            "destination": "@387bjgcs",
-            "events": [
-                {
-                    "replyToken": "nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
-                    "type": "postback",
-                    "mode": "active",
-                    "source": {
-                        "userId": ".1660859088.",
-                        "type": "user"
-                    },
-                    "timestamp": 1513669370317,
-                    "webhookEventId": "01FZ74A0TDDPYRVKNK77XKC3ZR",
-                    "deliveryContext": {
-                        "isRedelivery": false
-                    },
-                    "postback": {
-                        "data": "yoyaku",
-                        "params": {
-                            "datetime": "2017-12-25T01:00"
-                        }
-                    }
-                }
-            ]
-        };
+            type: 'text',
+            text: 'Hello World!'
+          };
           
           bot.replyMessage(event.replayToken, message)
     });
