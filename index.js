@@ -56,36 +56,64 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
-        }
+        }      
+          const message = {
+            "destination": "@387bjgcs",
+            "events": [
+                {
+                    "replyToken": "nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
+                    "type": "postback",
+                    "mode": "active",
+                    "source": {
+                        "userId": ".1660859088.",
+                        "type": "user"
+                    },
+                    "timestamp": 1513669370317,
+                    "webhookEventId": "01FZ74A0TDDPYRVKNK77XKC3ZR",
+                    "deliveryContext": {
+                        "isRedelivery": false
+                    },
+                    "postback": {
+                        "data": "yoyaku",
+                        "params": {
+                            "datetime": "2017-12-25T01:00"
+                        }
+                    }
+                }
+            ]
+        };
+          
+          bot.replyMessage(event.replayToken, message)
     });
 
 
-    function doPost(e) {
-        /* レスポンスを取得 */
-        const responseLine = e.postData.getDataAsString();
-        /* JSON形式に変換する */
-        const responseLineJson = JSON.parse(responseLine).events[0];
+
+    // function doPost(e) {
+    //     /* レスポンスを取得 */
+    //     const responseLine = e.postData.getDataAsString();
+    //     /* JSON形式に変換する */
+    //     const responseLineJson = JSON.parse(responseLine).events[0];
     
-        /* スクリプトプロパティのオブジェクトを取得 */
-        const prop = PropertiesService.getScriptProperties().getProperties();
+    //     /* スクリプトプロパティのオブジェクトを取得 */
+    //     const prop = PropertiesService.getScriptProperties().getProperties();
     
-        /* レスポンスをLINEに送る */
-        UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', {
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + prop.TOKEN, // スクリプトプロパティにトークンは事前に追加しておく
-            },
-            'method': 'POST',
-            'payload': JSON.stringify({
-                "to": prop.DEBUGID, // スクリプトプロパティに送信先IDは事前に追加しておく
-                "messages": [{
-                    "type": "text",
-                    "text": responseLine // レスポンスを送る
-                }],
-                "notificationDisabled": false // trueだとユーザーに通知されない
-            }),
-        });
-    }
+    //     /* レスポンスをLINEに送る */
+    //     UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', {
+    //         'headers': {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': 'Bearer ' + prop.TOKEN, // スクリプトプロパティにトークンは事前に追加しておく
+    //         },
+    //         'method': 'POST',
+    //         'payload': JSON.stringify({
+    //             "to": prop.DEBUGID, // スクリプトプロパティに送信先IDは事前に追加しておく
+    //             "messages": [{
+    //                 "type": "text",
+    //                 "text": responseLine // レスポンスを送る
+    //             }],
+    //             "notificationDisabled": false // trueだとユーザーに通知されない
+    //         }),
+    //     });
+    // }
 
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
