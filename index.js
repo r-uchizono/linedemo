@@ -56,7 +56,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             }
 
 
-            else if (event.message.text == "会員ID"){                   
+            else if (event.message.text == "会員ID"){                  
                 QRCode.toDataURL('test qr code sample.', (error, url) => {
                     if (error) {
                       console.log(error);
@@ -65,13 +65,14 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
                     console.log(url);
                     console.log(url);
-                  });
-                let message = {
-                    type: 'imaga',
-                    originalContentUrl: url,
-                    previewImageUrl: url
-                }
-                events_processed.push(bot.replyMessage(event.replyToken, message));
+
+                    let message = {
+                        type: 'imaga',
+                        originalContentUrl: url,
+                        previewImageUrl: url
+                    }
+                    events_processed.push(bot.replyMessage(event.replyToken, message));
+                });
             }
 
 
