@@ -59,7 +59,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             // DB登録処理
             client.connect()
             const query = {
-                text: 'INSERT INTO users(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
+                text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
                 values: [event.postback.data, event.source.userId, event.postback.params.time],
             }
             client.query(query)
