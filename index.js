@@ -53,7 +53,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
-            console.log(event.postback.data);
+            console.log(event.postback.data.split('=')[1]);
             console.log(event.source.userId);
             console.log(event.postback.params.time);
   
@@ -61,7 +61,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             client.connect()
             const query = {
                 text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
-                values: [event.postback.data, event.source.userId, event.postback.params.time],
+                values: [event.postback.data.split('=')[1], event.source.userId, event.postback.params.time],
             }
             client.query(query)
             .then(res => console.log(res.rows[0]))
