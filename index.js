@@ -53,18 +53,15 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
+        } else if (event.type == "postback" && event.postback.data == "yoyaku"){
+            console.log(event.postback.params.datetime);
         }
-
-        console.log(event.type);
-        console.log(event.postback.data);
-
-        if(event.type != "message"){      
-          const message = {
-            type: 'text',
-            text: 'Hello World!'
-          };
-          
-          events_processed.push(bot.replyMessage(event.replyToken, message));
+        else {
+            const message = {
+                type: 'text',
+                text: 'Hello World!'
+                };
+                events_processed.push(bot.replyMessage(event.replyToken, message));
         }
     });
 
