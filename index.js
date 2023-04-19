@@ -64,10 +64,12 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       return;
                     }
                     console.log(url);
+                    console.log(url);
                   });
                 let message = {
                     type: 'imaga',
-                    originalContentUrl: url
+                    originalContentUrl: url,
+                    previewImageUrl: url
                 }
                 events_processed.push(bot.replyMessage(event.replyToken, message));
             }
