@@ -19,7 +19,7 @@ server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new Client(line_config);
-const client = new pg.Client({
+const client = new pg.Pool({
     user: 'unis',
     host: 'dpg-cgvn4qodh87joksvpj70-a',
     database: 'event_f91d',
@@ -59,15 +59,24 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
   
             // DB登録処理
             const query = {
-                text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
+                text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, $3)',
                 values: [event.postback.data.split('=')[1], event.source.userId, event.postback.params.time],
             }
-            client.connect()
-            .then(() => console.log("接続完了"))
-            .then(() => client.query(query))
-            .then(result => console.log(result))
-            .catch((err => console.log(err)))
-            .finally((() => pg.end()))
+
+            client.connect(function (err, client) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  client
+                    .query(query)
+                    .then(() => {
+                      console.log('Data Inserted.');
+                    })
+                    .catch((e) => {
+                      console.error(e.stack);
+                    });
+                }
+            });
 
             let message = {
                 type: 'text',
