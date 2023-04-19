@@ -46,20 +46,30 @@
     "backgroundColor": "#fbdac8"
     },
     "footer": {
-    "type": "box",
-    "layout": "vertical",
-    "contents": [
-        {
-            "type": "button",
-            "action": {
-              "type": "datetimepicker",
-              "label": "日時を選択してください",
-              "data": "event_id=100",
-              "mode": "time"
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "button",
+                "action": {
+                "type": "datetimepicker",
+                "label": "日時を選択してください",
+                "data": "event_id=100",
+                "mode": "time"
+                },
+                "color": "#FFFFFF"
             },
-        "color": "#FFFFFF"
-        }
-    ]
+            {
+                "type": "button",
+                "action": {
+                "type": "datetimepicker",
+                "label": "日時を選択してください",
+                "data": "event_id=100",
+                "mode": "time"
+                },
+                "color": "#FFFFFF"
+            }
+        ]
     },
     "styles": {
     "header": {
