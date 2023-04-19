@@ -58,20 +58,16 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             console.log(event.postback.params.time);
   
             // DB登録処理
-            try {
-                client.connect();
-            } catch(e) {
-                console.error( "エラー：", e.message );
-            }
-
             const query = {
                 text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
                 values: [event.postback.data.split('=')[1], event.source.userId, event.postback.params.time],
             }
-            client.query(query)
-            .then(res => console.log(res.rows[0]))
-            .catch(e => console.error(e.stack))
-            .finally(client.end());
+            client.connect()
+            .then(() => console.log("接続完了"))
+            .then(() => client.query(query))
+            .then(result => console.log(result))
+            .catch((err => console.log(err)))
+            .finally((() => pg.end()))
 
             let message = {
                 type: 'text',
