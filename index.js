@@ -57,10 +57,11 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){                   
-                QRCode.toDataURL('123456789!ui', function (err, url) {
-                    if(error){
-                        console.log(err);
-                        return;
+                QRCode.toDataURL('test qr code sample.', (error, url) => {
+                    if (error) {
+                      console.log(error);
+                      console.log(url);
+                      return;
                     }
                     console.log(url);
                   });
