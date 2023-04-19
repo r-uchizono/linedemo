@@ -55,7 +55,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             }
 
 
-            else if (event.message.text == "会員ID"){                    
+            else if (event.message.text == "会員ID"){    
+                const url = '123456789'                
                 QRCode.toDataURL('test qr code sample.', (error, url) => {
                     if (error) {
                       console.log(error);
