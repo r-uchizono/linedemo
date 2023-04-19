@@ -19,8 +19,7 @@ server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new Client(line_config);
-
-const client = new pg({
+const client = new pg.Client({
     user: 'unis',
     host: 'dpg-cgvn4qodh87joksvpj70-a',
     database: 'event_f91d',
