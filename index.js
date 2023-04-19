@@ -3,6 +3,7 @@
 import express from 'express'; 
 import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 import fs from 'fs';
+import pg from 'pg';
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -18,6 +19,14 @@ server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new Client(line_config);
+
+const client = new Client({
+    user: 'unis',
+    host: 'dpg-cgvn4qodh87joksvpj70-a',
+    database: 'event_f91d',
+    password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
+    port: 5432
+});
 
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -46,15 +55,23 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             }
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
             console.log(event.source.userId);
-            console.log(event.postback.params.datetime);
-            events_processed.push(bot.replyMessage(event.replyToken, '予約が完了しました'));
+            console.log(event.postback.params.time);
+  
+            // DB登録処理
+  
+  
+            let message = {
+                type: 'text',
+                text: '予約が完了しました'
+            };
+            events_processed.push(bot.replyMessage(event.replyToken, message));
         }
         else {
             const message = {
                 type: 'text',
                 text: 'Hello World!'
-                };
-                events_processed.push(bot.replyMessage(event.replyToken, message));
+            };
+            events_processed.push(bot.replyMessage(event.replyToken, message));
         }
     });
 
