@@ -4,6 +4,7 @@ import express from 'express';
 import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをインポート
 import fs from 'fs';
 import pg from 'pg';
+import QRCode from 'qrcode'; 
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -52,9 +53,21 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
+
+
+            else if (event.message.text == "会員ID"){                    
+                QRCode.toDataURL('test qr code sample.', (error, url) => {
+                    if (error) {
+                      console.log(error);
+                      return;
+                    }
+                    console.log(url);
+                  });
+                events_processed.push(bot.replyMessage(event.replyToken, url));
+            }
+
+
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
-            console.log(event.postback.data.split('=')[1]);
-            console.log(event.source.userId);
             console.log(event.postback.params.time);
   
             // DB登録処理

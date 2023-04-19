@@ -58,16 +58,6 @@
                 "mode": "time"
                 },
                 "color": "#FFFFFF"
-            },
-            {
-                "type": "button",
-                "action": {
-                "type": "datetimepicker",
-                "label": "日時を選択してください",
-                "data": "event_id=100",
-                "mode": "time"
-                },
-                "color": "#FFFFFF"
             }
         ]
     },
