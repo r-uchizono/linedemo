@@ -59,21 +59,33 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         }
     });
 
-    app.post('/ore', async (req, res) => {
 
-        const weo = req.body.events[0];
-        if(weo.type === 'postback'){
-                console.log(weo.postback.params.date);
-                const mes = `${weo.postback.params.date}ね。その日は予定があるんだ、ごめんね。`;
-                const smo = [{type: 'text', text: mes}];
-                const res = await reply({replyToken: weo.replyToken, messages: smo});
-                console.log(res.status);
-                return;
-            }
+    function doPost(e) {
+        /* レスポンスを取得 */
+        const responseLine = e.postData.getDataAsString();
+        /* JSON形式に変換する */
+        const responseLineJson = JSON.parse(responseLine).events[0];
     
-         /*色々省略*/
-    });
-
+        /* スクリプトプロパティのオブジェクトを取得 */
+        const prop = PropertiesService.getScriptProperties().getProperties();
+    
+        /* レスポンスをLINEに送る */
+        UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', {
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + prop.TOKEN, // スクリプトプロパティにトークンは事前に追加しておく
+            },
+            'method': 'POST',
+            'payload': JSON.stringify({
+                "to": prop.DEBUGID, // スクリプトプロパティに送信先IDは事前に追加しておく
+                "messages": [{
+                    "type": "text",
+                    "text": responseLine // レスポンスを送る
+                }],
+                "notificationDisabled": false // trueだとユーザーに通知されない
+            }),
+        });
+    }
 
 
     // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
