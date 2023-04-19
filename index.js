@@ -57,7 +57,15 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             console.log(event.postback.params.time);
   
             // DB登録処理
-  
+            client.connect()
+            const query = {
+                text: 'INSERT INTO users(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
+                values: [event.postback.data, event.source.userId, event.postback.params.time],
+            }
+            client.query(query)
+            .then(res => console.log(res.rows[0]))
+            .catch(e => console.error(e.stack))
+
   
             let message = {
                 type: 'text',
