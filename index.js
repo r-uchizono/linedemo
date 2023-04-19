@@ -58,7 +58,12 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             console.log(event.postback.params.time);
   
             // DB登録処理
-            client.connect()
+            try {
+                client.connect();
+            } catch(e) {
+                console.error( "エラー：", e.message );
+            }
+
             const query = {
                 text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, &3)',
                 values: [event.postback.data.split('=')[1], event.source.userId, event.postback.params.time],
@@ -69,7 +74,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
             client.end();
 
-  
             let message = {
                 type: 'text',
                 text: '予約が完了しました'
