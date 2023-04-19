@@ -30,10 +30,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
 
-    //  const url = 'https://github.com/r-uchizono/linedemo/blob/934b72beb46fcee856009c2e3083a46c4e0f4eeb/yoyaku.json';
-    //   fetch(url)
-    //   .then(res => res.json)
-    //   .then(data => {
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
@@ -42,8 +38,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
-
-
 
                 // データを文字列に変換
                 const dataJSON = bufferData.toString()
@@ -59,21 +53,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                     console.log(data.contents.header.contents[0].text);
                     console.log(data.contents.header.contents);
-
-                    // var changeData = data.filter(function(item, index){
-                    //     if (item.text == '○○/○○会場')  return true;
-                    //   });
-                    //  changeData.text = '鹿児島会場';
-                      
-                    //   newData.push(changeData);
-                    //   // [注意]
-                    //   // 最後にchangeArray[0]ではなくchangeArrayでpushすると
-                    //   // 更新されたデータだけ配列型で入ってしまう。
-                      
-                    // data = newData;
-                //}
-
-
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }

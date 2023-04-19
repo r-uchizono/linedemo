@@ -50,12 +50,16 @@
     "layout": "vertical",
     "contents": [
         {
-        "type": "button",
-        "action": {
-            "type": "postback",
-            "label": "イベント予約>>",
-            "data": "yoyaku"
-        },
+            "type": "button",
+            "action": {
+              "type": "datetimepicker",
+              "label": "日時を選択してください",
+              "data": "yoyaku",
+              "mode": "datetime",
+              "initial": "2023-04-01t00:00",
+              "max": "2025-03-31t23:59",
+              "min": "2020-04-01t00:00"
+            },
         "color": "#FFFFFF"
         }
     ]
