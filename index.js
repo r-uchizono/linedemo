@@ -56,13 +56,15 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
-        }      
+        }
+        if(event.type != "message"){      
           const message = {
             type: 'text',
             text: 'Hello World!'
           };
           
           events_processed.push(bot.replyMessage(event.replyToken, message));
+        }
     });
 
 
