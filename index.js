@@ -64,23 +64,25 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       return;
                     }
 
+                    var img = new Image(); 
+
+                    Base64ToImage(url, function(img) { 
+                        console.log(img)
+                    });
+
                     function Base64ToImage(base64img, callback) 
                     {
-                         var img = new Image(); 
+                         
                          img.onload = function() { 
                             callback(img); 
                         }; 
                         img.src = base64img; 
                     }
 
-                    Base64ToImage(url, function(img) { 
-                        console.log(img)
-                    });
-
                     let message = {
                         type: 'imaga',
                         originalContentUrl: img,
-                        previewImageUrl: urlimg
+                        previewImageUrl: img
                     }
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
