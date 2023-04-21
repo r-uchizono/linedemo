@@ -58,26 +58,40 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){    
-                //フォルダ存在チェック　pathにフォルダ情報
-                //フォルダ作成　なかったときのみ作成、あったらそのまま使用する
-                //画像ファイル名としてランダムな文字列作成
+                
                 //フォルダに保存
                 //ファイルのURLを生成し送信・拡張子注意
                 //toDataURL→tofile関数        
-                
-                const options = {width:200};
-                QRCode.toString('test qr code sample.', options, (error, url) => {
+                const QRDir = 'test'
+                //フォルダ存在チェック　pathにフォルダ情報
+                if( fs.existsSync( QRDir ) ){ 
+                    console.log( "存在します。"); 
+                }else{ 
+                    console.log( "存在しません。"); 
+                    //フォルダ作成　なかったときのみ作成、あったらそのまま使用する
+                    fs.mkdirSync('test');
+                }
+
+                //画像ファイル名としてランダムな文字列作成
+                var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                var N=16
+                Array.from(crypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
+
+                const QRfile = Array.iterable 
+
+                QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
                     if (error) {
                       console.log(error);
-                      console.log(url);
+                      console.log(path);
                       return;
                     }
 
                     let message = {
-                        type: "text",
-                        text: url
+                        type: "image",
+                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
+                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile)
                     }
-                    console.log(url)
+                    console.log(path)
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
