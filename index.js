@@ -65,14 +65,9 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       return;
                     }
 
-
-                    
-                    // QRCode.toFile('foo.png', 'test qr code sample.');
-
                     let message = {
                         type: 'text',
-                        originalContentUrl: url, 
-                        previewImageUrl: url
+                        text : url, 
                     }
                     console.log(url)
                     console.log(message)
