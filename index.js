@@ -85,8 +85,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     // });
 
                     let message = {
-                        type: 'imaga',
-                        originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg',
+                        type: 'image',
+                        originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg', 
                         previewImageUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg'
                     }
                     console.log(message)
