@@ -67,8 +67,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                     let message = {
                         type: "uri",
-                        label: "QRコード表示",
-                        uri: url
+                        label: "会員ID表示",
+                        uri: 'data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAIQAAACECAYAAABRRIOnAAAAAklEQVR4AewaftIAAAORSURBVO3BQY7kRgADwWRB%2F%2F9yeg8%2B8CRAUPd4x2BE%2FIOZfx1mymGmHGbKYaYcZsphphxmymGmHGbKYaYcZsphphxmymGmHGbKxUtJ%2BEkqLQlNpSXhCZWWhCdUWhJ%2Bksobh5lymCmHmXLxYSqflIQ7Ki0JTeWJJDSVT1L5pCR80mGmHGbKYaZcfFkSnlD5piTcUbmThDsqTyThCZVvOsyUw0w5zJSLXy4JTaUloancScITKv8nh5lymCmHmXLxP5OEO0loKm8koan8ZoeZcpgph5ly8WUqP0nlThJaEu6o3EnCGyp%2Fk8NMOcyUw0y5%2BLAk%2FE2S0FRaEppKS0JTeSMJf7PDTDnMlMNMuXhJ5TdTeSIJTeWOym9ymCmHmXKYKRcvJaGpPJGEptKS8EQSmsqdJDSVN5LwSSp3ktBU3jjMlMNMOcyUi5dUWhLuqDSVloSm8kQS7iShqbyRhKbyRBKayp0kNJVPOsyUw0w5zJSLL1NpSbij0pJwR6WptCQ0lZaEN1TuJOGTVL7pMFMOM%2BUwU%2BIfvJCEJ1RaEu6o3ElCU7mThKbyRBLuqLQkNJUnktBUvukwUw4z5TBT4h98URKeUGlJuKPyRBKaSkvCHZU7SXhCpSXhDZU3DjPlMFMOM%2BXipSQ0lSdUWhKaSkvCnSTcUWlJaCotCS0Jd1SeSMIdlZ90mCmHmXKYKfEPflAS7qi0JDSVJ5LwTSqflIQ7Kt90mCmHmXKYKRc%2FTKUl4Y7KnSS8odKS0FTuJOGOyicloal80mGmHGbKYaZcvJSEN1TuJKGpNJU3kvBNSXhCpSXhThKayhuHmXKYKYeZEv%2FgF0vCEyp3kvCGyhNJaCp3ktBUPukwUw4z5TBTLl5Kwk9SuaPyhsoTSbiThKZyJwl3VL7pMFMOM%2BUwUy4%2BTOWTknBHpSXhjkpLQlNpSWgqT6g8odKS0JLQVD7pMFMOM%2BUwUy6%2BLAlPqDyRhDsqLQlNpSXhjSS8kYQnktBU3jjMlMNMOcyUi19OpSXhjkpLQlN5QqUl4QmVJ5LwTYeZcpgph5ly8T%2Bj0pLwRBK%2BSeWJJNxR%2BaTDTDnMlMNMufgylf%2BSSktCU2lJaCotCU3ljSQ0lf%2FSYaYcZsphplx8WBJ%2BUhKeUGlJeELlThLeSMITSWgqbxxmymGmHGZK%2FIOZfx1mymGmHGbKYaYcZsphphxmymGmHGbKYaYcZsphphxmymGmHGbKP%2BJIjRuoZK%2FEAAAAAElFTkSuQmCC'
                     }
                     console.log(url)
                     console.log(message)
