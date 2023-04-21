@@ -59,10 +59,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){    
-                
-                //フォルダに保存
-                //ファイルのURLを生成し送信・拡張子注意
-                //toDataURL→tofile関数        
+                      
                 const QRDir = 'test'
                 //フォルダ存在チェック　pathにフォルダ情報
                 if( fs.existsSync( QRDir ) ){ 
@@ -81,13 +78,14 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(iterable);
                 const QRfile = Array.iterable 
 
+                //フォルダに保存
                 QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
                     if (error) {
                       console.log(error);
                       console.log(path);
                       return;
                     }
-
+                    //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
                         originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
