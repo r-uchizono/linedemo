@@ -63,8 +63,10 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 //画像ファイル名としてランダムな文字列作成
                 //フォルダに保存
                 //ファイルのURLを生成し送信・拡張子注意
-                //toDataURL→tofile関数              
-                QRCode.toString('test qr code sample.', (error, url) => {
+                //toDataURL→tofile関数        
+                
+                const options = {width:200};
+                QRCode.toString('test qr code sample.', options, (error, url) => {
                     if (error) {
                       console.log(error);
                       console.log(url);
