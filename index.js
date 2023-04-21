@@ -86,8 +86,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                     let message = {
                         type: 'imaga',
-                        originalContentUrl: 'https://www.bing.com/images/search?view=detailV2&ccid=JP9%2fF7uS&id=D1A9758696F11553964B74CD15044F78458B172E&thid=OIP.JP9_F7uSkjKqjwHjhHqXawHaDt&mediaurl=https%3a%2f%2fmedia.istockphoto.com%2fvectors%2fbusiness-stamp-illustration-sample-vector-id932071254&exph=512&expw=1024&q=%e3%82%b5%e3%83%b3%e3%83%97%e3%83%ab%e7%94%bb%e5%83%8f%e3%80%80%e7%84%a1%e6%96%99&simid=608011359214250321&FORM=IRPRST&ck=C871B98C17250A6744E4458804D3D5CF&selectedIndex=5&ajaxhist=0&ajaxserp=0',
-                        previewImageUrl: 'https://www.bing.com/images/search?view=detailV2&ccid=JP9%2fF7uS&id=D1A9758696F11553964B74CD15044F78458B172E&thid=OIP.JP9_F7uSkjKqjwHjhHqXawHaDt&mediaurl=https%3a%2f%2fmedia.istockphoto.com%2fvectors%2fbusiness-stamp-illustration-sample-vector-id932071254&exph=512&expw=1024&q=%e3%82%b5%e3%83%b3%e3%83%97%e3%83%ab%e7%94%bb%e5%83%8f%e3%80%80%e7%84%a1%e6%96%99&simid=608011359214250321&FORM=IRPRST&ck=C871B98C17250A6744E4458804D3D5CF&selectedIndex=5&ajaxhist=0&ajaxserp=0'
+                        originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg',
+                        previewImageUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg'
                     }
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
