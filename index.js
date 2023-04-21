@@ -67,36 +67,13 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
                     
-                    QRCode.toFile('foo.png', 'test qr code sample.');
-                    //  const base64Str = url 
-                    //     .replace("data:image/png;base64,",""); 
-
-                    // fs.promises.writeFile("test.jpeg", base64Str, { encoding: "base64" });
-
-                    // function Base64ToImage(base64img, callback) 
-                    // {
-                    //      var img = new Image(); 
-                    //      img.onload = function() { 
-                    //         callback(img); 
-                    //     }; 
-                    //     img.src = base64img; 
-                    // }
-
-                    // Base64ToImage(url, function(img) { 
-                    //     console.log(img)
-                    // });
+                    // QRCode.toFile('foo.png', 'test qr code sample.');
 
                     let message = {
-                        type: 'image',
-                        originalContentUrl: 'foo.png', 
-                        previewImageUrl: 'foo.png'
+                        type: 'text',
+                        originalContentUrl: url, 
+                        previewImageUrl: url
                     }
-
-                    // let message = {
-                    //     type: 'image',
-                    //     originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg', 
-                    //     previewImageUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg'
-                    // }
                     console.log(url)
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
