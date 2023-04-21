@@ -88,9 +88,15 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                     let message = {
                         type: 'image',
-                        originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg', 
-                        previewImageUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg'
+                        originalContentUrl: 'foo.png', 
+                        previewImageUrl: 'foo.png'
                     }
+
+                    // let message = {
+                    //     type: 'image',
+                    //     originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg', 
+                    //     previewImageUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg'
+                    // }
                     console.log(url)
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
