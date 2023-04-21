@@ -67,7 +67,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
                     
-                    QRCode.toFile(path.join('linedemo','foo.png'), 'test qr code sample.');
+                    QRCode.toFile('foo.png', 'test qr code sample.');
                     //  const base64Str = url 
                     //     .replace("data:image/png;base64,",""); 
 
