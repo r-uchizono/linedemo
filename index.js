@@ -66,17 +66,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
 
 
-                    const imgDir = path.join(path.join(__dirname, 'linedemo'), 'images');
-
-                    QRCode.toFile(path.join(imgDir, 'my-qrcode.png'), 'test qr code sample.', (error) => {
-                    if (error) {
-                        console.log(error);
-                        return;
-                    }
-
-                    console.log('create qrcode finish.');
-                    });
-
+                    QRCode.toFile('foo.png', 'test qr code sample.');
                     //  const base64Str = url 
                     //     .replace("data:image/png;base64,",""); 
 
