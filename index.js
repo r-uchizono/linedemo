@@ -5,6 +5,7 @@ import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをイ
 import fs from 'fs';
 import pg from 'pg';
 import QRCode from 'qrcode'; 
+import crypto from 'crypto'
 
 import path from 'path';
 
