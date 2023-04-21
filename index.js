@@ -66,8 +66,9 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
 
                     let message = {
-                        type: 'text',
-                        text : url, 
+                        type: "uri",
+                        label: "QRコード表示",
+                        uri: url
                     }
                     console.log(url)
                     console.log(message)
