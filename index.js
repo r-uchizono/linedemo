@@ -5,7 +5,8 @@ import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをイ
 import fs from 'fs';
 import pg from 'pg';
 import QRCode from 'qrcode'; 
-import { error } from 'console';
+
+import path from 'path';
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -65,6 +66,16 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
 
 
+                    const imgDir = path.join(path.join(__dirname, 'public'), 'images');
+
+                    QRCode.toFile(path.join(imgDir, 'my-qrcode.png'), 'test qr code sample.', (error) => {
+                    if (error) {
+                        console.log(error);
+                        return;
+                    }
+
+                    console.log('create qrcode finish.');
+                    });
 
                     //  const base64Str = url 
                     //     .replace("data:image/png;base64,",""); 
@@ -89,6 +100,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         originalContentUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg', 
                         previewImageUrl: 'https://cdn.shibe.online/shibes/907fed97467e36f3075211872d98f407398126c4.jpg'
                     }
+                    console.log(url)
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
