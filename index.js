@@ -78,6 +78,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 var N=16
                 Array.from(crypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
 
+                console.log(iterable);
                 const QRfile = Array.iterable 
 
                 QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
