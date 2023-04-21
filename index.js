@@ -73,6 +73,10 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 //画像ファイル名としてランダムな文字列作成
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 var N=16
+
+                console.log(new Uint8Array(N));
+                console.log((n)=>S[n%S.length]);
+
                 Array.from(crypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
 
                 console.log(iterable);
