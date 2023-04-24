@@ -81,13 +81,13 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const QRfile = tt
 
                 //フォルダに保存
-                QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
+                QRCode.toFile(path.join(QRDir, QRfile + '.png'), 'test qr code sample.', (error) => {
                     if (error) {
                       console.log(error);
                       return;
                     }
 
-                    if( fs.existsSync(path.join(QRDir, QRfile)) ){ 
+                    if( fs.existsSync(path.join(QRDir, QRfile + '.png')) ){ 
                         console.log( "存在します。"); 
                     }else{ 
                         console.log( "存在しません。"); 
@@ -96,10 +96,10 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
-                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
-                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile)
+                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png'),
+                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png')
                     }
-                    console.log(path.join(QRDir, QRfile))
+                    console.log(path.join(QRDir, QRfile + '.png'))
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
