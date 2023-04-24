@@ -74,9 +74,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 var N=16
 
-                console.log(new Uint8Array(N));
-                console.log((n)=>S[n%S.length]);
-
                 const array = new Uint8Array(N);
                 var tt = Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
                 console.log(getRandomValues(array));
