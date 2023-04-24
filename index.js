@@ -98,7 +98,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     let message = {
                         type: "image",
                         originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png'),
-                        previewImageUrl: path.join(QRDir ,QRfile + '.png')
+                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png')
                     }
                     console.log(path.join(QRDir ,QRfile + '.png'))
                     console.log(message)
