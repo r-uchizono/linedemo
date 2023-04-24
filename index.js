@@ -87,13 +87,20 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       console.log(error);
                       return;
                     }
+
+                    if( fs.existsSync( QRfile ) ){ 
+                        console.log( "存在します。"); 
+                    }else{ 
+                        console.log( "存在しません。"); 
+                    }
+
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
                         originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
                         previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile)
                     }
-                    console.log('linedemo.onrender.com')
+                    console.log('https://linedemo.onrender.com')
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
