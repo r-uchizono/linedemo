@@ -79,7 +79,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 //Array.from(crypto.webcrypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
                 array = new Uint8Array(N);
-                getRandomValues(array).map((n)=>S[n%S.length]).join('');
+                getRandomValues(array);
                 console.log(getRandomValues(array));
 
                 console.log(iterable);
