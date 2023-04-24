@@ -58,10 +58,31 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){                  
-                QRCode.toDataURL('test qr code sample.', (error, url) => {
+                const QRDir = 'test'
+                //フォルダ存在チェック　pathにフォルダ情報
+                if( fs.existsSync( QRDir ) ){ 
+                    console.log( "存在します。"); 
+                }else{ 
+                    console.log( "存在しません。"); 
+                    //フォルダ作成　なかったときのみ作成、あったらそのまま使用する
+                    fs.mkdirSync('test');
+                }
+
+                //画像ファイル名としてランダムな文字列作成
+                var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                var N=16
+
+                const array = new Uint8Array(N);
+                var tt = Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
+                console.log(getRandomValues(array));
+
+                console.log(tt);
+                const QRfile = tt
+
+                //フォルダに保存
+                QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
                     if (error) {
                       console.log(error);
-                      console.log(url);
                       return;
                     }
 
