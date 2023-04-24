@@ -87,11 +87,11 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     // });
                     console.log(url)
 
-                    let message = {
+                    let message = JSON.stringify({
                         type: 'image',
                         originalContentUrl: url, 
                         previewImageUrl: url
-                    }
+                    });
                     console.log(url)
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
