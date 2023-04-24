@@ -19,7 +19,7 @@ const line_config = {
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const server = express();
-server.use(express.static('test'));
+
 server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
@@ -37,8 +37,6 @@ const client = new pg.Pool({
 server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
-
-    res.send();
 
     // すべてのイベント処理のプロミスを格納する配列。
      let events_processed = [];
@@ -71,6 +69,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     //フォルダ作成　なかったときのみ作成、あったらそのまま使用する
                     fs.mkdirSync('test');
                 }
+
+                server.use(express.static('test'));
 
                 //画像ファイル名としてランダムな文字列作成
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
