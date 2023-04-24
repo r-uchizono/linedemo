@@ -80,6 +80,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(tt);
                 const QRfile = tt
 
+                QRDir ='./' +  QRDir 
                 //フォルダに保存
                 QRCode.toFile(path.join(QRDir, QRfile + '.png'), 'test qr code sample.', (error) => {
                     if (error) {
