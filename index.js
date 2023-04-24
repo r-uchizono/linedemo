@@ -59,7 +59,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){                  
-                const QRDir = 'test'
+                var QRDir = 'test'
                 //フォルダ存在チェック　pathにフォルダ情報
                 if( fs.existsSync( QRDir ) ){ 
                     console.log( "存在します。"); 
