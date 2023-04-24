@@ -88,7 +88,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       return;
                     }
 
-                    if( fs.existsSync(path.join(QRDir, QRfile + '.png')) ){ 
+                    if( fs.existsSync(path.join('https://linedemo.onrender.com', QRDir, QRfile + '.png')) ){ 
                         console.log( "存在します。"); 
                     }else{ 
                         console.log( "存在しません。"); 
