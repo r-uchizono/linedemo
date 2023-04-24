@@ -19,7 +19,7 @@ const line_config = {
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const server = express();
-
+server.use(express.static(__dirname + '/test'));
 server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
@@ -70,8 +70,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     fs.mkdirSync('test');
                 }
 
-                server.use(express.static('test'));
-
                 //画像ファイル名としてランダムな文字列作成
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 var N=16
@@ -95,6 +93,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }else{ 
                         console.log( "存在しません。"); 
                     }
+
+                    console.log(__dirname);
 
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
