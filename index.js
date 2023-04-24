@@ -99,7 +99,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
                         previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile)
                     }
-                    console.log('https://linedemo.onrender.com')
+                    console.log(path.join(QRDir, QRfile))
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
