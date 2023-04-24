@@ -6,7 +6,7 @@ import fs from 'fs';
 import pg from 'pg';
 import QRCode from 'qrcode'; 
 import crypto from 'crypto'
-
+import getRandomValues from get-random-values;
 import path from 'path';
 
 // -----------------------------------------------------------------------------
@@ -77,7 +77,10 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(new Uint8Array(N));
                 console.log((n)=>S[n%S.length]);
 
-                Array.from(crypto.webcrypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
+                //Array.from(crypto.webcrypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
+                array = new Uint8Array(N);
+                getRandomValues(array).map((n)=>S[n%S.length]).join('');
+                console.log(getRandomValues(array));
 
                 console.log(iterable);
                 const QRfile = iterable
