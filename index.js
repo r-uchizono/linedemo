@@ -8,6 +8,11 @@ import QRCode from 'qrcode';
 import crypto from 'crypto'
 import getRandomValues from 'get-random-values';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
