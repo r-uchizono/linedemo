@@ -77,7 +77,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(new Uint8Array(N));
                 console.log((n)=>S[n%S.length]);
 
-                Array.from(crypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
+                Array.from(crypto.webcrypto.getRandomValues(new Uint8Array(N))).map((n)=>S[n%S.length]).join('')
 
                 console.log(iterable);
                 const QRfile = iterable
