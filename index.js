@@ -87,7 +87,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       return;
                     }
 
-                    if( fs.existsSync( QRfile ) ){ 
+                    if( fs.existsSync(path.join(QRDir, QRfile)) ){ 
                         console.log( "存在します。"); 
                     }else{ 
                         console.log( "存在しません。"); 
