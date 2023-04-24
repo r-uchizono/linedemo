@@ -19,6 +19,7 @@ const line_config = {
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const server = express();
+server.use(express.static('test'));
 server.listen(process.env.PORT || 3000);
 
 // APIコールのためのクライアントインスタンスを作成
@@ -80,7 +81,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(tt);
                 const QRfile = tt
 
-                QRDir ='./' +  QRDir 
                 //フォルダに保存
                 QRCode.toFile(path.join(QRDir, QRfile + '.png'), 'test qr code sample.', (error) => {
                     if (error) {
@@ -97,10 +97,10 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
-                        originalContentUrl: path.join(QRDir ,QRfile + '.png'),
+                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png'),
                         previewImageUrl: path.join(QRDir ,QRfile + '.png')
                     }
-                    console.log(path.join(QRDir, QRfile + '.png'))
+                    console.log(path.join(QRDir ,QRfile + '.png'))
                     console.log(message)
                     events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
