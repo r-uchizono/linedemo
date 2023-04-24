@@ -78,11 +78,12 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log((n)=>S[n%S.length]);
 
                 const array = new Uint8Array(N);
-                Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
+                var tt = Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
                 console.log(getRandomValues(array));
 
-                console.log(iterable);
-                const QRfile = iterable
+                console.log(S);
+                console.log(tt);
+                const QRfile = S
 
                 //フォルダに保存
                 QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
