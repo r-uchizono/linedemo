@@ -90,8 +90,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
-                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile & '.png'),
-                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile & '.png')
+                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
+                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile)
                     }
                     console.log(path)
                     console.log(message)
