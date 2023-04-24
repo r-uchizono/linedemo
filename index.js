@@ -78,22 +78,20 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 var tt = Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
                 console.log(getRandomValues(array));
 
-                console.log(S);
                 console.log(tt);
-                const QRfile = S
+                const QRfile = tt
 
                 //フォルダに保存
                 QRCode.toFile(path.join(QRDir, QRfile), 'test qr code sample.', (error) => {
                     if (error) {
                       console.log(error);
-                      console.log(path);
                       return;
                     }
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
-                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile),
-                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile)
+                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile, '.png'),
+                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile, '.png')
                     }
                     console.log(path)
                     console.log(message)
