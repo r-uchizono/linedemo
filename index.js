@@ -71,7 +71,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){                  
-                var QRDir = 'test'
+                var QRDir = '.\link\img'
                 //フォルダ存在チェック　pathにフォルダ情報
                 if( fs.existsSync( QRDir ) ){ 
                     console.log( "存在します。"); 
@@ -111,8 +111,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
-                        originalContentUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png'),
-                        previewImageUrl: path.join('https://linedemo.onrender.com', QRDir ,QRfile + '.png')
+                        originalContentUrl: 'https://linedemo.onrender.com/img/'+ QRfile + '.png',
+                        previewImageUrl: 'https://linedemo.onrender.com/img/'+ QRfile + '.png'
                     }
                     console.log(path.join(QRDir ,QRfile + '.png'))
                     console.log(message)
