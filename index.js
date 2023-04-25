@@ -20,7 +20,7 @@ const line_config = {
 
 // -----------------------------------------------------------------------------
 // Webサーバー設定
-const server = express();
+const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,15 +40,15 @@ const client = new pg.Pool({
     port: 5432
 });
 
-server.post("/", (req, res)=> {
-    server.render('index.js');
+app.post("/", (req, res)=> {
+    app.render('index.js');
 })
 
-server.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000);
 
 // -----------------------------------------------------------------------------
 // ルーター設定
-server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
+app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
