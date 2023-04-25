@@ -71,7 +71,18 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
-
+            else if (event.message.text == "予約確認"){
+                //データを取りだす
+                const bufferData = fs.readFileSync('kakunin.json')
+                // データを文字列に変換
+                const dataJSON = bufferData.toString()
+                //JSONのデータをJavascriptのオブジェクトに
+                const data = JSON.parse(dataJSON)
+                console.log(data)
+                //data.contents.header.contents[0].text = '鹿児島会場'
+                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                events_processed.push(bot.replyMessage(event.replyToken, data));
+            }
 
             else if (event.message.text == "会員ID") {                  
                 //画像ファイル名としてランダムな文字列作成

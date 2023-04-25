@@ -1,0 +1,78 @@
+{
+    "type": "flex",
+    "altText": "this is a flex message",
+    "contents": {
+    "type": "bubble",
+    "header": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+        {
+        "type": "text",
+        "text": "○○/○○会場",
+        "size": "xl",
+        "position": "relative",
+        "align": "center",
+        "color": "#FFFFFF"
+        }
+    ]
+    },
+    "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+        {
+        "type": "text",
+        "text": "OOOO年OO月OO日（O）",
+        "size": "lg",
+        "margin": "none"
+        },
+        {
+        "type": "text",
+        "text": "開催場所　○○:○○～○○:○○",
+        "size": "sm"
+        },
+        {
+        "type": "text",
+        "text": "場所　○○○○",
+        "size": "sm"
+        },
+        {
+        "type": "text",
+        "text": "　　　○○○○",
+        "size": "sm"
+        },
+        {
+        "type": "text",
+        "text": "来場予定時間　○○:○○",
+        "size": "sm"
+        }
+    ],
+    "backgroundColor": "#fbdac8"
+    },
+    "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "button",
+                "action": {
+                "type": "postback",
+                "label": "予約取消",
+                "data": "event_id=200"
+                },
+                "color": "#FFFFFF"
+            }
+        ]
+    },
+    "styles": {
+    "header": {
+        "backgroundColor": "#f3981d"
+    },
+    "footer": {
+        "backgroundColor": "#f3981d"
+    }
+    }
+}
+    
+}
