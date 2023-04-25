@@ -86,7 +86,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     text: "SELECT user_id FROM t_yoyaku WHERE user_id = $1",
                     values:[event.source.userId],
                 };
-                client.connect(function (err, client) {
+                Promise.all(client.connect(function (err, client) {
                     if (err) {
                       console.log(err);
                     } else {
@@ -94,31 +94,30 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .query(query)
                         .then((res) => {
                           console.log(res.rows[0].user_id);
-                          userid = res.rows[0].user_id
                         })
                         .catch((e) => {
                           console.error(e.stack);
                         });
                     }
-                }).then(
-                    console.log(userid)
-                    ).then(
-                       //フォルダに保存
-                        QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
-                            if (error) {
-                                console.log(error);
-                                return;
-                            }
-            
-                            //ファイルのURLを生成し送信・拡張子注意
-                            let message = {
-                                type: "image",
-                                originalContentUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png',
-                                previewImageUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png'
-                            }
-                            events_processed.push(bot.replyMessage(event.replyToken, message));
-                        }) 
-                    );                
+                })).then(
+                console.log(userid)
+                ).then(
+              
+                //フォルダに保存
+                QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+
+                //ファイルのURLを生成し送信・拡張子注意
+                let message = {
+                    type: "image",
+                    originalContentUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png',
+                    previewImageUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png'
+                }
+                events_processed.push(bot.replyMessage(event.replyToken, message));
+                }));
                 // try {
                 //     fs.rmdir(imageDir, { recursive: true },(error));{
                 //         if(error){
