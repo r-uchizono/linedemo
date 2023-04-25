@@ -59,7 +59,7 @@
                 "action": {
                 "type": "postback",
                 "label": "予約取消",
-                "data": "event_id=200"
+                "data": "torikesi_id=200"
                 },
                 "color": "#FFFFFF"
             }
