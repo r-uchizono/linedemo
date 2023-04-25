@@ -94,7 +94,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .query(query)
                         .then((res) => {
                           console.log(res.rows[0].user_id);
-                          userid  = client.res.rows[0].user_id
+                          userid  = res.rows[0].user_id
                         })
                         .catch((e) => {
                           console.error(e.stack);
