@@ -110,7 +110,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
 
                     console.log(__dirname);
-                    res.send('something here')
+                    // res.send('something here')
 
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
