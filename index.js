@@ -5,7 +5,6 @@ import { Client, middleware } from "@line/bot-sdk"; // Messaging APIのSDKをイ
 import fs from 'fs';
 import pg from 'pg';
 import QRCode from 'qrcode'; 
-import crypto from 'crypto'
 import getRandomValues from 'get-random-values';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -96,8 +95,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
                 try {
-                    fs.rmdir(imageDir);
+                    fs.rmdir(imageDir, function(err, result){
+                        if(err){
+                        console.log('削除エラー');
+                        return;
+                        }
                     console.log('削除しました。');
+                    })
                     } catch (error) {
                         console.log('削除エラー');
                     throw error;
