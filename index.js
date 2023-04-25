@@ -58,8 +58,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            // ユーザーからのテキストメッセージが「こんにちは」だった場合のみ反応。
-            if (event.message.text == "イベント情報"){
+            // ユーザーからのテキストメッセージが「新規予約」だった場合のみ反応。
+            if (event.message.text == "新規予約"){
                 //データを取りだす
                 const bufferData = fs.readFileSync('yoyaku.json')
                 // データを文字列に変換
@@ -89,7 +89,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 client.connect(function (err, client) {
                     if (err) {
                       console.log(err);
-                      console.log('a');
                     } else {
                       client
                         .query(query)
