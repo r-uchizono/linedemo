@@ -97,7 +97,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 try {
                     fs.rmdir(imageDir, function(err, result){
                         if(err){
-                        console.log('削除エラー');
+                        console.log(err);
                         return;
                         }
                     console.log('削除しました。');
