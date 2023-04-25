@@ -84,7 +84,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     text: "SELECT user_id FROM t_yoyaku WHERE user_id = $1",
                     values:[event.source.userId],
                 };
-                let userid = client.connect(function (err, client) {
+
+                var userid;
+                client.connect(function (err, client) {
                     if (err) {
                       console.log(err);
                     } else {
@@ -92,7 +94,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .query(query)
                         .then((res) => {
                             console.log(res.rows[0].user_id);
-                            return res.rows[0].user_id;
+                            userid = res.rows[0].user_id;
                         })
                         .catch((e) => {
                           console.error(e.stack);
