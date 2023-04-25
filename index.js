@@ -96,7 +96,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
                 try {
-                    fs.unlinkSync(QRfile + '.png');
+                    fs.unlinkSync(path.join(imageDir, QRfile + '.png'));
                     console.log('削除しました。');
                     } catch (error) {
                         console.log('削除エラー');
