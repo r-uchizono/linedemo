@@ -85,7 +85,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     values:[event.source.userId],
                 };
 
-                var userid;
+                let userid;
                 client.connect(function (err, client) {
                     if (err) {
                       console.log(err);
@@ -95,6 +95,24 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .then((res) => {
                             console.log(res.rows[0].user_id);
                             userid = res.rows[0].user_id;
+                            console.log(userid)
+              
+                            //フォルダに保存
+                            QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
+                            if (error) {
+                                console.log(error);
+                                return;
+                            }
+
+                            //ファイルのURLを生成し送信・拡張子注意
+                            let message = {
+                                type: "image",
+                                originalContentUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png',
+                                previewImageUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png'
+                            }
+                            events_processed.push(bot.replyMessage(event.replyToken, message));
+                            });
+
                         })
                         .catch((e) => {
                           console.error(e.stack);
@@ -102,35 +120,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
                 })
 
-                console.log(userid)
-              
-                //フォルダに保存
-                QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
-                if (error) {
-                    console.log(error);
-                    return;
-                }
-
-                //ファイルのURLを生成し送信・拡張子注意
-                let message = {
-                    type: "image",
-                    originalContentUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png',
-                    previewImageUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png'
-                }
-                events_processed.push(bot.replyMessage(event.replyToken, message));
-                });
-                // try {
-                //     fs.rmdir(imageDir, { recursive: true },(error));{
-                //         if(error){
-                //             console.log(error);
-                //             return;
-                //         }
-                //     }
-                //     console.log('削除しました。');
-                //     } catch (error) {
-                //         console.log('削除エラー');
-                //     throw error;
-                //     }
+                
             }
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
             console.log(event.postback.params.time);
