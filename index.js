@@ -80,8 +80,26 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
                 console.log(getRandomValues(array));
 
+
+                const query = {
+                    text: "SELECT user_id FROM t_yoyaku WHERE user_id = $1",
+                    values:[event.source.userId],
+                  };
+                  client.connect(function (err, client) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      client
+                        .query(query)
+                        .then((res) => {
+                          console.log(res);
+                        })
+                        .catch((e) => {
+                          console.error(e.stack);
+                        });
+                    }
+                });
                 let user_id = event.source.userId
-                console.log(user_id);
 
                 //フォルダに保存
                 QRCode.toFile(path.join(imageDir, QRfile + '.png'), user_id, (error) => {
