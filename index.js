@@ -8,6 +8,7 @@ import QRCode from 'qrcode';
 import getRandomValues from 'get-random-values';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { error } from 'console';
 
 
 // -----------------------------------------------------------------------------
@@ -95,7 +96,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
                 try {
-                    fs.rmdir(imageDir, { recursive: true });
+                    fs.rmdir(imageDir, { recursive: true },(error));{
+                        if(error){
+                            console.log(error);
+                            return;
+                        }
+                    }
                     console.log('削除しました。');
                     } catch (error) {
                         console.log('削除エラー');
