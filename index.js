@@ -80,6 +80,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n)=>S[n%S.length]).join('')
                 console.log(getRandomValues(array));
 
+                let user_id = event.source.userId
+                console.log(user_id);
+
                 //フォルダに保存
                 QRCode.toFile(path.join(imageDir, QRfile + '.png'), 'test qr code sample.', (error) => {
                 if (error) {
