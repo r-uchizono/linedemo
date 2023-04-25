@@ -75,6 +75,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     fs.mkdirSync('test');
                 }
 
+                server.use(express.static('/test'));
+
                 //画像ファイル名としてランダムな文字列作成
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 var N=16
