@@ -89,13 +89,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 client.connect(function (err, client) {
                     if (err) {
                       console.log(err);
+                      console.log('a');
                     } else {
                       client
                         .query(query)
                         .then((res) => {
                             console.log(res.rows[0].user_id);
                             userid = res.rows[0].user_id;
-                            console.log(userid)
               
                             //フォルダに保存
                             QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
@@ -116,6 +116,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         })
                         .catch((e) => {
                           console.error(e.stack);
+                          console.log('b');
                         });
                     }
                 })
