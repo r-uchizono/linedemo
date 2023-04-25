@@ -24,8 +24,8 @@ const line_config = {
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const server = express();
-server.use(express.static(__dirname + '/test'));
-server.listen(process.env.PORT || 3000);
+// server.use(express.static(__dirname + '/test'));
+server.use(express.static('link'));
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new Client(line_config);
@@ -36,6 +36,12 @@ const client = new pg.Pool({
     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
     port: 5432
 });
+
+server.post("/", (req, res)=> {
+    server.render('index.js');
+})
+
+server.listen(process.env.PORT || 3000);
 
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -75,8 +81,6 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     fs.mkdirSync('test');
                 }
 
-                server.use(express.static('/test'));
-
                 //画像ファイル名としてランダムな文字列作成
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 var N=16
@@ -102,6 +106,7 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
 
                     console.log(__dirname);
+                    res.send('something here')
 
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
