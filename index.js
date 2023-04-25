@@ -95,18 +95,18 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 }
                 events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
-                try {
-                    fs.rmdir(imageDir, { recursive: true },(error));{
-                        if(error){
-                            console.log(error);
-                            return;
-                        }
-                    }
-                    console.log('削除しました。');
-                    } catch (error) {
-                        console.log('削除エラー');
-                    throw error;
-                    }
+                // try {
+                //     fs.rmdir(imageDir, { recursive: true },(error));{
+                //         if(error){
+                //             console.log(error);
+                //             return;
+                //         }
+                //     }
+                //     console.log('削除しました。');
+                //     } catch (error) {
+                //         console.log('削除エラー');
+                //     throw error;
+                //     }
             }
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
             console.log(event.postback.params.time);
