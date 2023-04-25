@@ -95,13 +95,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, message));
                 });
                 try {
-                    fs.rmdir(imageDir, function(err, result){
-                        if(err){
-                        console.log(err);
-                        return;
-                        }
+                    fs.rmdir(imageDir, { recursive: true });
                     console.log('削除しました。');
-                    })
                     } catch (error) {
                         console.log('削除エラー');
                     throw error;
