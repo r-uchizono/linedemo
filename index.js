@@ -115,8 +115,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                         })
                         .catch((e) => {
-                          console.error(e.stack);
-                          console.log('b');
+                            console.error(e.stack);
+                            let errmessage = {
+                                type: "text",
+                                text: "お客様情報が未登録です。"
+                            };
+                          events_processed.push(bot.replyMessage(event.replyToken, errmessage));
                         });
                     }
                 })
