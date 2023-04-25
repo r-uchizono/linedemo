@@ -10,9 +10,6 @@ import getRandomValues from 'get-random-values';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -24,8 +21,14 @@ const line_config = {
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const server = express();
-// server.use(express.static(__dirname + '/test'));
-server.use(express.static('link'));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const imageDir = path.join(__dirname, 'public');
+if (!fs.existsSync(imageDir)) {
+    fs.mkdirSync(imageDir);
+}
+app.use(express.static(imageDir));
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new Client(line_config);
@@ -71,15 +74,15 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
             else if (event.message.text == "会員ID"){                  
-                var QRDir = '.\link\img'
-                //フォルダ存在チェック　pathにフォルダ情報
-                if( fs.existsSync( QRDir ) ){ 
-                    console.log( "存在します。"); 
-                }else{ 
-                    console.log( "存在しません。"); 
-                    //フォルダ作成　なかったときのみ作成、あったらそのまま使用する
-                    fs.mkdirSync('test');
-                }
+                // var QRDir = '.\link\img'
+                // //フォルダ存在チェック　pathにフォルダ情報
+                // if( fs.existsSync( QRDir ) ){ 
+                //     console.log( "存在します。"); 
+                // }else{ 
+                //     console.log( "存在しません。"); 
+                //     //フォルダ作成　なかったときのみ作成、あったらそのまま使用する
+                //     fs.mkdirSync('test');
+                // }
 
                 //画像ファイル名としてランダムな文字列作成
                 var S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -93,13 +96,14 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const QRfile = tt
 
                 //フォルダに保存
-                QRCode.toFile(path.join(QRDir, QRfile + '.png'), 'test qr code sample.', (error) => {
+                // QRCode.toFile(path.join(QRDir, QRfile + '.png'), 'test qr code sample.', (error) => {
+                    QRCode.toFile(path.join(imageDir, QRfile + '.png'), 'test qr code sample.', (error) => {
                     if (error) {
                       console.log(error);
                       return;
                     }
 
-                    if( fs.existsSync(path.join(QRDir, QRfile + '.png')) ){ 
+                    if( fs.existsSync(path.join(imageDir, QRfile + '.png')) ){ 
                         console.log( "存在します。"); 
                     }else{ 
                         console.log( "存在しません。"); 
@@ -111,8 +115,8 @@ server.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     //ファイルのURLを生成し送信・拡張子注意
                     let message = {
                         type: "image",
-                        originalContentUrl: 'https://linedemo.onrender.com/img/'+ QRfile + '.png',
-                        previewImageUrl: 'https://linedemo.onrender.com/img/'+ QRfile + '.png'
+                        originalContentUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png',
+                        previewImageUrl: 'https://linedemo.onrender.com/'+ QRfile + '.png'
                     }
                     console.log(path.join(QRDir ,QRfile + '.png'))
                     console.log(message)
