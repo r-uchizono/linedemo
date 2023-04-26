@@ -101,8 +101,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                                 const stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
                                 const etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
-                                const SformattedTime = stime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
-                                const EformattedTime = etime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric'});
+                                const SformattedTime = stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                const EformattedTime = etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
                                 const date = new Date(res.rows[0].first_day);
                                 const year = date.getFullYear();
                                 const month = ('0' + (date.getMonth() + 1)).slice(-2);
