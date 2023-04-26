@@ -83,12 +83,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .query(query_event_base)
                         .then((res) => {
                             console.log(res.rows[0]);
-                            console.log(res.rows.length);
+                            console.log(res.rows[0].event_cd);
                             const query_event = {
                                 text: "SELECT * " +
                                         "FROM m_event t1 " +
                                         "INNER JOIN m_kaisaiti t2 ON t1.kaisaiti_cd = t2.kaisaiti_cd " +
-                                        "WHERE t1.event_cd = '$1' " +
+                                        "WHERE t1.event_cd = $1 " +
                                         "ORDER BY t1.first_day",
                                 values:[res.rows[0].event_cd],
                             };  
