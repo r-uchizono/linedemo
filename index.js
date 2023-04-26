@@ -82,7 +82,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       client
                         .query(query_event_base)
                         .then((res) => {
-                            console.log(res.rows[0]);
                             console.log(res.rows[0].event_cd);
                             const query_event = {
                                 text: "SELECT * " +
@@ -96,8 +95,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                             client.query(query_event)
                             .then((res) => {
-                                console.log(res.rows[0]);
                                 console.log(res.rows.length);
+
+                                res.rows.forEach(function(values){
+                                    console.log( value );
+                                })
 
                                 const stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
                                 const etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
