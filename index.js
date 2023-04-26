@@ -91,6 +91,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .query(query)
                         .then((res) => {
                             console.log(res.rows[0]);
+                            console.log(res.rows.length);
                         })
                     }
                 })
