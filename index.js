@@ -103,6 +103,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                                 data.contents = '[' + data.contents + ',' + data.contents + ']'
                                 console.log(data.contents);
+                                console.log(data.contents[0]);
 
                                 const f_stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
                                 const f_etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
