@@ -127,7 +127,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 firstEventJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
                                 data.contents.contents.push({...firstEventJson});
 
-                                let secondEventJson = JSON.parse(dataJSON).contents[0].contents;
+                                let secondEventJson = JSON.parse(dataJSON).contents.contents;
                                 secondEventJson.header.contents.text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
                                 secondEventJson.body.contents[0].text = s_formattedDate;
                                 secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
