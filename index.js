@@ -97,11 +97,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                             .then((res) => {
                                 console.log(res.rows.length);
 
-                                res.rows.forEach(function(values){
-                                    console.log(values.length);
-                                })
+                                // res.rows.forEach(function(values){
+                                    
+                                // })
 
-                                data.contents = data.contents + ',' + data.contents
+                                data.contents = '[' + data.contents + ',' + data.contents + ']'
                                 console.log(data.contents);
 
                                 const f_stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
