@@ -1,5 +1,5 @@
 {
-    "type": "carousel",
+    "type": "flex",
     "contents": {
         "type": "bubble",
         "header": {
