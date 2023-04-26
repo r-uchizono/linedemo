@@ -125,18 +125,18 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 const s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
                                 const s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
 
-                                data.contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents[0].body.contents[0].text = f_formattedDate;
-                                data.contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
-                                data.contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                data.contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                data.contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents[1].body.contents[0].text = s_formattedDate;
-                                data.contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
-                                data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                new_contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                new_contents[0].body.contents[0].text = f_formattedDate;
+                                new_contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
+                                new_contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                new_contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                new_contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                new_contents[1].body.contents[0].text = s_formattedDate;
+                                new_contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
+                                new_contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                new_contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
 
-                                console.log(f_formattedDate);
+                                data.contents = new_contents;
                                 console.log(data.contents[0].body.contents[0]);
                                 console.log(data.contents[1].body.contents[0]);
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
