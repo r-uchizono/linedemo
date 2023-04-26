@@ -66,7 +66,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 let dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 let data = JSON.parse(dataJSON)
-                data.contents.contents = [];
+                data.contents = [];
 
                 let query_event_base = {
                     text: "SELECT *" +
