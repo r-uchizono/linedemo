@@ -68,11 +68,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const data = JSON.parse(dataJSON)
 
                 const query_event_base = {
-                    text: "SELECT * " +
-                            "FROM m_event_base t1 " +
-                            "WHERE current_date between t1.start_ymd and t1.end_ymd " +
-                                "OR current_date < t1.start_ymd " +
-                            "ORDER BY t1.start_ymd",
+                    text: "SELECT *" +
+                          "  FROM m_event_base t1 " +
+                          " WHERE current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
+                          "    OR current_date < t1.start_ymd" +
+                          " ORDER BY t1.start_ymd",
                 };
 
                 client.connect(function (err, client) {
@@ -84,11 +84,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .then((res) => {
                             console.log(res.rows[0].event_cd);
                             const query_event = {
-                                text: "SELECT * " +
-                                        "FROM m_event t1 " +
-                                        "INNER JOIN m_kaisaiti t2 ON t1.kaisaiti_cd = t2.kaisaiti_cd " +
-                                        "WHERE t1.event_cd = $1 " +
-                                        "ORDER BY t1.first_day",
+                                text: "SELECT *" +
+                                      "  FROM m_event t1" +
+                                      " INNER JOIN m_kaisaiti t2" +
+                                      "    ON t1.kaisaiti_cd = t2.kaisaiti_cd" +
+                                      " WHERE t1.event_cd = $1" +
+                                      " ORDER BY t1.first_day",
                                 values:[res.rows[0].event_cd],
                             };  
                             let event_nm = res.rows[0].event_nm
@@ -101,8 +102,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     
                                 // })
 
-                                let new_contents = [data.contents,data.contents]
-                                console.log(new_contents);
+                                data.contents = [data.contents,data.contents]
+                                console.log(data.contents);
+                                console.log(data.contents[0]);
 
                                 const f_stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
                                 const f_etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
@@ -112,6 +114,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 const F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
                                 const S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
                                 const S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                
                                 const f_date = new Date(res.rows[0].first_day);
                                 const f_year = f_date.getFullYear();
                                 const f_month = ('0' + (f_date.getMonth() + 1)).slice(-2);
@@ -125,29 +128,24 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 const s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
                                 const s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
 
-                                new_contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                new_contents[0].body.contents[0].text = f_formattedDate;
-                                new_contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
-                                new_contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                new_contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                new_contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                new_contents[1].body.contents[0].text = s_formattedDate;
-                                new_contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
-                                new_contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                new_contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                data.contents[0].body.contents[0].text = f_formattedDate;
+                                data.contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
+                                data.contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                data.contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                data.contents[1].body.contents[0].text = s_formattedDate;
+                                data.contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
+                                data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
 
-                                // data.contents = new_contents;
+                                console.log(f_formattedDate);
+                                console.log(s_formattedDate);
                                 // console.log(data.contents[0].body.contents[0]);
                                 // console.log(data.contents[1].body.contents[0]);
-                                // // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                                // events_processed.push(bot.replyMessage(event.replyToken, data));
+                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
-                        }).then((new_contents) =>{
-                            data.contents = new_contents;
-                            console.log(data.contents[0].body.contents[0]);
-                            console.log(data.contents[1].body.contents[0]);
-                            // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                            events_processed.push(bot.replyMessage(event.replyToken, data));
                         })
                     }
                 })
