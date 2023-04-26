@@ -91,11 +91,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         "WHERE t1.event_cd = $1 " +
                                         "ORDER BY t1.first_day",
                                 values:[res.rows[0].event_cd],
-                            };           
-                        }).then(client.query(query_event))
-                        .then((res) => {
-                            console.log(res.rows[0]);
-                            console.log(res.rows.length);
+                            };  
+                            
+                            client.query(query_event)
+                            .then((res) => {
+                                console.log(res.rows[0]);
+                                console.log(res.rows.length);
+                            })
                         })
                     }
                 })
