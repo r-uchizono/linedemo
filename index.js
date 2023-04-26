@@ -136,6 +136,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 data.contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                 data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
+
+                                console.log(data);
+                                console.log(data.contents[0].body.contents[0]);
+                                console.log(data.contents[1].body.contents[0]);
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
