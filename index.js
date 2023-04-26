@@ -135,8 +135,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 secondEventJson.contents.body.contents[3].text = '　　　' + res.rows[0].place_address;
                                 data.contents.push({...secondEventJson.contents});
 
-                                console.log(data.contents[0].body.contents[0]);
-                                console.log(data.contents[1].body.contents[0]);
+                                console.log(JSON.stringify(data));
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
