@@ -129,12 +129,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 const s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
 
                                 data.contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents[0].body.contents[0].text = f_formattedDate;
+                                data.contents[0].body.contents[0].text = res.rows[0].first_day;
                                 data.contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
                                 data.contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 data.contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
                                 data.contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents[1].body.contents[0].text = s_formattedDate;
+                                data.contents[1].body.contents[0].text = res.rows[0].second_day;
                                 data.contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                 data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
