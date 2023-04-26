@@ -66,7 +66,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 let dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 let data = JSON.parse(dataJSON)
-                data.contents = [];
+                // data.contents = [];
 
                 let query_event_base = {
                     text: "SELECT *" +
@@ -125,7 +125,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 // firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
                                 // firstEventJson.body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 // firstEventJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                data.contents.push({...firstEventJson});
+                                // data.contents.push({...firstEventJson});
 
                                 let secondEventJson = JSON.parse(dataJSON).contents;
                                 // secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
@@ -133,7 +133,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 // secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                 // secondEventJson.body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 // secondEventJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                data.contents.push({...secondEventJson});
+                                // data.contents.push({...secondEventJson});
+                                data.contents = secondEventJson;
 
                                 console.log(JSON.stringify(data));
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
