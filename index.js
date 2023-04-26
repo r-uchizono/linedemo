@@ -101,7 +101,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     
                                 // })
 
-                                data.contents = '[' + data.contents + ',' + data.contents + ']'
+                                data.contents = [data.contents,data.contents]
                                 console.log(data.contents);
                                 console.log(data.contents[0]);
 
