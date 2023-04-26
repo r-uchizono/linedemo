@@ -61,13 +61,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             // ユーザーからのテキストメッセージが「新規予約」だった場合のみ反応。
             if (event.message.text == "新規予約"){
                 //データを取りだす
-                const bufferData = fs.readFileSync('yoyaku.json')
+                let bufferData = fs.readFileSync('yoyaku.json')
                 // データを文字列に変換
-                const dataJSON = bufferData.toString()
+                let dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
-                const data = JSON.parse(dataJSON)
+                let data = JSON.parse(dataJSON)
 
-                const query_event_base = {
+                let query_event_base = {
                     text: "SELECT *" +
                           "  FROM m_event_base t1 " +
                           " WHERE current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
@@ -102,7 +102,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     
                                 // })
 
-                                data.contents = [data.contents,data.contents]
+                                // data.contents = [data.contents,data.contents]
                                 console.log(data.contents);
                                 console.log(data.contents[0]);
 
@@ -128,21 +128,24 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 const s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
                                 const s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
 
-                                data.contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents[0].body.contents[0].text = res.rows[0].first_day;
-                                data.contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
-                                data.contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                data.contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                data.contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents[1].body.contents[0].text = res.rows[0].second_day;
-                                data.contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
-                                data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                let firstEventJson = JSON.parse(dataJSON);
+                                templateJson.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                templateJson.body.contents[0].text = f_formattedDate;
+                                templateJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
+                                templateJson.body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                templateJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents.push(firstEventJson);
 
-                                console.log(res.rows[0].first_day);
-                                console.log(res.rows[0].second_day);
-                                // console.log(data.contents[0].body.contents[0]);
-                                // console.log(data.contents[1].body.contents[0]);
+                                let secondEventJson = JSON.parse(dataJSON);
+                                secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                secondEventJson.body.contents[0].text = s_formattedDate;
+                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
+                                secondEventJson.body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                secondEventJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents.push(secondEventJson);
+
+                                console.log(data.contents[0].body.contents[0]);
+                                console.log(data.contents[1].body.contents[0]);
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
