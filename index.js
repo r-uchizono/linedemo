@@ -98,25 +98,43 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 console.log(res.rows.length);
 
                                 res.rows.forEach(function(values){
-                                    console.log(values);
+                                    console.log(values.length);
                                 })
 
-                                const stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
-                                const etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
-                                const SformattedTime = stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
-                                const EformattedTime = etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
-                                const date = new Date(res.rows[0].first_day);
-                                const year = date.getFullYear();
-                                const month = ('0' + (date.getMonth() + 1)).slice(-2);
-                                const day = ('0' + date.getDate()).slice(-2);
-                                const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
-                                const formattedDate = `${year}年${month}月${day}日（${dayOfWeek}）`;
+                                data.contents = data.contents + ',' + data.contents
+                                console.log(data.contents);
 
-                                data.contents.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents.body.contents[0].text = formattedDate;
-                                data.contents.body.contents[1].text = '開催時間　' + SformattedTime + '～' + EformattedTime;
-                                data.contents.body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                data.contents.body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                const f_stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
+                                const f_etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
+                                const s_stime = new Date('2023-04-01T' + res.rows[0].second_start_time);
+                                const s_etime = new Date('2023-04-01T' + res.rows[0].second_end_time);
+                                const F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                const F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                const S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                const S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                const f_date = new Date(res.rows[0].first_day);
+                                const f_year = f_date.getFullYear();
+                                const f_month = ('0' + (f_date.getMonth() + 1)).slice(-2);
+                                const f_day = ('0' + f_date.getDate()).slice(-2);
+                                const f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()];
+                                const f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`;
+                                const s_date = new Date(res.rows[0].second_day);
+                                const s_year = s_date.getFullYear();
+                                const s_month = ('0' + (s_date.getMonth() + 1)).slice(-2);
+                                const s_day = ('0' + s_date.getDate()).slice(-2);
+                                const s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
+                                const s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
+
+                                data.contents[0].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                data.contents[0].body.contents[0].text = f_formattedDate;
+                                data.contents[0].body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
+                                data.contents[0].body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                data.contents[0].body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents[1].header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                data.contents[1].body.contents[0].text = s_formattedDate;
+                                data.contents[1].body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
+                                data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
