@@ -66,7 +66,23 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
-                console.log(data)
+
+                // const today = new Date();
+                // const year = today.getFullYear();
+                // const month = String(today.getMonth() + 1).padStart(2, '0');
+                // const day = String(today.getDate()).padStart(2, '0');
+                // const formattedDate = `${year}/${month}/${day}`;
+
+                // console.log(formattedDate);
+
+                const formattedDate = new Date().toISOString().slice(0, 10);
+                console.log(formattedDate);
+
+                const query = {
+                    text: "SELECT * FROM m_event WHERE first_day > $1 OR second_day > $1",
+                    values:[formattedDate],
+                };
+
                 data.contents.header.contents[0].text = '鹿児島会場'
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
