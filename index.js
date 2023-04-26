@@ -139,8 +139,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 data.contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 data.contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
 
-                                console.log(data.contents[0].body.contents[0].text);
-                                console.log(data.contents[1].body.contents[0].text);
+                                console.log(res.rows[0].first_day);
+                                console.log(res.rows[0].second_day);
                                 // console.log(data.contents[0].body.contents[0]);
                                 // console.log(data.contents[1].body.contents[0]);
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
