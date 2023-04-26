@@ -67,20 +67,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
 
-                // const today = new Date();
-                // const year = today.getFullYear();
-                // const month = String(today.getMonth() + 1).padStart(2, '0');
-                // const day = String(today.getDate()).padStart(2, '0');
-                // const formattedDate = `${year}/${month}/${day}`;
-
-                // console.log(formattedDate);
-
-                const formattedDate = new Date().toISOString().slice(0, 10);
-                console.log(formattedDate);
-
-                const query = {
-                    text: "SELECT * FROM m_event WHERE first_day > $1 OR second_day > $1",
-                    values:[formattedDate],
+                const query_event_base = {
+                    text: "SELECT * " +
+                            "FROM m_event_base t1 " +
+                            "WHERE current_date between t1.start_ymd and t1.end_ymd " +
+                                "OR current_date < t1.start_ymd " +
+                            "ORDER BY t1.start_ymd",
                 };
 
                 client.connect(function (err, client) {
@@ -88,11 +80,23 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                       console.log(err);
                     } else {
                       client
-                        .query(query)
+                        .query(query_event_base)
                         .then((res) => {
                             console.log(res.rows[0]);
                             console.log(res.rows.length);
-                        })
+                            const query_event = {
+                                text: "SELECT * " +
+                                        "FROM m_event t1 " +
+                                        "INNER JOIN m_kaisaiti t2 ON t1.kaisaiti_cd = t2.kaisaiti_cd" +
+                                        "WHERE t1.event_cd = $1 " +
+                                        "ORDER BY t1.first_day",
+                                values:[res.rows[0].event_cd],
+                            };           
+                        }).then(client.query(query_event)
+                        .then((res) => {
+                            console.log(res.rows[0]);
+                            console.log(res.rows.length);
+                        }))
                     }
                 })
 
