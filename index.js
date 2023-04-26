@@ -96,53 +96,43 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                             client.query(query_event)
                             .then((res) => {
-                                console.log(res.rows.length);
-
-                                // res.rows.forEach(function(values){
-                                    
-                                // })
-
-                                // data.contents = [data.contents,data.contents]
-                                console.log(data.contents);
-                                console.log(data.contents[0]);
-
-                                const f_stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
-                                const f_etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
-                                const s_stime = new Date('2023-04-01T' + res.rows[0].second_start_time);
-                                const s_etime = new Date('2023-04-01T' + res.rows[0].second_end_time);
-                                const F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
-                                const F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
-                                const S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
-                                const S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                let f_stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
+                                let f_etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
+                                let s_stime = new Date('2023-04-01T' + res.rows[0].second_start_time);
+                                let s_etime = new Date('2023-04-01T' + res.rows[0].second_end_time);
+                                let F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                let F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                let S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                let S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
                                 
-                                const f_date = new Date(res.rows[0].first_day);
-                                const f_year = f_date.getFullYear();
-                                const f_month = ('0' + (f_date.getMonth() + 1)).slice(-2);
-                                const f_day = ('0' + f_date.getDate()).slice(-2);
-                                const f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()];
-                                const f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`;
-                                const s_date = new Date(res.rows[0].second_day);
-                                const s_year = s_date.getFullYear();
-                                const s_month = ('0' + (s_date.getMonth() + 1)).slice(-2);
-                                const s_day = ('0' + s_date.getDate()).slice(-2);
-                                const s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
-                                const s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
+                                let f_date = new Date(res.rows[0].first_day);
+                                let f_year = f_date.getFullYear();
+                                let f_month = ('0' + (f_date.getMonth() + 1)).slice(-2);
+                                let f_day = ('0' + f_date.getDate()).slice(-2);
+                                let f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()];
+                                let f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`;
+                                let s_date = new Date(res.rows[0].second_day);
+                                let s_year = s_date.getFullYear();
+                                let s_month = ('0' + (s_date.getMonth() + 1)).slice(-2);
+                                let s_day = ('0' + s_date.getDate()).slice(-2);
+                                let s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
+                                let s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
 
                                 let firstEventJson = JSON.parse(dataJSON);
-                                firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                firstEventJson.body.contents[0].text = f_formattedDate;
-                                firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
-                                firstEventJson.body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                firstEventJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                data.contents.push(firstEventJson);
+                                firstEventJson.contents.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                firstEventJson.contents.body.contents[0].text = f_formattedDate;
+                                firstEventJson.contents.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
+                                firstEventJson.contents.body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                firstEventJson.contents.body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents.push(firstEventJson.contents);
 
                                 let secondEventJson = JSON.parse(dataJSON);
-                                secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                secondEventJson.body.contents[0].text = s_formattedDate;
-                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
-                                secondEventJson.body.contents[2].text = '場所　' + res.rows[0].place_name;
-                                secondEventJson.body.contents[3].text = '　　　' + res.rows[0].place_address;
-                                data.contents.push(secondEventJson);
+                                secondEventJson.contents.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                secondEventJson.contents.body.contents[0].text = s_formattedDate;
+                                secondEventJson.contents.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
+                                secondEventJson.contents.body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                secondEventJson.contents.body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                data.contents.push(secondEventJson.contents);
 
                                 console.log(data.contents[0].body.contents[0]);
                                 console.log(data.contents[1].body.contents[0]);
