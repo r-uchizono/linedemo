@@ -136,12 +136,18 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 new_contents[1].body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 new_contents[1].body.contents[3].text = '　　　' + res.rows[0].place_address;
 
-                                data.contents = new_contents;
-                                console.log(data.contents[0].body.contents[0]);
-                                console.log(data.contents[1].body.contents[0]);
-                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                                events_processed.push(bot.replyMessage(event.replyToken, data));
+                                // data.contents = new_contents;
+                                // console.log(data.contents[0].body.contents[0]);
+                                // console.log(data.contents[1].body.contents[0]);
+                                // // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                // events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
+                        }).then((new_contents) =>{
+                            data.contents = new_contents;
+                            console.log(data.contents[0].body.contents[0]);
+                            console.log(data.contents[1].body.contents[0]);
+                            // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                            events_processed.push(bot.replyMessage(event.replyToken, data));
                         })
                     }
                 })
