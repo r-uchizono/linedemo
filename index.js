@@ -83,6 +83,18 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     values:[formattedDate],
                 };
 
+                client.connect(function (err, client) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      client
+                        .query(query)
+                        .then((res) => {
+                            console.log(res.rows[0]);
+                        })
+                    }
+                })
+
                 data.contents.header.contents[0].text = '鹿児島会場'
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
