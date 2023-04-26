@@ -99,9 +99,20 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 console.log(res.rows[0]);
                                 console.log(res.rows.length);
 
+                                const stime = new Date('2023-04-01T' + res.rows[0].first_start_time);
+                                const etime = new Date('2023-04-01T' + res.rows[0].first_end_time);
+                                const SformattedTime = stime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                const EformattedTime = etime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric'});
+                                const date = new Date(res.rows[0].first_day);
+                                const year = date.getFullYear();
+                                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                                const day = ('0' + date.getDate()).slice(-2);
+                                const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+                                const formattedDate = `${year}年${month}月${day}日（${dayOfWeek}）`;
+
                                 data.contents.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
-                                data.contents.body.contents[0].text = res.rows[0].first_day;
-                                data.contents.body.contents[1].text = '開催時間　' + res.rows[0].first_start_time + '～' + res.rows[0].first_end_time;
+                                data.contents.body.contents[0].text = formattedDate;
+                                data.contents.body.contents[1].text = '開催時間　' + SformattedTime + '～' + EformattedTime;
                                 data.contents.body.contents[2].text = '場所　' + res.rows[0].place_name;
                                 data.contents.body.contents[3].text = '　　　' + res.rows[0].place_address;
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。

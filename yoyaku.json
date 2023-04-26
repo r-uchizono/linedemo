@@ -10,7 +10,7 @@
         {
         "type": "text",
         "text": "会場",
-        "size": "xl",
+        "size": "md",
         "position": "relative",
         "align": "center",
         "color": "#FFFFFF"
