@@ -92,19 +92,25 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         "ORDER BY t1.first_day",
                                 values:[res.rows[0].event_cd],
                             };  
-                            
+                            let event_nm = res.rows[0].event_nm
+
                             client.query(query_event)
                             .then((res) => {
                                 console.log(res.rows[0]);
                                 console.log(res.rows.length);
+
+                                data.contents.header.contents[0].text = event_nm + '/' + res.rows[0].kaisaiti_nm + '会場';
+                                data.contents.body.contents[0].text = res.rows[0].first_day;
+                                data.contents.body.contents[1].text = '開催時間　' + res.rows[0].first_start_time + '～' + res.rows[0].first_end_time;
+                                data.contents.body.contents[2].text = '場所　' + res.rows[0].place_name;
+                                data.contents.body.contents[3].text = '　　　' + res.rows[0].place_address;
+                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
                         })
                     }
                 })
 
-                data.contents.header.contents[0].text = '鹿児島会場'
-                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, data));
             }
             else if (event.message.text == "予約確認"){
                 //データを取りだす
