@@ -170,9 +170,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         console.log(data);
                                         console.log(data.contents.contents);
                                     }
-
-                                    
-                                    
+                                
                                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                     events_processed.push(bot.replyMessage(event.replyToken, data));
                                     data = JSON.parse(dataJSON)
@@ -205,7 +203,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(getRandomValues(array));
 
                 const query = {
-                    text: "SELECT user_id FROM t_yoyaku WHERE user_id = $1",
+                    text: "SELECT user_cd FROM t_yoyaku WHERE user_cd = $1",
                     values:[event.source.userId],
                 };
 
@@ -255,7 +253,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
   
             // DB登録処理
             const query = {
-                text: 'INSERT INTO t_yoyaku(event_id, user_id, reserve_time) VALUES($1, $2, $3)',
+                text: 'INSERT INTO t_yoyaku(event_cd, user_id, reserve_time) VALUES($1, $2, $3)',
                 values: [event.postback.data.split('=')[1], event.source.userId, event.postback.params.time],
             }
 
