@@ -171,6 +171,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     
                                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                     events_processed.push(bot.replyMessage(event.replyToken, data));
+                                    events_processed.push(bot.replyMessage(event.replyToken, data));
                                     data.contents.contents = [];
                                 }
                                 
