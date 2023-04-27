@@ -59,7 +59,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             // ユーザーからのテキストメッセージが「新規予約」だった場合のみ反応。
-            if (event.message.text == "新規予約"){
+            if (event.message.text == "イベント一覧"){
                 //データを取りだす
                 let bufferData = fs.readFileSync('yoyaku.json')
                 // データを文字列に変換
