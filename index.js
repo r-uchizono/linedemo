@@ -104,7 +104,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 let row =  Math.ceil(res.rows.length/6);
                                 console.log(row);
 
-                                for(let I = 1; I < row; I++){
+                                for(let I = 0; I < row; I++){
                                     if(res.rows.length <= 6)
                                     {
                                         end = res.rows.length
@@ -112,13 +112,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     else 
                                     { 
                                         if(res.rows.length - end > 6){
-                                            end = I*6;
+                                            end = (I + 1)*6;
                                         }
                                         else{
                                             end = res.rows.length
                                         }
                                         
-                                        start = (I - 1)*6
+                                        start = (I)*6
                                         console.log(start);
                                     }
 
