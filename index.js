@@ -154,7 +154,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         })
                     }
                 })
-
             }
             else if (event.message.text == "予約確認"){
                 //データを取りだす
