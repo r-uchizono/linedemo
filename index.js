@@ -105,6 +105,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 console.log(row);
 
                                 for(let I = 0; I < row; I++){
+                                    console.log("roop start");
                                     if(res.rows.length <= 6)
                                     {
                                         end = res.rows.length
