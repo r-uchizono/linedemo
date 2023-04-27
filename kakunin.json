@@ -62,6 +62,15 @@
                 "data": "torikesi_id=200"
                 },
                 "color": "#FFFFFF"
+            },
+            {
+                "type": "button",
+                "action": {
+                "type": "postback",
+                "label": "時間変更",
+                "data": "torikesi_id=200"
+                },
+                "color": "#FFFFFF"
             }
         ]
     },
