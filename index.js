@@ -99,6 +99,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                             .then((res) => {
 
                                 let count = 0;
+
+                                Math.ceil(res.rows.length/6);
+                                console.log(res.rows.length/6);
+
+                                for(let I = 0; I < count; I++){
+                                    
+                                }
                                 if(res.rows.length <= 6)
                                 {
                                     count = res.rows.length
@@ -147,7 +154,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     secondEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
                                     data.contents.contents.push({...secondEventJson});
                                 }
-                                console.log(JSON.stringify(data));
+                                
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data));
                             })
