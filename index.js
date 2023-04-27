@@ -98,7 +98,16 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                             client.query(query_event)
                             .then((res) => {
 
-                                for(let i = 0; i < res.rows.length; i++){
+                                let count = 0;
+                                if(res.rows.length <= 6)
+                                {
+                                    count = res.rows.length
+                                }
+                                else 
+                                {
+                                    count = 6
+                                }
+                                for(let i = 0; i < count; i++){
 
                                     let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time);
                                     let f_etime = new Date('2023-04-01T' + res.rows[i].first_end_time);
