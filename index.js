@@ -119,7 +119,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         }
                                         
                                         start = (I - 1)*6
+                                        console.log(start);
                                     }
+
+                                    console.log(end);
+
                                     for(let i = start; i < end; i++){
 
                                         let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time);
