@@ -166,7 +166,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         secondEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
                                         data.contents.contents.push({...secondEventJson});
                                     }
-                                    if(I = 1){
+                                    if(I == 1){
                                         console.log(data);
                                     }
                                     
