@@ -101,7 +101,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 let count = 0;
 
                                 Math.ceil(res.rows.length/6);
-                                console.log(res.rows.length/6);
+                                console.log(Math.ceil(res.rows.length/6));
 
                                 for(let I = 0; I < count; I++){
                                     
