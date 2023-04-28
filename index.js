@@ -144,6 +144,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         let f_day = ('0' + f_date.getDate()).slice(-2);
                                         let f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()];
                                         let f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`;
+                                        let f_dataDate = `${f_year}/${f_month}/${f_day}`;
 
                                         let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0];
                                         firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場';
@@ -151,7 +152,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
                                         firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                         firstEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
-                                        firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].first_day;
+                                        firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + f_dataDate;
                                         data[0].contents.contents.push({...firstEventJson});
 
                                         if(res.rows[i].second_day != null)
@@ -162,6 +163,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             let s_day = ('0' + s_date.getDate()).slice(-2);
                                             let s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
                                             let s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
+                                            let s_dataDate = `${s_year}/${s_month}/${s_day}`;
 
                                             let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0];
                                             secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場';
@@ -169,7 +171,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                             secondEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
-                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].second_day;
+
+                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
                                     }
