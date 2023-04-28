@@ -212,7 +212,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(getRandomValues(array));
 
                 const query = {
-                    text: "SELECT user_id FROM t_yoyaku WHERE user_id = $1",
+                    text: "SELECT user_id FROM m_user WHERE user_id = $1",
                     values:[event.source.userId],
                 };
 
