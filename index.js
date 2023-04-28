@@ -178,9 +178,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
+
+                                        console.log(firstEventJson.body.contents[3].action.uri)
                                     }
-                                
-                                    console.log(firstEventJson.body.contents[3].action.uri)
 
                                     data_message.push({...data[0]});
                                     data = JSON.parse(dataJSON)
