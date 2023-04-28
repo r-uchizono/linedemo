@@ -173,9 +173,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
                                     }
-                                    if(I == 1){
-                                        console.log(data[0].contents.contents[0].footer.contents[0].action.data.split('=')[1]);
-                                    }
                                 
                                     data_message.push({...data[0]});
                                     data = JSON.parse(dataJSON)
@@ -263,10 +260,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
             // DB登録処理
             const query = {
                 text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
-                values: [event.postback.data.split('=')[1], 1 ,event.source.userId, event.postback.params.time + event.postback.data.split('=')[2]],
+                values: [event.postback.data.split('=')[1], 1 , event.source.userId, event.postback.data.split('=')[2] + event.postback.params.time],
             }
 
-            console.log(event.postback.params.time + event.postback.data.split('=')[2]);
+            console.log(event.postback.data.split('=')[2] + event.postback.params.time);
             
             console.log(event.postback.data);
 
