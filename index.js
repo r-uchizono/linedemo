@@ -259,12 +259,12 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 
             }
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
-            console.log(event.postback.params.time);
+            console.log(event.postback.params.datetime);
   
             // DB登録処理
             const query = {
                 text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
-                values: [event.postback.data.split('=')[1], 2023 ,event.source.userId, event.postback.params.time],
+                values: [event.postback.data.split('=')[1], 2023 ,event.source.userId, event.postback.params.datetime],
             }
 
             console.log(event.postback.data);
