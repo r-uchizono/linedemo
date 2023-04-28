@@ -58,7 +58,7 @@
                                 "type": "datetimepicker",
                                 "label": "日時を選択してください",
                                 "data": "event_id=100",
-                                "mode": "datetime"
+                                "mode": "time"
                             },
                             "color": "#FFFFFF"
                         }
