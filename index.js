@@ -151,8 +151,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
                                         firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                         firstEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
-                                        firstEventJson.footer.contents[0].action.data.split('=')[1] = res.rows[i].event_cd;
-                                        firstEventJson.footer.contents[0].action.data.split('=')[2] = res.rows[i].first_day;
+                                        firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].first_day;
                                         data[0].contents.contents.push({...firstEventJson});
 
                                         if(res.rows[i].second_day != null)
@@ -170,8 +169,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                             secondEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
-                                            secondEventJson.footer.contents[0].action.data.split('=')[1] = res.rows[i].event_cd;
-                                            secondEventJson.footer.contents[0].action.data.split('=')[2] = res.rows[i].second_day;
+                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].second_day;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
                                     }
