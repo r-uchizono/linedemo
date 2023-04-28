@@ -171,25 +171,21 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         console.log(data.contents.contents);
                                     }
                                 
-                                    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                                    events_processed.push(bot.replyMessage(event.replyToken, data));
+                                    data.push({...data});
                                     data = JSON.parse(dataJSON)
                                     data.contents.contents = [];
                                 }
+
+                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                events_processed.push(bot.replyMessage(event.replyToken, data));
                                 
-                            }).then((res) => {
-                                Promise.all(events_processed).then(
-                                    (response) => {
-                                        console.log(`${response.length} event(s) processed.`);
-                                    }
-                                );
                             })
                             
                         })
                     }
                 })
             }
-            
+
             else if (event.message.text == "予約確認"){
                 //データを取りだす
                 const bufferData = fs.readFileSync('kakunin.json')
@@ -211,7 +207,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 console.log(getRandomValues(array));
 
                 const query = {
-                    text: "SELECT user_cd FROM t_yoyaku WHERE user_cd = $1",
+                    text: "SELECT user_id FROM t_yoyaku WHERE user_id = $1",
                     values:[event.source.userId],
                 };
 
@@ -261,9 +257,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
   
             // DB登録処理
             const query = {
-                text: 'INSERT INTO t_yoyaku(event_cd, user_id, reserve_time) VALUES($1, $2, $3)',
-                values: [event.postback.data.split('=')[1], event.source.userId, event.postback.params.time],
+                text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3)',
+                values: [event.postback.data.split('=')[1], '2023B',event.source.userId, event.postback.params.time],
             }
+
+            console.log(event.postback.data);
 
             client.connect(function (err, client) {
                 if (err) {
@@ -295,10 +293,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
         }
     });
 
-    // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
-    // Promise.all(events_processed).then(
-    //     (response) => {
-    //         console.log(`${response.length} event(s) processed.`);
-    //     }
-    // );
+    //すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
+    Promise.all(events_processed).then(
+        (response) => {
+            console.log(`${response.length} event(s) processed.`);
+        }
+    );
 });
