@@ -172,7 +172,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         console.log(data[0].contents.contents);
                                     }
                                 
-                                    data_message.push({...data});
+                                    data_message.push({...data[0]});
                                     data = JSON.parse(dataJSON)
                                     data[0].contents.contents = [];
                                 }
