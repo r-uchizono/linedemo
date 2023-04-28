@@ -1,4 +1,4 @@
-{
+[{
     "type": "flex",
     "altText": "This is a Flex Message",
     "contents": {
@@ -75,4 +75,4 @@
             }
         ]
     }
-}
+}]
