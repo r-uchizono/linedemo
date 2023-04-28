@@ -154,7 +154,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         let address = res.rows[i].place_address;
                                         let url = `https://www.google.com/maps/search/?api=1&query=${address}`;
                                         firstEventJson.body.contents[3].text = '　　　' + address;
-                                        firstEventJson.body.contents[3].action.uri = url;
+                                        //firstEventJson.body.contents[3].action.uri = url;
                                         firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + f_dataDate;
                                         data[0].contents.contents.push({...firstEventJson});
 
@@ -174,7 +174,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                             secondEventJson.body.contents[3].text = '　　　' + address;
-                                            secondEventJson.body.contents[3].action.uri = url;
+                                            //secondEventJson.body.contents[3].action.uri = url;
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
