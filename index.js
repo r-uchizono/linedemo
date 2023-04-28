@@ -151,7 +151,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[0].text = f_formattedDate;
                                         firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
                                         firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
-                                        firstEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
+
+                                        let adress = res.rows[i].place_address;
+                                        let url = `https://www.google.com/maps/search/?api=1&query=${adress}`;
+                                        firstEventJson.body.contents[3].text = '　　　' + adress + '\n${url}';
                                         firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + f_dataDate;
                                         data[0].contents.contents.push({...firstEventJson});
 
@@ -170,11 +173,17 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[0].text = s_formattedDate;
                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
-                                            secondEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address;
 
+                                            let adress = res.rows[i].place_address;
+                                            let url = `https://www.google.com/maps/search/?api=1&query=${adress}`;
+                                            secondEventJson.body.contents[3].text = '　　　' + address + '\n${url}';
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
+
+                                        
+                                        secondEventJson.body.contents[3].text = '　　　' + res.rows[i].place_address + '\n${url}';
+
                                     }
                                 
                                     data_message.push({...data[0]});
