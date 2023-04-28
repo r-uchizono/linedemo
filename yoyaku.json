@@ -57,7 +57,7 @@
                             "action": {
                                 "type": "datetimepicker",
                                 "label": "日時を選択してください",
-                                "data": "event_id=100",
+                                "data": "event_id=100=date",
                                 "mode": "time"
                             },
                             "color": "#FFFFFF"
