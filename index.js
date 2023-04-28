@@ -66,6 +66,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 let dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 let data = JSON.parse(dataJSON)
+                let data_message = JSON.parse(dataJSON)
                 data[0].contents.contents = [];
 
                 let query_event_base = {
@@ -171,7 +172,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         console.log(data[0].contents.contents);
                                     }
                                 
-                                    data_message = JSON.parse(dataJSON)
                                     data_message.push({...data});
                                     data = JSON.parse(dataJSON)
                                     data[0].contents.contents = [];
