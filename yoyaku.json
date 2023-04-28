@@ -43,7 +43,12 @@
                         {
                             "type": "text",
                             "text": "場所２",
-                            "size": "sm"
+                            "size": "sm",
+                            "action": {
+                                "type": "uri",
+                                "label": "action",
+                                "uri": ""
+                              }
                         }
                     ],
                     "backgroundColor": "#fbdac8"
