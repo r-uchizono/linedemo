@@ -176,15 +176,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         }
                                     }
                                     if(I == 1){
-                                        console.log(data[0].contents.contents[0].footer);
+                                        console.log(data[0].contents.contents[0].footer.contents[0]);
                                     }
                                 
                                     data_message.push({...data[0]});
                                     data = JSON.parse(dataJSON)
                                     data[0].contents.contents = [];
                                 }
-
-                                console.log(data_message);
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data_message));
                                 
