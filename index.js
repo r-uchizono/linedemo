@@ -255,7 +255,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 
             }
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
-            console.log(event.postback.params.datetime);
   
             // DB登録処理
             const query = {
