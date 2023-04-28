@@ -176,8 +176,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         }
                                     }
                                     if(I == 1){
-                                        console.log(data);
-                                        console.log(data[0].contents.contents);
+                                        console.log(data[0].contents.contents.footer);
                                     }
                                 
                                     data_message.push({...data[0]});
