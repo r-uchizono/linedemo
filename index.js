@@ -180,6 +180,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         }
 
                                         console.log(firstEventJson.body.contents[3].action.uri)
+                                        console.log(firstEventJson.body.contents[3].action.label)
                                     }
 
                                     data_message.push({...data[0]});
