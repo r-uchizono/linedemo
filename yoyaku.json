@@ -41,9 +41,15 @@
                             "size": "sm"
                         },
                         {
-                            "type": "text",
-                            "text": "場所２",
-                            "size": "sm"
+                            "type": "button",
+                            "action": {
+                                "type": "uri",
+                                "label": "",
+                                "uri": ""
+                            },
+                            "offsetStart": "-67px",
+                            "style": "link",
+                            "height": "sm"
                         }
                     ],
                     "backgroundColor": "#fbdac8"
