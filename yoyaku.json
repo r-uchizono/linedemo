@@ -44,8 +44,8 @@
                             "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "basyo",
-                                "uri": "url"
+                                "label": "住所",
+                                "uri": "https://www.google.com/maps/search/?api=1&query=鹿児島市"
                             },
                             "offsetStart": "-67px",
                             "style": "link",
