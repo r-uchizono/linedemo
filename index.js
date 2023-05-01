@@ -121,11 +121,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         }
                                         
                                         start = (I)*6
-                                        console.log(start);
                                     }
-
-                                    console.log(end);
-                                    console.log(I);
 
                                     for(let i = start; i < end; i++){
 
@@ -177,9 +173,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate + '=' + res.rows[i].kaisaiti_cd;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
-
-                                        console.log(firstEventJson.body.contents[3].action.uri)
-                                        // console.log(firstEventJson.body.contents[3].action.label)
                                     }
 
                                     data_message.push({...data[0]});
@@ -292,17 +285,20 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
+                data.contents.body.contents = [];
 
                 for(let i = 1; i < 10; i++){
                     data.contents.body.contents[i].data = 'a_ninzu=' + i + '=' + event.postback.data;
                 }
+
+                console.log(data.contents.body.contents);
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
             else if(event.postback.data.split('=')[0] == "a_ninzu"){
                 // DB登録処理
                 // const query = {
-                //     text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
+                //     text: 'UPDATE t_yoyaku SET (event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
                 //     values: [event.postback.data.split('=')[1], 1 , event.source.userId, event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000'],
                 // }
 
