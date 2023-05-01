@@ -9,14 +9,14 @@
       "contents": [
         {
           "type": "text",
-          "text": "大人の方は何名ですか？"
+          "text": "子供の方は何名ですか？"
         },
         {
           "type": "button",
           "action": {
             "type": "postback",
             "label": "1名",
-            "data": "ninzu"
+            "data": "c_ninzu=1"
           },
           "height": "sm",
           "style": "primary",
@@ -28,10 +28,10 @@
           "action": {
             "type": "postback",
             "label": "2名",
-            "data": "ninzu"
+            "data": "c_ninzu=2"
           },
           "height": "sm",
-          "margin": "2px",
+          "margin": "5px",
           "style": "primary",
           "color": "#f3981d"
         },
@@ -40,10 +40,10 @@
           "action": {
             "type": "postback",
             "label": "3名",
-            "data": "ninzu"
+            "data": "c_ninzu=3"
           },
           "height": "sm",
-          "margin": "2px",
+          "margin": "5px",
           "style": "primary",
           "color": "#f3981d"
         },
@@ -52,10 +52,10 @@
           "action": {
             "type": "postback",
             "label": "4名",
-            "data": "ninzu"
+            "data": "c_ninzu=4"
           },
           "height": "sm",
-          "margin": "2px",
+          "margin": "5px",
           "style": "primary",
           "color": "#f3981d"
         },
@@ -64,10 +64,10 @@
           "action": {
             "type": "postback",
             "label": "5名",
-            "data": "ninzu"
+            "data": "c_ninzu=5"
           },
           "height": "sm",
-          "margin": "2px",
+          "margin": "5px",
           "style": "primary",
           "color": "#f3981d"
         },
@@ -76,10 +76,10 @@
           "action": {
             "type": "postback",
             "label": "6名",
-            "data": "ninzu"
+            "data": "c_ninzu=6"
           },
           "height": "sm",
-          "margin": "2px",
+          "margin": "5px",
           "style": "primary",
           "color": "#f3981d"
         },
@@ -88,11 +88,11 @@
           "action": {
             "type": "postback",
             "label": "7名",
-            "data": "ninzu"
+            "data": "c_ninzu=7"
           },
           "height": "sm",
           "style": "primary",
-          "margin": "2px",
+          "margin": "5px",
           "color": "#f3981d"
         },
         {
@@ -100,11 +100,11 @@
           "action": {
             "type": "postback",
             "label": "8名",
-            "data": "ninzu"
+            "data": "c_ninzu=8"
           },
           "height": "sm",
           "style": "primary",
-          "margin": "2px",
+          "margin": "5px",
           "color": "#f3981d"
         },
         {
@@ -112,11 +112,11 @@
           "action": {
             "type": "postback",
             "label": "9名",
-            "data": "ninzu"
+            "data": "c_ninzu=9"
           },
           "height": "sm",
           "style": "primary",
-          "margin": "1px",
+          "margin": "5px",
           "color": "#f3981d"
         }
       ],

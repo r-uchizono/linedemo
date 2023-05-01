@@ -261,42 +261,75 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 
             }
-        // この処理の対象をイベントタイプがポストバックで、かつ、「イベント一覧」だった場合。
-        } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
-  
-            // DB登録処理
-            const query = {
-                text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
-                values: [event.postback.data.split('=')[1], 1 , event.source.userId, event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000'],
-            }
-
-            console.log(event.postback.data.split('=')[2] + event.postback.params.time);
-            
-            console.log(event.postback.data);
-
-            client.connect(function (err, client) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  client
-                    .query(query)
-                    .then(() => {
-                      console.log('Data Inserted.');
-                    })
-                    .catch((e) => {
-                      console.error(e.stack);
-                    });
+        // この処理の対象をイベントタイプがポストバックだった場合。
+        } else if (event.type == "postback") {
+            // 「イベント一覧」の場合
+            if(event.postback.data.split('=')[0] == "event_id"){
+                // DB登録処理
+                const query = {
+                    text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
+                    values: [event.postback.data.split('=')[1], 1 , event.source.userId, event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000'],
                 }
-            });
 
-            //データを取りだす
-            const bufferData = fs.readFileSync('ninzu.json')
-            // データを文字列に変換
-            const dataJSON = bufferData.toString()
-            //JSONのデータをJavascriptのオブジェクトに
-            const data = JSON.parse(dataJSON)
+                client.connect(function (err, client) {
+                    if (err) {
+                    console.log(err);
+                    } else {
+                    client
+                        .query(query)
+                        .then(() => {
+                        console.log('Data Inserted.');
+                        })
+                        .catch((e) => {
+                        console.error(e.stack);
+                        });
+                    }
+                });
 
-            events_processed.push(bot.replyMessage(event.replyToken, data));
+                //データを取りだす
+                const bufferData = fs.readFileSync('a_ninzu.json')
+                // データを文字列に変換
+                const dataJSON = bufferData.toString()
+                //JSONのデータをJavascriptのオブジェクトに
+                const data = JSON.parse(dataJSON)
+
+                events_processed.push(bot.replyMessage(event.replyToken, data));
+            }
+            else if(event.postback.data.split('=')[0] == "a_ninzu"){
+                // DB登録処理
+                // const query = {
+                //     text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
+                //     values: [event.postback.data.split('=')[1], 1 , event.source.userId, event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000'],
+                // }
+
+                //console.log(event.postback.data.split('=')[2] + event.postback.params.time);
+                
+                console.log(event.postback.data);
+
+                // client.connect(function (err, client) {
+                //     if (err) {
+                //     console.log(err);
+                //     } else {
+                //     client
+                //         .query(query)
+                //         .then(() => {
+                //         console.log('Data Updated.');
+                //         })
+                //         .catch((e) => {
+                //         console.error(e.stack);
+                //         });
+                //     }
+                // });
+
+                //データを取りだす
+                const bufferData = fs.readFileSync('c_ninzu.json')
+                // データを文字列に変換
+                const dataJSON = bufferData.toString()
+                //JSONのデータをJavascriptのオブジェクトに
+                const data = JSON.parse(dataJSON)
+
+                events_processed.push(bot.replyMessage(event.replyToken, data));
+            }
         }
         else {
             const message = {
