@@ -150,7 +150,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         let address = res.rows[i].place_address;
                                         firstEventJson.body.contents[3].action.label = address;
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-                                        firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + f_dataDate + '=' + res.rows[i].kaisaiti_cd;
+                                        firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
                                         data[0].contents.contents.push({...firstEventJson});
 
                                         if(res.rows[i].second_day != null)
@@ -170,7 +170,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                             secondEventJson.body.contents[3].action.label = address;
                                             secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate + '=' + res.rows[i].kaisaiti_cd;
+                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
                                     }
