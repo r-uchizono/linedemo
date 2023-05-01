@@ -45,7 +45,7 @@
                             "action": {
                                 "type": "uri",
                                 "label": "basyo",
-                                "uri": "https://www.google.com/maps/search/?api=1&query=${address}"
+                                "uri": "https://www.google.com/maps/search/?api=1&query=鹿児島"
                             }
                         }
                     ],
