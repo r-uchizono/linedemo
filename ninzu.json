@@ -1,0 +1,126 @@
+{
+    "type": "flex",
+    "altText": "イベント予約",
+    "contents": {
+    "type": "bubble",
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "大人の方は何名ですか？"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "1名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "style": "primary",
+          "margin": "10px",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "2名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "margin": "2px",
+          "style": "primary",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "3名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "margin": "2px",
+          "style": "primary",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "4名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "margin": "2px",
+          "style": "primary",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "5名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "margin": "2px",
+          "style": "primary",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "6名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "margin": "2px",
+          "style": "primary",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "7名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "style": "primary",
+          "margin": "2px",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "8名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "style": "primary",
+          "margin": "2px",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "9名",
+            "data": "ninzu"
+          },
+          "height": "sm",
+          "style": "primary",
+          "margin": "1px",
+          "color": "#f3981d"
+        }
+      ],
+      "backgroundColor": "#fbdac8"
+    }
+    }
+}

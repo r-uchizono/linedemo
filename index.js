@@ -58,7 +58,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            // ユーザーからのテキストメッセージが「新規予約」だった場合のみ反応。
+            // ユーザーからのテキストメッセージが「イベント一覧」だった場合のみ反応。
             if (event.message.text == "イベント一覧"){
                 //データを取りだす
                 let bufferData = fs.readFileSync('yoyaku.json')
@@ -195,7 +195,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     }
                 })
             }
-
+            // ユーザーからのテキストメッセージが「予約確認」だった場合のみ反応。
             else if (event.message.text == "予約確認"){
                 //データを取りだす
                 const bufferData = fs.readFileSync('kakunin.json')
@@ -203,12 +203,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
-                console.log(data)
                 //data.contents.header.contents[0].text = '鹿児島会場'
                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
-
+            // ユーザーからのテキストメッセージが「会員ID」だった場合のみ反応。
             else if (event.message.text == "会員ID") {                  
                 //画像ファイル名としてランダムな文字列作成
                 let S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -262,6 +261,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 
             }
+        // この処理の対象をイベントタイプがポストバックで、かつ、「イベント一覧」だった場合。
         } else if (event.type == "postback" && event.postback.data.split('=')[0] == "event_id"){
   
             // DB登録処理
@@ -289,11 +289,14 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 }
             });
 
-            let message = {
-                type: 'text',
-                text: '予約が完了しました'
-            };
-            events_processed.push(bot.replyMessage(event.replyToken, message));
+            //データを取りだす
+            const bufferData = fs.readFileSync('ninzu.json')
+            // データを文字列に変換
+            const dataJSON = bufferData.toString()
+            //JSONのデータをJavascriptのオブジェクトに
+            const data = JSON.parse(dataJSON)
+
+            events_processed.push(bot.replyMessage(event.replyToken, data));
         }
         else {
             const message = {

@@ -1,6 +1,6 @@
 {
     "type": "flex",
-    "altText": "this is a flex message",
+    "altText": "予約確認",
     "contents": {
     "type": "bubble",
     "header": {
