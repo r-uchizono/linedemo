@@ -289,9 +289,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 for(let i = 1; i < 10; i++){
                     data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data;
+                    console.log(data.contents.body.contents[i]);
                 }
-
-                console.log(data.contents.body.contents);
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
