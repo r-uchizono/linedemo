@@ -170,7 +170,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                             secondEventJson.body.contents[3].action.label = address;
                                             secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + s_dataDate + '=' + res.rows[i].kaisaiti_cd;
+                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
                                     }
@@ -261,7 +261,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 // DB登録処理
                 const query = {
                     text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
-                    values: [event.postback.data.split('=')[1], event.postback.data.split('=')[3] , event.source.userId, event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000'],
+                    values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2] , event.source.userId, event.postback.data.split('=')[3] + ' ' + event.postback.params.time + ':00.000'],
                 }
 
                 client.connect(function (err, client) {
@@ -287,7 +287,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const data = JSON.parse(dataJSON)
 
                 for(let i = 1; i < 10; i++){
-                    data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data;
+                    data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data + ' ' + event.postback.params.time + ':00.000';
                 }
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
@@ -316,8 +316,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                           '   SET reserve_a_count = $1, reserve_c_count = $2' +
                           ' WHERE user_id = $3' + 
                           ' AND   event_cd = $4' +
-                          ' AND   reserve_time = $5' +
-                          ' AND   kaisaiti_cd = $6',
+                          ' AND   kaisaiti_cd = $5' +
+                          ' AND   reserve_time = $6',
                     values: [event.postback.data.split('=')[3], event.postback.data.split('=')[1], event.source.userId, event.postback.data.split('=')[5], event.postback.data.split('=')[6], event.postback.data.split('=')[7]],
                 }
                 
