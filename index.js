@@ -288,7 +288,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 data.contents.body.contents = [];
 
                 for(let i = 1; i < 10; i++){
-                    data.contents.body.contents[i].data = 'a_ninzu=' + i + '=' + event.postback.data;
+                    data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data;
                 }
 
                 console.log(data.contents.body.contents);
