@@ -285,7 +285,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
-                data.contents.body.contents = [];
 
                 for(let i = 1; i < 10; i++){
                     data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data;
