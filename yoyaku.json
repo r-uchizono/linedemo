@@ -45,7 +45,7 @@
                             "action": {
                                 "type": "uri",
                                 "label": "住所",
-                                "uri": "https://goo.gl/maps/PMSF25FfQqP2FsXS7"
+                                "uri": "https://www.google.com/maps/search/?api=1&query="
                             },
                             "offsetStart": "-67px",
                             "style": "link",
