@@ -152,7 +152,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
                                         firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                         let address = res.rows[i].place_address;
-                                        let url = `https://www.google.com/maps/search/?api=1&query=${address}`;
                                         firstEventJson.body.contents[3].action.label = address;
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                         firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + f_dataDate;

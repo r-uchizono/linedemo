@@ -33,12 +33,12 @@
                         {
                             "type": "text",
                             "text": "開催時間",
-                            "size": "sm"
+                            "size": "15px"
                         },
                         {
                             "type": "text",
                             "text": "場所",
-                            "size": "sm"
+                            "size": "15px"
                         },
                         {
                             "type": "button",
