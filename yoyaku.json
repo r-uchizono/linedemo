@@ -47,7 +47,7 @@
                                 "label": "住所",
                                 "uri": "https://www.google.com/maps/search/?api=1&query="
                             },
-                            "offsetStart": "30px",
+                            "offsetStart": "29px",
                             "offsetTop": "-15px"
                         }
                     ],
