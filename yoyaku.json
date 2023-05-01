@@ -44,8 +44,8 @@
                             "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "",
-                                "uri": ""
+                                "label": "basyo",
+                                "uri": "url"
                             },
                             "offsetStart": "-67px",
                             "style": "link",
