@@ -44,7 +44,7 @@
                             "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "",
+                                "label": "basyo",
                                 "uri": "https://unis-soft.co.jp/"
                             },
                             "offsetStart": "-67px",
