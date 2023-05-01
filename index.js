@@ -288,36 +288,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                 for(let i = 1; i < 10; i++){
                     data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data;
-                    console.log(data.contents.body.contents[i]);
                 }
 
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
             else if(event.postback.data.split('=')[0] == "a_ninzu"){
-                // DB登録処理
-                // const query = {
-                //     text: 'UPDATE t_yoyaku SET (event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
-                //     values: [event.postback.data.split('=')[1], 1 , event.source.userId, event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000'],
-                // }
-
-                //console.log(event.postback.data.split('=')[2] + event.postback.params.time);
                 
                 console.log(event.postback.data);
-
-                // client.connect(function (err, client) {
-                //     if (err) {
-                //     console.log(err);
-                //     } else {
-                //     client
-                //         .query(query)
-                //         .then(() => {
-                //         console.log('Data Updated.');
-                //         })
-                //         .catch((e) => {
-                //         console.error(e.stack);
-                //         });
-                //     }
-                // });
 
                 //データを取りだす
                 const bufferData = fs.readFileSync('c_ninzu.json')
@@ -326,7 +303,47 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
 
+                for(let i = 1; i < 10; i++){
+                    data.contents.body.contents[i].action.data = 'c_ninzu=' + i + '=' + event.postback.data;
+                }
+
                 events_processed.push(bot.replyMessage(event.replyToken, data));
+            }
+            else if(event.postback.data.split('=')[0] == "c_ninzu"){
+                // DB登録処理
+                const query = {
+                    text: 'UPDATE t_yoyaku' +
+                          '   SET reserve_a_count = $1, reserve_c_count = $2' +
+                          ' WHERE user_id = $3' + 
+                          ' AND   event_cd = $4' +
+                          ' AND   reserve_time = $5' +
+                          ' AND   kaisaiti_cd = $6',
+                    values: [event.postback.data.split('=')[3], event.postback.data.split('=')[1], event.source.userId, event.postback.data.split('=')[5], event.postback.data.split('=')[6], event.postback.data.split('=')[7]],
+                }
+                
+                console.log(event.postback.data);
+
+                client.connect(function (err, client) {
+                    if (err) {
+                    console.log(err);
+                    } else {
+                    client
+                        .query(query)
+                        .then(() => {
+                        console.log('Data Updated.');
+                        })
+                        .catch((e) => {
+                        console.error(e.stack);
+                        });
+                    }
+                });
+
+                let message = {
+                    type: 'text',
+                    text: '予約が完了しました'
+                };
+
+                events_processed.push(bot.replyMessage(event.replyToken, message));
             }
         }
         else {
