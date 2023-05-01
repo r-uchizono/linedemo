@@ -44,8 +44,8 @@
                             "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "",
-                                "uri": ""
+                                "label": "a",
+                                "uri": "https://unis-soft.co.jp/"
                             },
                             "offsetStart": "-67px",
                             "style": "link",
