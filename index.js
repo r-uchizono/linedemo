@@ -293,6 +293,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
 
+                for(let i = 1; i < 10; i++){
+                    data.contents.body.contents[i].data = 'a_ninzu=' + i + '=' + event.postback.data;
+                }
+
                 events_processed.push(bot.replyMessage(event.replyToken, data));
             }
             else if(event.postback.data.split('=')[0] == "a_ninzu"){
