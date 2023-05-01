@@ -44,9 +44,12 @@
                             "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "basyo",
-                                "uri": "https://www.google.com/maps/search/?api=1&query=鹿児島"
-                            }
+                                "label": "",
+                                "uri": ""
+                            },
+                            "offsetStart": "-67px",
+                            "style": "link",
+                            "height": "sm"
                         }
                     ],
                     "backgroundColor": "#fbdac8"
