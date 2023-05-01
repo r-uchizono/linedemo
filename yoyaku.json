@@ -33,12 +33,12 @@
                         {
                             "type": "text",
                             "text": "開催時間",
-                            "size": "15px"
+                            "size": "16px"
                         },
                         {
                             "type": "text",
                             "text": "場所",
-                            "size": "15px"
+                            "size": "16px"
                         },
                         {
                             "type": "button",
@@ -47,7 +47,7 @@
                                 "label": "住所",
                                 "uri": "https://www.google.com/maps/search/?api=1&query="
                             },
-                            "offsetStart": "45px",
+                            "offsetStart": "30px",
                             "offsetTop": "-15px"
                         }
                     ],
