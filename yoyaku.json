@@ -44,8 +44,8 @@
                             "type": "button",
                             "action": {
                                 "type": "uri",
-                                "label": "",
-                                "uri": ""
+                                "label": "basyo",
+                                "uri": "https://www.google.com/maps/search/?api=1&query=${address}"
                             }
                         }
                     ],
