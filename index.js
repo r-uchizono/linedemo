@@ -167,9 +167,15 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[3].action.label = address;
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                         if(res.rows[i].t1_id != null){
-                                            firstEventJson.footer.contents[0].action.data = 'dummy'
-                                            firstEventJson.footer.contents[0].action.type = 'postback'
-                                            firstEventJson.footer.contents[0].action.label = '予約済みです'
+                                            firstEventJson.footer.contents = [];
+                                            firstEventJson.footer.contents[0] = {
+                                            "type": "button",
+                                            "action": {
+                                              "type": "postback",
+                                              "label": "予約済みです",
+                                              "data": "dummy"
+                                            }   
+                                            };
                                         }
                                         else{
                                             firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
@@ -195,9 +201,15 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[3].action.label = address;
                                             secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);                                           
                                             if(res.rows[i].t2_id != null){
-                                                secondEventJson.footer.contents[0].action.data = 'dummy'
-                                                secondEventJson.footer.contents[0].action.type = 'postback'
-                                                secondEventJson.footer.contents[0].action.label = '予約済みです'
+                                                secondEventJson.footer.contents = [];
+                                                secondEventJson.footer.contents[0] = {
+                                                "type": "button",
+                                                "action": {
+                                                  "type": "postback",
+                                                  "label": "予約済みです",
+                                                  "data": "dummy"
+                                                }   
+                                                };
                                             }
                                             else{
                                                 secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
