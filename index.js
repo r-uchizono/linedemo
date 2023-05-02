@@ -86,13 +86,28 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .then((res) => {
                             console.log(res.rows[0].event_cd);
                             const query_event = {
-                                text: "SELECT *" +
-                                      "  FROM m_event t1" +
-                                      " INNER JOIN m_kaisaiti t2" +
-                                      "    ON t1.kaisaiti_cd = t2.kaisaiti_cd" +
-                                      " WHERE t1.event_cd = $1" +
+                                text: "SELECT e1.*" +
+                                      "     , k.kaisaiti_nm" +
+                                      "     , t1.id" +
+                                      "     , t2.id" +
+                                      "  FROM m_event e1" +
+                                      " INNER JOIN m_kaisaiti k" +
+                                      "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
+                                      "  LEFT outer join" +
+                                      "       t_yoyaku t1" +
+                                      "    ON e1.event_cd = t1.event_cd" +
+                                      "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
+                                      "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
+                                      "   AND t1.user_id = '$1'" +
+                                      "  LEFT outer join" +
+                                      "       t_yoyaku t2" +
+                                      "    ON e1.event_cd = t2.event_cd" +
+                                      "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
+                                      "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
+                                      "   AND t2.user_id = '$1'" +
+                                      " WHERE t1.event_cd = $2" + 
                                       " ORDER BY t1.first_day",
-                                values:[res.rows[0].event_cd],
+                                values:[event.source.userId, res.rows[0].event_cd],
                             };  
                             let event_nm = res.rows[0].event_nm
 
@@ -151,6 +166,14 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[3].action.label = address;
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                         firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
+                                        if(res.rows[i].id != null){
+                                            firstEventJson.footer.contents = [];
+                                            firstEventJson.footer.contents[0] = {
+                                                "type": "text",
+                                                "text": "予約済みです",
+                                                "size": "18px"
+                                            };
+                                        }
                                         data[0].contents.contents.push({...firstEventJson});
 
                                         if(res.rows[i].second_day != null)
@@ -171,6 +194,14 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[3].action.label = address;
                                             secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
+                                            if(res.rows[i].id_1 != null){
+                                                firstEventJson.footer.contents = [];
+                                                firstEventJson.footer.contents[0] = {
+                                                    "type": "text",
+                                                    "text": "予約済みです",
+                                                    "size": "18px"
+                                                };
+                                            }
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
                                     }
