@@ -339,7 +339,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 const query = {
                     text: 'UPDATE t_yoyaku' +
                           '   SET reserve_c_count = $1' +
-                          ' WHERE user_id = $2',
+                          ' WHERE id = $2',
                     values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2]],
                 }
                 
