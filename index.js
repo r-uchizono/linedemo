@@ -264,6 +264,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2] , event.source.userId, event.postback.data.split('=')[3] + ' ' + event.postback.params.time + ':00.000'],
                 }
 
+                const query_id = {
+                    text: 'SELECT setval()',
+                }
+
+
                 client.connect(function (err, client) {
                     if (err) {
                     console.log(err);
@@ -271,54 +276,72 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                     client
                         .query(query)
                         .then(() => {
-                        console.log('Data Inserted.');
+                            console.log('Data Inserted.');
+                            client.query(query_id)
+                            .then((res) => {
+                                console.log(res);
+                                //データを取りだす
+                                const bufferData = fs.readFileSync('a_ninzu.json')
+                                // データを文字列に変換
+                                const dataJSON = bufferData.toString()
+                                //JSONのデータをJavascriptのオブジェクトに
+                                const data = JSON.parse(dataJSON)
+                                for(let i = 1; i < 10; i++){
+                                    data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res;
+                                    console.log(data.contents.body.contents[i].action.data)
+                                }
+                                events_processed.push(bot.replyMessage(event.replyToken, data));
+                            })                     
                         })
                         .catch((e) => {
                         console.error(e.stack);
                         });
                     }
                 });
-
-                //データを取りだす
-                const bufferData = fs.readFileSync('a_ninzu.json')
-                // データを文字列に変換
-                const dataJSON = bufferData.toString()
-                //JSONのデータをJavascriptのオブジェクトに
-                const data = JSON.parse(dataJSON)
-
-                for(let i = 1; i < 10; i++){
-                    data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + event.postback.data + ' ' + event.postback.params.time + ':00.000';
-                }
-
-                events_processed.push(bot.replyMessage(event.replyToken, data));
             }
             else if(event.postback.data.split('=')[0] == "a_ninzu"){
                 
                 console.log(event.postback.data);
 
-                //データを取りだす
-                const bufferData = fs.readFileSync('c_ninzu.json')
-                // データを文字列に変換
-                const dataJSON = bufferData.toString()
-                //JSONのデータをJavascriptのオブジェクトに
-                const data = JSON.parse(dataJSON)
-
-                for(let i = 1; i < 10; i++){
-                    data.contents.body.contents[i].action.data = 'c_ninzu=' + i + '=' + event.postback.data;
+                const query = {
+                    text: 'UPDATE t_yoyaku' +
+                          '   SET reserve_a_count = $1' +
+                          ' WHERE id = $2',
+                    values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2]],
                 }
+                client.connect(function (err, client) {
+                    if (err) {
+                    console.log(err);
+                    } else {
+                    client
+                        .query(query)
+                        .then(() => {
+                            console.log('Data Updated.');
+                            //データを取りだす
+                            const bufferData = fs.readFileSync('c_ninzu.json')
+                            // データを文字列に変換
+                            const dataJSON = bufferData.toString()
+                            //JSONのデータをJavascriptのオブジェクトに
+                            const data = JSON.parse(dataJSON)
 
-                events_processed.push(bot.replyMessage(event.replyToken, data));
+                            for(let i = 1; i < 10; i++){
+                                data.contents.body.contents[i].action.data = 'c_ninzu=' + i + '=' + event.postback.data.split('=')[2];
+                                console.log(data.contents.body.contents[i].action.data)
+                            }
+
+                            events_processed.push(bot.replyMessage(event.replyToken, data));
+                        })
+                    }
+                })
+
             }
             else if(event.postback.data.split('=')[0] == "c_ninzu"){
                 // DB登録処理
                 const query = {
                     text: 'UPDATE t_yoyaku' +
-                          '   SET reserve_a_count = $1, reserve_c_count = $2' +
-                          ' WHERE user_id = $3' + 
-                          ' AND   event_cd = $4' +
-                          ' AND   kaisaiti_cd = $5' +
-                          ' AND   reserve_time = $6',
-                    values: [event.postback.data.split('=')[3], event.postback.data.split('=')[1], event.source.userId, event.postback.data.split('=')[5], event.postback.data.split('=')[6], event.postback.data.split('=')[7]],
+                          '   SET reserve_c_count = $1' +
+                          ' WHERE user_id = $2',
+                    values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2]],
                 }
                 
                 console.log(event.postback.data);
