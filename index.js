@@ -119,7 +119,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                                 let row =  Math.ceil(res.rows.length/6);
                                 console.log(row);
-                                console.log(res.rows);
 
                                 for(let I = 0; I < row; I++){
                                     console.log("roop start");
@@ -224,6 +223,52 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 }
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data_message));
+
+
+                                const graph_data = {
+                                    labels: ['A', 'B', 'C', 'D', 'E'],
+                                    datasets: [{
+                                      label: 'Sample data',
+                                      data: [12, 19, 3, 5, 2],
+                                      backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)'
+                                      ],
+                                      borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)'
+                                      ],
+                                      borderWidth: 1
+                                    }]
+                                };
+                                  
+                                  const options = {
+                                    scales: {
+                                      yAxes: [{
+                                        ticks: {
+                                          beginAtZero: true
+                                        }
+                                      }]
+                                    }
+                                  };
+                                  
+                                  const canvas = document.createElement('canvas');
+                                  document.body.appendChild(canvas);
+                                  
+                                  const ctx = canvas.getContext('2d');
+                                  
+                                  const chart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: graph_data,
+                                    options: options
+                                  });
+                                  console.log(chart);
                                 
                             })
                             
