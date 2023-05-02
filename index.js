@@ -265,9 +265,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 }
 
                 const query_id = {
-                    text: 'SELECT setval()',
+                    text: "SELECT setval('t_yoyaku_id_seq', (SELECT MAX(id) FROM t_yoyaku))",
                 }
-
 
                 client.connect(function (err, client) {
                     if (err) {
