@@ -98,13 +98,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                       "    ON e1.event_cd = t1.event_cd" +
                                       "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
                                       "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
-                                      "   AND t1.user_id = '$1'" +
+                                      "   AND t1.user_id = $1" +
                                       "  LEFT outer join" +
                                       "       t_yoyaku t2" +
                                       "    ON e1.event_cd = t2.event_cd" +
                                       "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
                                       "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
-                                      "   AND t2.user_id = '$1'" +
+                                      "   AND t2.user_id = $1" +
                                       " WHERE t1.event_cd = $2" + 
                                       " ORDER BY e1.first_day",
                                 values:[event.source.userId, res.rows[0].event_cd],
