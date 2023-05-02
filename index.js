@@ -88,8 +88,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                             const query_event = {
                                 text: "SELECT e1.*" +
                                       "     , k.kaisaiti_nm" +
-                                      "     , t1.id" +
-                                      "     , t2.id" +
+                                      "     , t1.id as t1_id" +
+                                      "     , t2.id as t2_id" +
                                       "  FROM m_event e1" +
                                       " INNER JOIN m_kaisaiti k" +
                                       "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
@@ -119,7 +119,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                                 let row =  Math.ceil(res.rows.length/6);
                                 console.log(row);
-                                console.log(res);
+                                console.log(res.rows);
 
                                 for(let I = 0; I < row; I++){
                                     console.log("roop start");
@@ -168,9 +168,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                         firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
 
-                                        console.log(res.rows[i].id);
+                                        console.log(res.rows[i].t1_id);
 
-                                        if(res.rows[i].id != null){
+                                        if(res.rows[i].t1_id != null){
                                             firstEventJson.footer.contents = [];
                                             firstEventJson.footer.contents[0] = {
                                                 "type": "text",
@@ -198,7 +198,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[3].action.label = address;
                                             secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
-                                            if(res.rows[i].id_1 != null){
+                                            if(res.rows[i].t2_id != null){
                                                 firstEventJson.footer.contents = [];
                                                 firstEventJson.footer.contents[0] = {
                                                     "type": "text",
