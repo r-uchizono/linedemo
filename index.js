@@ -119,7 +119,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                                 let row =  Math.ceil(res.rows.length/6);
                                 console.log(row);
-                                console.log(query_event);
 
                                 for(let I = 0; I < row; I++){
                                     console.log("roop start");
@@ -167,6 +166,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         firstEventJson.body.contents[3].action.label = address;
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                         firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
+                                        
+                                        console.log(res.rows[i].id);
+
                                         if(res.rows[i].id != null){
                                             firstEventJson.footer.contents = [];
                                             firstEventJson.footer.contents[0] = {
