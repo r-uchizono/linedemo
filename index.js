@@ -224,7 +224,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data_message));
 
-
                                 const graph_data = {
                                     labels: ['A', 'B', 'C', 'D', 'E'],
                                     datasets: [{
@@ -366,7 +365,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                             console.log('Data Inserted.');
                             client.query(query_id)
                             .then((res) => {
-                                console.log(res);
                                 //データを取りだす
                                 const bufferData = fs.readFileSync('a_ninzu.json')
                                 // データを文字列に変換
@@ -375,7 +373,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 const data = JSON.parse(dataJSON)
                                 for(let i = 1; i < 10; i++){
                                     data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res.rows[0].setval;
-                                    console.log(data.contents.body.contents[i].action.data)
                                 }
                                 events_processed.push(bot.replyMessage(event.replyToken, data));
                             })                     
@@ -387,8 +384,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                 });
             }
             else if(event.postback.data.split('=')[0] == "a_ninzu"){
-                
-                console.log(event.postback.data);
 
                 const query = {
                     text: 'UPDATE t_yoyaku' +
@@ -413,7 +408,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                             for(let i = 1; i < 10; i++){
                                 data.contents.body.contents[i].action.data = 'c_ninzu=' + i + '=' + event.postback.data.split('=')[2];
-                                console.log(data.contents.body.contents[i].action.data)
                             }
 
                             events_processed.push(bot.replyMessage(event.replyToken, data));
