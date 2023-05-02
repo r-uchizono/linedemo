@@ -106,7 +106,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                       "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
                                       "   AND t2.user_id = '$1'" +
                                       " WHERE t1.event_cd = $2" + 
-                                      " ORDER BY t1.first_day",
+                                      " ORDER BY e1.first_day",
                                 values:[event.source.userId, res.rows[0].event_cd],
                             };  
                             let event_nm = res.rows[0].event_nm
