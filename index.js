@@ -8,7 +8,7 @@ import QRCode from 'qrcode';
 import getRandomValues from 'get-random-values';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { error } from 'console';
+import Chart from 'chart.js/auto';
 
 
 // -----------------------------------------------------------------------------
