@@ -93,13 +93,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                       "  FROM m_event e1" +
                                       " INNER JOIN m_kaisaiti k" +
                                       "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
-                                      "  LEFT outer join" +
+                                      "  LEFT OUTER JOIN" +
                                       "       t_yoyaku t1" +
                                       "    ON e1.event_cd = t1.event_cd" +
                                       "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
                                       "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
                                       "   AND t1.user_id = $1" +
-                                      "  LEFT outer join" +
+                                      "  LEFT OUTER JOIN" +
                                       "       t_yoyaku t2" +
                                       "    ON e1.event_cd = t2.event_cd" +
                                       "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
@@ -119,7 +119,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
                                 let row =  Math.ceil(res.rows.length/6);
                                 console.log(row);
-                                console.log(res);
+                                console.log(query_event);
 
                                 for(let I = 0; I < row; I++){
                                     console.log("roop start");
