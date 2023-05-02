@@ -199,8 +199,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
                                             secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
                                             if(res.rows[i].t2_id != null){
-                                                firstEventJson.footer.contents = [];
-                                                firstEventJson.footer.contents[0] = {
+                                                secondEventJson.footer.contents = [];
+                                                secondEventJson.footer.contents[0] = {
                                                     "type": "text",
                                                     "text": "予約済みです",
                                                     "size": "18px"
