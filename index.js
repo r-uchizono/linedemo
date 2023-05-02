@@ -166,18 +166,15 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                         let address = res.rows[i].place_address;
                                         firstEventJson.body.contents[3].action.label = address;
                                         firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-                                        firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
-
-                                        console.log(res.rows[i].t1_id);
-
                                         if(res.rows[i].t1_id != null){
-                                            firstEventJson.footer.contents = [];
-                                            firstEventJson.footer.contents[0] = {
-                                                "type": "text",
-                                                "text": "予約済みです",
-                                                "size": "18px"
-                                            };
+                                            firstEventJson.footer.contents[0].action.data = 'dummy'
+                                            firstEventJson.footer.contents[0].action.type = 'postback'
+                                            firstEventJson.footer.contents[0].action.label = '予約済みです'
                                         }
+                                        else{
+                                            firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
+                                        }
+
                                         data[0].contents.contents.push({...firstEventJson});
 
                                         if(res.rows[i].second_day != null)
@@ -196,15 +193,14 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
                                             secondEventJson.body.contents[3].action.label = address;
-                                            secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-                                            secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
+                                            secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);                                           
                                             if(res.rows[i].t2_id != null){
-                                                secondEventJson.footer.contents = [];
-                                                secondEventJson.footer.contents[0] = {
-                                                    "type": "text",
-                                                    "text": "予約済みです",
-                                                    "size": "18px"
-                                                };
+                                                secondEventJson.footer.contents[0].action.data = 'dummy'
+                                                secondEventJson.footer.contents[0].action.type = 'postback'
+                                                secondEventJson.footer.contents[0].action.label = '予約済みです'
+                                            }
+                                            else{
+                                                secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
                                             }
                                             data[0].contents.contents.push({...secondEventJson});
                                         }
