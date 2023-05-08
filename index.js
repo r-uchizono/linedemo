@@ -131,7 +131,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                           "       e1.first_day",
                                     values:[event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd],
                                 };  
-                                // let event_nm = res.rows[0].event_nm
     
                                 client.query(query_event)
                                 .then((res) => {
@@ -140,7 +139,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     let start = 0;
     
                                     let row =  Math.ceil(res.rows.length/6);
-                                    console.log(res);
+                                    console.log(row);
     
                                     for(let I = 0; I < row; I++){
                                         console.log("roop start");
