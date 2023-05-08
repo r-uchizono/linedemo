@@ -92,7 +92,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 text: "SELECT *" +
                                       "  FROM m_user m1 " +
                                       "  LEFT OUTER JOIN" +
-                                      "       m_event_e e1" +
+                                      "       m_eigyo_e e1" +
                                       "    ON m1.eigyo_cd = e1.eigyo_cd" +
                                       " WHERE m1.user_id = $1" +
                                       "   AND m1.event_cd = $2" , 
