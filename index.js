@@ -113,7 +113,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                           "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
                                           "  LEFT OUTER JOIN" +
                                           "       m_event_eigyo e2" +
-                                          "    ON k.kaisaiti_cd = e2.event_cd" +
+                                          "    ON k.kaisaiti_cd = e2.kaisaiti_cd" +
                                           "   AND e2.event_cd = $2" +
                                           "   AND e2.eigyo_cd = $3" +
                                           "  LEFT OUTER JOIN" +
