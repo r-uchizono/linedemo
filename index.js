@@ -227,10 +227,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
 
 
                                
-                                const { JSDOM } = jsdom;
+                                // const { JSDOM } = jsdom;
 
-                                const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-                                const document = dom.window.document;
+                                // const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+                                // const document = dom.window.document;
                              
                                 const ctx = document.getElementById('myChart');
 
