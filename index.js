@@ -258,9 +258,9 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     let dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
                                     let document = dom.window.document;
                                  
-                                    // let ctx = ;
+                                    let ctx = document.getElementById('myChart');
     
-                                    let chart = new Chart(document.getElementById('myChart'), {
+                                    let chart = new Chart(ctx, {
                                         type: 'bar',
                                         data: {
                                             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -287,6 +287,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                             }]
                                         }
                                     })
+                                    console.log(ctx)
                                     console.log(chart)                              
                                     
     
