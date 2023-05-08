@@ -86,123 +86,102 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                         .query(query_event_base)
                         .then((res) => {
                             console.log(res.rows[0].event_cd);
-                            const query_event = {
-                                text: "SELECT e1.*" +
-                                      "     , k.kaisaiti_nm" +
-                                      "     , t1.id as t1_id" +
-                                      "     , t2.id as t2_id" +
-                                      "  FROM m_event e1" +
-                                      " INNER JOIN m_kaisaiti k" +
-                                      "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
-                                      "  LEFT OUTER JOIN" +
-                                      "       t_yoyaku t1" +
-                                      "    ON e1.event_cd = t1.event_cd" +
-                                      "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
-                                      "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
-                                      "   AND t1.user_id = $1" +
-                                      "  LEFT OUTER JOIN" +
-                                      "       t_yoyaku t2" +
-                                      "    ON e1.event_cd = t2.event_cd" +
-                                      "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
-                                      "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
-                                      "   AND t2.user_id = $1" +
-                                      " WHERE e1.event_cd = $2" + 
-                                      " ORDER BY e1.first_day",
+
+                            let query_user = {
+                                text: "SELECT *" +
+                                      "  FROM m_user m1 " +
+                                      " WHERE m1.user_id = $1" +
+                                      "   AND m1.event_cd = $2",
                                 values:[event.source.userId, res.rows[0].event_cd],
-                            };  
+                            };
+
                             let event_nm = res.rows[0].event_nm
-
-                            client.query(query_event)
+            
+                            client.query(query_user)
                             .then((res) => {
-
-                                let end = 0;
-                                let start = 0;
-
-                                let row =  Math.ceil(res.rows.length/6);
-                                console.log(row);
-
-                                for(let I = 0; I < row; I++){
-                                    console.log("roop start");
-                                    if(res.rows.length <= 6)
-                                    {
-                                        end = res.rows.length
-                                    }
-                                    else 
-                                    { 
-                                        if(res.rows.length - end > 6){
-                                            end = (I + 1)*6;
-                                        }
-                                        else{
+                                let query_event = {
+                                    text: "SELECT e1.*" +
+                                          "     , k.kaisaiti_nm" +
+                                          "     , t1.id as t1_id" +
+                                          "     , t2.id as t2_id" +
+                                          "  FROM m_event e1" +
+                                          " INNER JOIN m_kaisaiti k" +
+                                          "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
+                                          "  LEFT OUTER JOIN" +
+                                          "       t_yoyaku t1" +
+                                          "    ON e1.event_cd = t1.event_cd" +
+                                          "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
+                                          "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
+                                          "   AND t1.user_id = $1" +
+                                          "  LEFT OUTER JOIN" +
+                                          "       t_yoyaku t2" +
+                                          "    ON e1.event_cd = t2.event_cd" +
+                                          "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
+                                          "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
+                                          "   AND t2.user_id = $1" +
+                                          " WHERE e1.event_cd = $2" + 
+                                          " ORDER BY e1.first_day",
+                                    values:[event.source.userId, res.rows[0].event_cd],
+                                };  
+                                // let event_nm = res.rows[0].event_nm
+    
+                                client.query(query_event)
+                                .then((res) => {
+    
+                                    let end = 0;
+                                    let start = 0;
+    
+                                    let row =  Math.ceil(res.rows.length/6);
+                                    console.log(row);
+    
+                                    for(let I = 0; I < row; I++){
+                                        console.log("roop start");
+                                        if(res.rows.length <= 6)
+                                        {
                                             end = res.rows.length
                                         }
-                                        
-                                        start = (I)*6
-                                    }
-
-                                    for(let i = start; i < end; i++){
-
-                                        let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time);
-                                        let f_etime = new Date('2023-04-01T' + res.rows[i].first_end_time);
-                                        let s_stime = new Date('2023-04-01T' + res.rows[i].second_start_time);
-                                        let s_etime = new Date('2023-04-01T' + res.rows[i].second_end_time);
-                                        let F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
-                                        let F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
-                                        let S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
-                                        let S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
-                                        
-                                        let f_date = new Date(res.rows[i].first_day);
-                                        let f_year = f_date.getFullYear();
-                                        let f_month = ('0' + (f_date.getMonth() + 1)).slice(-2);
-                                        let f_day = ('0' + f_date.getDate()).slice(-2);
-                                        let f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()];
-                                        let f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`;
-                                        let f_dataDate = `${f_year}/${f_month}/${f_day}`;
-
-                                        let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0];
-                                        firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場';
-                                        firstEventJson.body.contents[0].text = f_formattedDate;
-                                        firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
-                                        firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
-                                        let address = res.rows[i].place_address;
-                                        firstEventJson.body.contents[3].action.label = address;
-                                        firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-                                        if(res.rows[i].t1_id != null){
-                                            firstEventJson.footer.contents = [];
-                                            firstEventJson.footer.contents[0] = {
-                                            "type": "button",
-                                            "action": {
-                                              "type": "postback",
-                                              "label": "予約済みです",
-                                              "data": "dummy"
-                                            }   
-                                            };
+                                        else 
+                                        { 
+                                            if(res.rows.length - end > 6){
+                                                end = (I + 1)*6;
+                                            }
+                                            else{
+                                                end = res.rows.length
+                                            }
+                                            
+                                            start = (I)*6
                                         }
-                                        else{
-                                            firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
-                                        }
-
-                                        data[0].contents.contents.push({...firstEventJson});
-
-                                        if(res.rows[i].second_day != null)
-                                        {
-                                            let s_date = new Date(res.rows[i].second_day);
-                                            let s_year = s_date.getFullYear();
-                                            let s_month = ('0' + (s_date.getMonth() + 1)).slice(-2);
-                                            let s_day = ('0' + s_date.getDate()).slice(-2);
-                                            let s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
-                                            let s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
-                                            let s_dataDate = `${s_year}/${s_month}/${s_day}`;
-
-                                            let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0];
-                                            secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場';
-                                            secondEventJson.body.contents[0].text = s_formattedDate;
-                                            secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
-                                            secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
-                                            secondEventJson.body.contents[3].action.label = address;
-                                            secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);                                           
-                                            if(res.rows[i].t2_id != null){
-                                                secondEventJson.footer.contents = [];
-                                                secondEventJson.footer.contents[0] = {
+    
+                                        for(let i = start; i < end; i++){
+    
+                                            let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time);
+                                            let f_etime = new Date('2023-04-01T' + res.rows[i].first_end_time);
+                                            let s_stime = new Date('2023-04-01T' + res.rows[i].second_start_time);
+                                            let s_etime = new Date('2023-04-01T' + res.rows[i].second_end_time);
+                                            let F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                            let F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                            let S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'}); // ロケールに基づいた形式の時間に変換する
+                                            let S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric'});
+                                            
+                                            let f_date = new Date(res.rows[i].first_day);
+                                            let f_year = f_date.getFullYear();
+                                            let f_month = ('0' + (f_date.getMonth() + 1)).slice(-2);
+                                            let f_day = ('0' + f_date.getDate()).slice(-2);
+                                            let f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()];
+                                            let f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`;
+                                            let f_dataDate = `${f_year}/${f_month}/${f_day}`;
+    
+                                            let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0];
+                                            firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場';
+                                            firstEventJson.body.contents[0].text = f_formattedDate;
+                                            firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime;
+                                            firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
+                                            let address = res.rows[i].place_address;
+                                            firstEventJson.body.contents[3].action.label = address;
+                                            firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+                                            if(res.rows[i].t1_id != null){
+                                                firstEventJson.footer.contents = [];
+                                                firstEventJson.footer.contents[0] = {
                                                 "type": "button",
                                                 "action": {
                                                   "type": "postback",
@@ -212,63 +191,101 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                                 };
                                             }
                                             else{
-                                                secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
+                                                firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate;
                                             }
-                                            data[0].contents.contents.push({...secondEventJson});
+    
+                                            data[0].contents.contents.push({...firstEventJson});
+    
+                                            if(res.rows[i].second_day != null)
+                                            {
+                                                let s_date = new Date(res.rows[i].second_day);
+                                                let s_year = s_date.getFullYear();
+                                                let s_month = ('0' + (s_date.getMonth() + 1)).slice(-2);
+                                                let s_day = ('0' + s_date.getDate()).slice(-2);
+                                                let s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()];
+                                                let s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`;
+                                                let s_dataDate = `${s_year}/${s_month}/${s_day}`;
+    
+                                                let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0];
+                                                secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場';
+                                                secondEventJson.body.contents[0].text = s_formattedDate;
+                                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime;
+                                                secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name;
+                                                secondEventJson.body.contents[3].action.label = address;
+                                                secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);                                           
+                                                if(res.rows[i].t2_id != null){
+                                                    secondEventJson.footer.contents = [];
+                                                    secondEventJson.footer.contents[0] = {
+                                                    "type": "button",
+                                                    "action": {
+                                                      "type": "postback",
+                                                      "label": "予約済みです",
+                                                      "data": "dummy"
+                                                    }   
+                                                    };
+                                                }
+                                                else{
+                                                    secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate;
+                                                }
+                                                data[0].contents.contents.push({...secondEventJson});
+                                            }
                                         }
+    
+                                        data_message.push({...data[0]});
+                                        data = JSON.parse(dataJSON)
+                                        data[0].contents.contents = [];
                                     }
-
-                                    data_message.push({...data[0]});
-                                    data = JSON.parse(dataJSON)
-                                    data[0].contents.contents = [];
-                                }
-                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                                events_processed.push(bot.replyMessage(event.replyToken, data_message));
-
-
-                               
-                                // const { JSDOM } = jsdom;
-
-                                // const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-                                // const document = dom.window.document;
-                             
-                                // const ctx = document.getElementById('myChart');
-
-                                // const chart = new Chart(ctx, {
-                                //     type: 'bar',
-                                //     data: {
-                                //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                                //         datasets: [{
-                                //             label: '# of Votes',
-                                //             data: [12, 19, 3, 5, 2, 3],
-                                //             backgroundColor: [
-                                //                 'rgba(255, 99, 132, 0.2)',
-                                //                 'rgba(54, 162, 235, 0.2)',
-                                //                 'rgba(255, 206, 86, 0.2)',
-                                //                 'rgba(75, 192, 192, 0.2)',
-                                //                 'rgba(153, 102, 255, 0.2)',
-                                //                 'rgba(255, 159, 64, 0.2)'
-                                //             ],
-                                //             borderColor: [
-                                //                 'rgba(255, 99, 132, 1)',
-                                //                 'rgba(54, 162, 235, 1)',
-                                //                 'rgba(255, 206, 86, 1)',
-                                //                 'rgba(75, 192, 192, 1)',
-                                //                 'rgba(153, 102, 255, 1)',
-                                //                 'rgba(255, 159, 64, 1)'
-                                //             ],
-                                //             borderWidth: 1
-                                //         }]
-                                //     }
-                                // })
-
-                                // console.log(chart)
+                                    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                    events_processed.push(bot.replyMessage(event.replyToken, data_message));
+    
+    
+                                   
+                                    const { JSDOM } = jsdom;
+    
+                                    const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+                                    const document = dom.window.document;
+                                 
+                                    const ctx = document.getElementById('myChart');
+    
+                                    const chart = new Chart(ctx, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                            datasets: [{
+                                                label: '# of Votes',
+                                                data: [12, 19, 3, 5, 2, 3],
+                                                backgroundColor: [
+                                                    'rgba(255, 99, 132, 0.2)',
+                                                    'rgba(54, 162, 235, 0.2)',
+                                                    'rgba(255, 206, 86, 0.2)',
+                                                    'rgba(75, 192, 192, 0.2)',
+                                                    'rgba(153, 102, 255, 0.2)',
+                                                    'rgba(255, 159, 64, 0.2)'
+                                                ],
+                                                borderColor: [
+                                                    'rgba(255, 99, 132, 1)',
+                                                    'rgba(54, 162, 235, 1)',
+                                                    'rgba(255, 206, 86, 1)',
+                                                    'rgba(75, 192, 192, 1)',
+                                                    'rgba(153, 102, 255, 1)',
+                                                    'rgba(255, 159, 64, 1)'
+                                                ],
+                                                borderWidth: 1
+                                            }]
+                                        }
+                                    })
+    
+                                    console.log(chart)
+                                    
+                                    
+    
+                                    
+                                                        
+                                })
                                 
-                                
-
-                                
-                                                    
                             })
+
+                            
                             
                         })
                     }
