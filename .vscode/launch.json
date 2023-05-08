@@ -1,0 +1,27 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "プログラムの起動",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\index.js",
+            "cwd": "${workspaceFolder}",
+            "env":{
+                "LINE_CHANNEL_SECRET":"34a0307ea972bef47bacdc00a49f0e97",
+                "LINE_ACCESS_TOKEN":"TmzjCIjkQu6oT+Ep2j8dzt+JOFujxVnscyWEwEyxB5BEKz0iMeWtaDlUS9t6/5TtGhXdAz+DmgYvaEWrbWpJGVvDXtCCxQ8PiHwjr7RHAa3g7OaguUcYIFCN4FnJPvOHCurjig4Gu9gkPDdvwWXAbQdB04t89/1O/w1cDnyilFU=",
+                "PG_USER" : "unis",
+                "PG_HOST" : "dpg-cgvn4qodh87joksvpj70-a.oregon-postgres.render.com",
+                "PG_DBNM" : "event_f91d",
+                "PG_PSWD" : "gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn",
+                "PG_PORT" : "5432",
+            }
+        }
+    ]
+}
