@@ -95,7 +95,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                       "       m_event_e e1" +
                                       "    ON m1.eigyo_cd = e1.eigyo_cd" +
                                       " WHERE m1.user_id = $1" +
-                                      "   AND m1.event_cd = $2" ,                                      ,
+                                      "   AND m1.event_cd = $2" , 
                                 values:[event.source.userId, res.rows[0].event_cd],
                             };
 
