@@ -9,6 +9,7 @@ import getRandomValues from 'get-random-values';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Chart from 'chart.js/auto';
+import jsdom from 'jsdom';
 
 
 // -----------------------------------------------------------------------------
@@ -224,39 +225,45 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                 events_processed.push(bot.replyMessage(event.replyToken, data_message));
 
-                                if (typeof document !== 'undefined') {
-                                    const ctx = document.getElementById('myChart');
 
-                                    const chart = new Chart(ctx, {
-                                        type: 'bar',
-                                        data: {
-                                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                                            datasets: [{
-                                                label: '# of Votes',
-                                                data: [12, 19, 3, 5, 2, 3],
-                                                backgroundColor: [
-                                                    'rgba(255, 99, 132, 0.2)',
-                                                    'rgba(54, 162, 235, 0.2)',
-                                                    'rgba(255, 206, 86, 0.2)',
-                                                    'rgba(75, 192, 192, 0.2)',
-                                                    'rgba(153, 102, 255, 0.2)',
-                                                    'rgba(255, 159, 64, 0.2)'
-                                                ],
-                                                borderColor: [
-                                                    'rgba(255, 99, 132, 1)',
-                                                    'rgba(54, 162, 235, 1)',
-                                                    'rgba(255, 206, 86, 1)',
-                                                    'rgba(75, 192, 192, 1)',
-                                                    'rgba(153, 102, 255, 1)',
-                                                    'rgba(255, 159, 64, 1)'
-                                                ],
-                                                borderWidth: 1
-                                            }]
-                                        }
-                                    })
+                               
+                                const { JSDOM } = jsdom;
 
-                                    console.log(chart)
-                                }
+                                const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+                                const document = dom.window.document;
+                             
+                                const ctx = document.getElementById('myChart');
+
+                                const chart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                        datasets: [{
+                                            label: '# of Votes',
+                                            data: [12, 19, 3, 5, 2, 3],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(255, 206, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)'
+                                            ],
+                                            borderColor: [
+                                                'rgba(255, 99, 132, 1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                                'rgba(255, 159, 64, 1)'
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    }
+                                })
+
+                                console.log(chart)
+                                
                                 
 
                                 
