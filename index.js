@@ -92,7 +92,10 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 text: "SELECT *" +
                                       "  FROM m_user m1 " +
                                       " WHERE m1.user_id = $1" +
-                                      "   AND m1.event_cd = $2",
+                                      "   AND m1.event_cd = $2" +
+                                      "  LEFT OUTER JOIN" +
+                                      "       m_event_e e1" +
+                                      "    ON m1.eigyo_cd = e1.eigyo_cd",
                                 values:[event.source.userId, res.rows[0].event_cd],
                             };
 
@@ -108,8 +111,11 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                           "  FROM m_event e1" +
                                           " INNER JOIN m_kaisaiti k" +
                                           "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
-                                          " INNER JOIN m_event_eigyo e2" +
-                                          "    ON k.kaisaiti_cd = e2.kaisaiti_cd" +
+                                          "  LEFT OUTER JOIN" +
+                                          "       m_event_eigyo e2" +
+                                          "    ON k.kaisaiti_cd = e2.event_cd" +
+                                          "   AND e2.event_cd = $2" +
+                                          "   AND e2.eigyo_cd = $3" +
                                           "  LEFT OUTER JOIN" +
                                           "       t_yoyaku t1" +
                                           "    ON e1.event_cd = t1.event_cd" +
@@ -254,9 +260,6 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                  
                                     // let ctx = document.getElementById('myChart');
     
-                                    // Promise.all(ctx)
-                                    // .then(
-                                    //     (res) => {
                                     //         let chart = new Chart(ctx, {
                                     //             type: 'bar',
                                     //             data: {
@@ -284,9 +287,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     //                 }]
                                     //             }
                                     //         })
-                                    //         console.log(chart)
-                                    //     }
-                                    // );                                
+                                    //         console.log(chart)                              
                                     
     
                                     
