@@ -133,7 +133,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                     let start = 0;
     
                                     let row =  Math.ceil(res.rows.length/6);
-                                    console.log(row);
+                                    console.log(res);
     
                                     for(let I = 0; I < row; I++){
                                         console.log("roop start");
