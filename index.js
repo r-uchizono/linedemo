@@ -108,6 +108,8 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                           "  FROM m_event e1" +
                                           " INNER JOIN m_kaisaiti k" +
                                           "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
+                                          " INNER JOIN m_event_eigyo e2" +
+                                          "    ON k.kaisaiti_cd = e2.kaisaiti_cd" +
                                           "  LEFT OUTER JOIN" +
                                           "       t_yoyaku t1" +
                                           "    ON e1.event_cd = t1.event_cd" +
@@ -121,8 +123,13 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                           "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
                                           "   AND t2.user_id = $1" +
                                           " WHERE e1.event_cd = $2" + 
-                                          " ORDER BY e1.first_day",
-                                    values:[event.source.userId, res.rows[0].event_cd],
+                                          " ORDER BY" +
+                                          " CASE" +
+                                          "  WHEN e2.eigyo_cd = $3 THEN 0" +
+                                          "  ELSE 1"+
+                                          " END," +
+                                          "       e1.first_day",
+                                    values:[event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd],
                                 };  
                                 // let event_nm = res.rows[0].event_nm
     
