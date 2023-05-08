@@ -1,0 +1,278 @@
+﻿# A5:ER FORMAT:16
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright © 2007 m.matsubara
+# A5:SQL Mk-2 Version 2.17.4 Copyright © 1997 - 2022 m.matsubara
+#  https://a5m2.mmatsubara.com
+
+[Manager]
+ProjectName=か電工イベント来場受付アプリ
+Author=UNIS
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",7,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=7
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=Tahoma
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=6
+RDBMSTypeName=PostgreSQL
+GenerateDropTableStatement=1
+DropTableIfExists=0
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+UpperCaseKeyword=0
+ShowTag=1
+ShowCommonAttributes=0
+BugFixEntityWidth=1
+
+[Entity]
+PName=m_eigyo_e
+LName=イベント営業所マスタ
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="営業所コード","eigyo_cd","numeric(3)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="営業所名","eigyo_nm","character varying(20)",,,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,50
+ZOrder=-1
+
+[Entity]
+PName=m_event
+LName=イベントマスタ
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="イベントコード","event_cd","character varying(5)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="開催地コード","kaisaiti_cd","numeric(2)","NOT NULL",1,"","",$FFFFFFFF,""
+Field="粗利上限","arari_jogen","numeric(5, 2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="粗利下限","arari_kagen","numeric(5, 2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="開催場所","place_name","character varying","NOT NULL",,"","",$FFFFFFFF,""
+Field="開催場所住所","place_address","character varying","NOT NULL",,"","",$FFFFFFFF,""
+Field="開催日１日目","first_day","date",,,"","",$FFFFFFFF,""
+Field="開催日１日名開始時間","first_start_time","time without time zone",,,"","",$FFFFFFFF,""
+Field="開催日１日名終了時間","first_end_time","time without time zone",,,"","",$FFFFFFFF,""
+Field="開催日２日目","second_day","date",,,"","",$FFFFFFFF,""
+Field="開催日２日名開始時間","second_start_time","time without time zone",,,"","",$FFFFFFFF,""
+Field="開催日２日名終了時間","second_end_time","time without time zone",,,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,50
+ZOrder=-2
+
+[Entity]
+PName=m_event_base
+LName=イベント基本マスタ
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="イベントコード","event_cd","character varying(5)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="イベント名","event_nm","character varying(30)",,,"","",$FFFFFFFF,""
+Field="開始日","start_ymd","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="終了日","end_ymd","date","NOT NULL",,"","",$FFFFFFFF,""
+Field="粗利上限","arari_jogen","numeric(5, 2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="粗利下限","arari_kagen","numeric(5, 2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,50
+ZOrder=-3
+
+[Entity]
+PName=m_event_eigyo
+LName=イベント営業所マスタ
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="イベントコード","event_cd","character varying(5)","NOT NULL",,"","",$FFFFFFFF,""
+Field="開催地コード","kaisaiti_cd","numeric(2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="営業所コード","eigyo_cd","numeric(3)","NOT NULL",,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,50
+ZOrder=-4
+
+[Entity]
+PName=m_kaisaiti
+LName=開催地マスタ
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="開催地コード","kaisaiti_cd","numeric(2)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="開催地名","kaisaiti_nm","character varying(30)",,,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,50
+ZOrder=-5
+
+[Entity]
+PName=m_user
+LName=ユーザーマスタ
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="ユーザーID","user_id","character varying(100)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="取引先CD","torihikisa_cd","numeric(10)",,,"","",$FFFFFFFF,""
+Field="取引先名","torihikisa_nm","character varying(100)",,,"","",$FFFFFFFF,""
+Field="氏名","user_nm","character varying(100)",,,"","",$FFFFFFFF,""
+Field="担当者CD","tanto_cd","numeric(10)",,,"","",$FFFFFFFF,""
+Field="担当者名","tanto_nm","character varying(100)",,,"","",$FFFFFFFF,""
+Field="QRコード","qr_code","character varying(100)",,,"","",$FFFFFFFF,""
+Field="QRコード有効期限","qr_expiration_date","timestamp(6) without time zone",,,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,50
+ZOrder=-6
+
+[Entity]
+PName=t_yoyaku
+LName=来場予約テーブル
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=550
+Field="id","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="イベントコード","event_cd","character varying(5)","NOT NULL",,"","",$FFFFFFFF,""
+Field="開催地コード","kaisaiti_cd","numeric(2)","NOT NULL",,"","",$FFFFFFFF,""
+Field="ユーザーID","user_id","character varying(100)","NOT NULL",,"","",$FFFFFFFF,""
+Field="予約人数（大人）","reserve_a_count","numeric(2)","NOT NULL",,"0","",$FFFFFFFF,""
+Field="予約人数（小人）","reserve_c_count","numeric(2)","NOT NULL",,"0","",$FFFFFFFF,""
+Field="予約日時","reserve_time","timestamp(6) without time zone","NOT NULL",,"","",$FFFFFFFF,""
+Field="登録日","created_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+Field="更新日","updated_at","timestamp(6) without time zone",,,"CURRENT_TIMESTAMP","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+Position="Main",50,550
+ZOrder=-7
+
+[Relation]
+Entity1=m_eigyo_e
+Entity2=m_event_eigyo
+RelationType1=2
+RelationType2=3
+Fields1=eigyo_cd
+Fields2=eigyo_cd
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,400,R,R,""
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=40
+TermPos1=R
+TermPos2=R
+ZOrder=3
+
+[Relation]
+Entity1=m_kaisaiti
+Entity2=m_event_eigyo
+RelationType1=2
+RelationType2=3
+Fields1=kaisaiti_cd
+Fields2=kaisaiti_cd
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,500,9500,400,R,R,""
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=50
+Bar2=950
+Bar3=40
+TermPos1=R
+TermPos2=R
+ZOrder=4
+
+[Relation]
+Entity1=m_event_base
+Entity2=m_event
+RelationType1=2
+RelationType2=3
+Fields1=event_cd
+Fields2=event_cd
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,815,9185,542,R,R,""
+Dependence=1
+Caption=
+PName=
+LineMode=0
+Bar1=82
+Bar2=918
+Bar3=54
+TermPos1=R
+TermPos2=R
+ZOrder=5
+
+[Relation]
+Entity1=m_event
+Entity2=t_yoyaku
+RelationType1=2
+RelationType2=3
+Fields1=event_cd,kaisaiti_cd
+Fields2=event_cd,kaisaiti_cd
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,588,9412,756,R,R,""
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=59
+Bar2=941
+Bar3=76
+TermPos1=R
+TermPos2=R
+ZOrder=7
