@@ -250,7 +250,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
     
                                     Promise.all(ctx)
                                     .then(
-                                        () => {
+                                        (res) => {
                                             let chart = new Chart(ctx, {
                                                 type: 'bar',
                                                 data: {
