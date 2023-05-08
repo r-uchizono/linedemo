@@ -267,8 +267,7 @@ app.post('/bot/webhook', middleware(line_config), (req, res, next) => {
                                 
 
                                 
-                              
-                                
+                                                    
                             })
                             
                         })
