@@ -20,6 +20,13 @@
                         }
                     ]
                 },
+                "hero": {
+                    "type": "image",
+                    "url": "https://6d25-2405-6586-8020-e00-81b7-fddb-6f1a-769f.jp.ngrok.io/12023_05_19.png",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "fit"
+                },
                 "body": {
                     "type": "box",
                     "layout": "vertical",

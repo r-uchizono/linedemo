@@ -9,7 +9,8 @@ import getRandomValues from 'get-random-values'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import Chart from 'chart.js/auto'
-import jsdom from 'jsdom'
+import { createCanvas } from 'canvas'
+import moment from 'moment';
 
 
 // -----------------------------------------------------------------------------
@@ -207,6 +208,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate
                                                         }
 
+                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + '12023_05_19.png'
+
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
                                                         if (res.rows[i].second_day != null) {
@@ -239,6 +242,9 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             else {
                                                                 secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate
                                                             }
+
+                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + '12023_05_19.png'
+                                                            console.log(secondEventJson.hero.url)
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
                                                     }
@@ -249,47 +255,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 }
                                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                                 events_processed.push(bot.replyMessage(event.replyToken, data_message))
-
-
-
-                                                let { JSDOM } = jsdom
-
-                                                let dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`)
-                                                let document = dom.window.document
-
-                                                let ctx = document.getElementById('myChart')
-
-                                                let chart = new Chart(ctx, {
-                                                    type: 'bar',
-                                                    data: {
-                                                        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                                                        datasets: [{
-                                                            label: '# of Votes',
-                                                            data: [12, 19, 3, 5, 2, 3],
-                                                            backgroundColor: [
-                                                                'rgba(255, 99, 132, 0.2)',
-                                                                'rgba(54, 162, 235, 0.2)',
-                                                                'rgba(255, 206, 86, 0.2)',
-                                                                'rgba(75, 192, 192, 0.2)',
-                                                                'rgba(153, 102, 255, 0.2)',
-                                                                'rgba(255, 159, 64, 0.2)'
-                                                            ],
-                                                            borderColor: [
-                                                                'rgba(255, 99, 132, 1)',
-                                                                'rgba(54, 162, 235, 1)',
-                                                                'rgba(255, 206, 86, 1)',
-                                                                'rgba(75, 192, 192, 1)',
-                                                                'rgba(153, 102, 255, 1)',
-                                                                'rgba(255, 159, 64, 1)'
-                                                            ],
-                                                            borderWidth: 1
-                                                        }]
-                                                    }
-                                                })
-                                                console.log(ctx)
-                                                console.log(chart)
-
-
 
 
                                             })
@@ -315,9 +280,67 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 const dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
                 const data = JSON.parse(dataJSON)
-                //data.contents.header.contents[0].text = '鹿児島会場'
-                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                events_processed.push(bot.replyMessage(event.replyToken, data))
+
+                let query_event_base = {
+                    text: "SELECT *" +
+                        "  FROM m_event_base t1 " +
+                        " WHERE current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
+                        "    OR current_date < t1.start_ymd" +
+                        " ORDER BY t1.start_ymd",
+                }
+
+                client.connect(function (err, client) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        client
+                            .query(query_event_base)
+                            .then((res) => {
+                                let event_cd = res.rows[0].event_cd
+                
+                                let query_user = {
+                                    text: "SELECT *" +
+                                        "  FROM m_user" +
+                                        " WHERE user_id = $1",
+                                    values: [event.source.userId],
+                                }
+
+                                client.query(query_user)
+                                    .then((res) => {
+                                        let query_yoyaku = {
+                                            text: "SELECT *" +
+                                                "  FROM t_yoyaku t1" +
+                                                "  LEFT OUTER JOIN" +
+                                                "       m_event m1" +
+                                                "    ON t1.event_cd = m1.event_cd" +
+                                                "   AND t1.kaisaiti_cd = m1.kaisaiti_cd" +
+                                                " WHERE t1.user_id = $1" + 
+                                                "   AND t1.event_cd = $2",
+                                            values: [res.rows[0].user_id, event_cd],
+                                        }
+
+                                        client.query(query_yoyaku)
+                                            .then((res) => {
+
+
+
+
+                                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                                events_processed.push(bot.replyMessage(event.replyToken, data))
+
+                                            })
+
+                                    }).catch((e) => {
+                                        console.error(e.stack)
+                                        let errmessage = {
+                                            type: "text",
+                                            text: "お客様情報が未登録です。"
+                                        }
+                                        events_processed.push(bot.replyMessage(event.replyToken, errmessage))
+                                    })
+                            })
+                        }
+                    })
             }
             // ユーザーからのテキストメッセージが「会員ID」だった場合のみ反応。
             else if (event.message.text == "会員ID") {
@@ -327,8 +350,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
                 console.log(getRandomValues(array))
 
-                const query = {
-                    text: "SELECT user_id FROM m_user WHERE user_id = $1",
+                let query = {
+                    text: "SELECT user_id, qr_expiration_date FROM m_user WHERE user_id = $1",
                     values: [event.source.userId],
                 }
 
@@ -358,10 +381,27 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                         originalContentUrl: 'https://' + req.get('host') + '/' + QRfile + '.png',
                                         previewImageUrl: 'https://' + req.get('host') + '/' + QRfile + '.png'
                                     }
-                                    events_processed.push(bot.replyMessage(event.replyToken, message))
+
+                                    let addmessage = {
+                                        type: 'text',
+                                        text: 'イベント受付にてご提示ください'
+                                    }
+
+                                    let date = new Date(res.rows[0].qr_expiration_date)
+                                    let month = ('0' + (date.getMonth() + 1)).slice(-2)
+                                    let day = ('0' + date.getDate()).slice(-2)
+                                    let dataDate = `${month}/${day}`
+                                    let formattedTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
+    
+                                    let addmessage2 = {
+                                        type: 'text',
+                                        text: '有効期限：' + dataDate + " " + formattedTime
+                                    };
+                    
+                                    events_processed.push(bot.replyMessage(event.replyToken, [message, addmessage, addmessage2])) 
                                 })
 
-                            })
+                            })                            
                             .catch((e) => {
                                 console.error(e.stack)
                                 let errmessage = {
@@ -400,13 +440,15 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 client.query(query_id)
                                     .then((res) => {
                                         //データを取りだす
-                                        const bufferData = fs.readFileSync('a_ninzu.json')
+                                        let bufferData = fs.readFileSync('a_ninzu.json')
                                         // データを文字列に変換
-                                        const dataJSON = bufferData.toString()
+                                        let dataJSON = bufferData.toString()
                                         //JSONのデータをJavascriptのオブジェクトに
-                                        const data = JSON.parse(dataJSON)
+                                        let data = JSON.parse(dataJSON)
+
+                                        var post = event.postback.data.split('=')
                                         for (let i = 1; i < 10; i++) {
-                                            data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res.rows[0].setval
+                                            data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res.rows[0].setval + '=' + post.slice(1)
                                         }
                                         events_processed.push(bot.replyMessage(event.replyToken, data))
                                     })
@@ -440,8 +482,9 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 //JSONのデータをJavascriptのオブジェクトに
                                 const data = JSON.parse(dataJSON)
 
-                                for (let i = 1; i < 10; i++) {
-                                    data.contents.body.contents[i].action.data = 'c_ninzu=' + i + '=' + event.postback.data.split('=')[2]
+                                var post = event.postback.data.split('=')
+                                for (let i = 0; i < 10; i++) {
+                                    data.contents.body.contents[i + 1].action.data = 'c_ninzu=' + i + '=' + post.slice(2)
                                 }
 
                                 events_processed.push(bot.replyMessage(event.replyToken, data))
@@ -451,15 +494,17 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
             }
             else if (event.postback.data.split('=')[0] == "c_ninzu") {
+
+                let post = event.postback.data.replace(/,/g, '=')
                 // DB登録処理
                 const query = {
                     text: 'UPDATE t_yoyaku' +
                         '   SET reserve_c_count = $1' +
                         ' WHERE id = $2',
-                    values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2]],
+                    values: [post.split('=')[1], post.split('=')[2]],
                 }
 
-                console.log(event.postback.data)
+                console.log(post)
 
                 client.connect(function (err, client) {
                     if (err) {
@@ -469,6 +514,133 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             .query(query)
                             .then(() => {
                                 console.log('Data Updated.')
+
+
+                                let query_time = {
+                                    text: "SELECT " + 
+                                        "      CASE" +  
+                                        "          WHEN first_day = $1" +
+                                        "               THEN first_start_time" +
+                                        "          ELSE second_start_time" + 
+                                        "          END as start, " +
+                                        "      CASE" +  
+                                        "          WHEN first_day = $1" +
+                                        "               THEN first_end_time - first_start_time" +
+                                        "          ELSE second_end_time - second_start_time" + 
+                                        "          END " +
+                                        "    FROM m_event " +
+                                        "   WHERE event_cd = $2" +
+                                        "     AND kaisaiti_cd = $3" +
+                                        "     AND ( first_day = $1" +
+                                        "      OR second_day = $1)",
+                                    values: [post.split('=')[5], post.split('=')[3], post.split('=')[4]],
+                                }
+
+                                client.query(query_time)
+                                    .then((res) => {
+                                        let row = Math.ceil(res.rows[0].case.hours / 2)
+
+                                        let select = ""
+                                        let selectdata = ""
+                                        let start = res.rows[0].start
+                                        let startTime = moment(start, 'HH:mm:ss');
+                                        let end 
+                                        let first = 0
+
+                                        for (let i = 0; i < row; i++) {
+                                            startTime.add(2, 'hours');
+                                            end = startTime.format('HH:mm:ss')
+
+                                            select = 
+                                            "( SELECT" +
+                                            "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
+                                            "  FROM" +
+                                            "      t_yoyaku " +
+                                            "  WHERE" +
+                                            "      reserve_time BETWEEN '" + post.split('=')[5] + " " + start + "' AND '" + post.split('=')[5] + " " + end  + "') as " + '"' + start.slice(0,5) + '~"'
+      
+                                            if(first != 0){
+                                                select  = ',' + select
+                                            }
+                                            selectdata = selectdata + select                                            
+                                            first = 1
+                                            start = end
+                                        }
+
+                                        console.log(selectdata)
+
+                                        let query_graph = {
+                                            text: "SELECT " + 
+                                                        selectdata +
+                                                  "  FROM t_yoyaku t1 " +
+                                                  " WHERE event_cd = $1 " +
+                                                  " GROUP BY event_cd",
+                                            values: [post.split('=')[3]],
+                                        }
+
+                                        client.query(query_graph)
+                                        .then((res) => {
+                                            console.log(res.rows[0].ninzu0)
+                                            console.log(res.rows[0].ninzu1)
+                                            console.log(res.rows[0].ninzu2)
+                                            console.log(res.rows[0].ninzu3)
+                                            console.log(res.rows[0].ninzu4)
+
+                                            const canvas = createCanvas(400, 400);
+                                            const ctx = canvas.getContext('2d');
+            
+                                            const graphdata = {
+                                            datasets: [{
+                                                label: '来場者予定グラフ',
+                                                data: res.rows[0],
+                                                backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)'
+                                                ],
+                                                borderColor: [
+                                                'rgba(255, 99, 132, 1)'
+                                                ],
+                                                borderWidth: 1,
+                                            }]
+                                            };
+            
+                                            const chart = new Chart(ctx, {
+                                            type: 'bar',
+                                            data: graphdata,
+                                            options: {
+                                                title: {
+                                                    display: false
+                                                },
+                                                scales: {
+                                                    y: {
+                                                        display: false
+                                                    },
+                                                    x: {
+                                                        display: true
+                                                    }
+                                                }
+                                                }
+                                            })
+            
+                                            console.log(graphdata)
+                                            console.log(chart)
+
+                                            let file = post.split('=')[4] + post.split('=')[5].replace(/\//g, '_')
+            
+                                            const graphDir = path.join(__dirname, 'graph')
+                                            if (!fs.existsSync(graphDir)) {
+                                                fs.mkdirSync(graphDir)
+                                            }
+                                            app.use(express.static(graphDir))
+
+                                            const out = fs.createWriteStream(graphDir + '/' + file +'.png');
+                                            const stream = canvas.createPNGStream();
+                                            stream.pipe(out);
+
+                                            console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
+                                        })
+        
+                                    
+                                    })
                             })
                             .catch((e) => {
                                 console.error(e.stack)
@@ -481,15 +653,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     text: '予約が完了しました'
                 }
 
-                events_processed.push(bot.replyMessage(event.replyToken, message))
+                events_processed.push(bot.replyMessage(event.replyToken, message))                
             }
+
+
         }
         else {
-            const message = {
-                type: 'text',
-                text: 'Hello World!'
-            }
-            events_processed.push(bot.replyMessage(event.replyToken, message))
+            return
         }
     })
 
