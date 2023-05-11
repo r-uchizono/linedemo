@@ -208,7 +208,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate
                                                         }
 
-                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + '12023_05_19.png'
+                                                        let f_file = res.rows[i].kaisaiti_cd + f_dataDate.replace(/\//g, '_')
+                                                        console.log(f_file)
+
+                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png'
 
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
@@ -243,7 +246,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                                 secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate
                                                             }
 
-                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + '12023_05_19.png'
+                                                            let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
+                                                            console.log(s_file)
+
+                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png'
                                                             console.log(secondEventJson.hero.url)
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
@@ -275,11 +281,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // ユーザーからのテキストメッセージが「予約確認」だった場合のみ反応。
             else if (event.message.text == "予約確認") {
                 //データを取りだす
-                const bufferData = fs.readFileSync('kakunin.json')
+                let bufferData = fs.readFileSync('kakunin.json')
                 // データを文字列に変換
-                const dataJSON = bufferData.toString()
+                let dataJSON = bufferData.toString()
                 //JSONのデータをJavascriptのオブジェクトに
-                const data = JSON.parse(dataJSON)
+                let data = JSON.parse(dataJSON)
+                let data_message = []
+                data[0].contents.contents = []
 
                 let query_event_base = {
                     text: "SELECT *" +
@@ -310,23 +318,92 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                         let query_yoyaku = {
                                             text: "SELECT *" +
                                                 "  FROM t_yoyaku t1" +
-                                                "  LEFT OUTER JOIN" +
+                                                " INNER JOIN" +
                                                 "       m_event m1" +
                                                 "    ON t1.event_cd = m1.event_cd" +
                                                 "   AND t1.kaisaiti_cd = m1.kaisaiti_cd" +
+                                                " INNER JOIN" +
+                                                "       m_event_base m2" +
+                                                "    ON m1.event_cd = m2.event_cd" +
+                                                " INNER JOIN m_kaisaiti k" +
+                                                "    ON m1.kaisaiti_cd = k.kaisaiti_cd" +
                                                 " WHERE t1.user_id = $1" + 
-                                                "   AND t1.event_cd = $2",
+                                                "   AND t1.event_cd = $2" +
+                                                " ORDER BY t1.reserve_time",
                                             values: [res.rows[0].user_id, event_cd],
                                         }
 
                                         client.query(query_yoyaku)
                                             .then((res) => {
+                                                let end = 0
+                                                let start = 0
 
+                                                let row = Math.ceil(res.rows.length / 12)
+                                                console.log(row)
 
+                                                for (let I = 0; I < row; I++) {
+                                                    console.log("roop start")
+                                                    if (res.rows.length <= 12) {
+                                                        end = res.rows.length
+                                                    }
+                                                    else {
+                                                        if (res.rows.length - end > 12) {
+                                                            end = (I + 1) * 12
+                                                        }
+                                                        else {
+                                                            end = res.rows.length
+                                                        }
 
+                                                        start = (I) * 12
+                                                    }
+                                                    for (let i = start; i < end; i++) {
 
-                                                // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                                                events_processed.push(bot.replyMessage(event.replyToken, data))
+                                                        let date = new Date(res.rows[i].reserve_time)
+                                                        let year = date.getFullYear()
+                                                        let month = ('0' + (date.getMonth() + 1)).slice(-2)
+                                                        let day = ('0' + date.getDate()).slice(-2)
+                                                        let dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+                                                        let formattedDate = `${year}年${month}月${day}日（${dayOfWeek}）`
+                                                        let dataDate = `${year}/${month}/${day}`
+                                                        let dataTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+                                                        
+                                                        let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time)
+                                                        let f_etime = new Date('2023-04-01T' + res.rows[i].first_end_time)
+                                                        let s_stime = new Date('2023-04-01T' + res.rows[i].second_start_time)
+                                                        let s_etime = new Date('2023-04-01T' + res.rows[i].second_end_time)
+                                                        let F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
+                                                        let F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+                                                        let S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
+                                                        let S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+
+                                                        let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
+                                                        EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
+                                                        EventJson.body.contents[0].text = formattedDate
+                                                        if(dataDate == res.rows[i].first_day){
+                                                            EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
+                                                        }
+                                                        else{
+                                                            EventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime
+                                                        }
+                                                        EventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
+                                                        let address = res.rows[i].place_address
+                                                        EventJson.body.contents[3].action.label = address
+                                                        EventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
+                                                        EventJson.body.contents[4].text = '来場予定時間　' + dataTime
+
+                                                        EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id
+                                                        EventJson.footer.contents[1].action.data = 'henko=' + res.rows[i].id + '=' + dataDate
+
+                                                        data[0].contents.contents.push({ ...EventJson })
+                                                    }
+
+                                                    data_message.push({ ...data[0] })
+                                                    data = JSON.parse(dataJSON)
+                                                    data[0].contents.contents = []
+                                                }
+
+                                               // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+                                                events_processed.push(bot.replyMessage(event.replyToken, data_message))
 
                                             })
 
@@ -420,12 +497,12 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             // 「イベント一覧」の場合
             if (event.postback.data.split('=')[0] == "event_id") {
                 // DB登録処理
-                const query = {
+                let query = {
                     text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
                     values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2], event.source.userId, event.postback.data.split('=')[3] + ' ' + event.postback.params.time + ':00.000'],
                 }
 
-                const query_id = {
+                let query_id = {
                     text: "SELECT setval('t_yoyaku_id_seq', (SELECT MAX(id) FROM t_yoyaku))",
                 }
 
@@ -461,7 +538,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             }
             else if (event.postback.data.split('=')[0] == "a_ninzu") {
 
-                const query = {
+                let query = {
                     text: 'UPDATE t_yoyaku' +
                         '   SET reserve_a_count = $1' +
                         ' WHERE id = $2',
@@ -476,11 +553,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             .then(() => {
                                 console.log('Data Updated.')
                                 //データを取りだす
-                                const bufferData = fs.readFileSync('c_ninzu.json')
+                                let bufferData = fs.readFileSync('c_ninzu.json')
                                 // データを文字列に変換
-                                const dataJSON = bufferData.toString()
+                                let dataJSON = bufferData.toString()
                                 //JSONのデータをJavascriptのオブジェクトに
-                                const data = JSON.parse(dataJSON)
+                                let data = JSON.parse(dataJSON)
 
                                 var post = event.postback.data.split('=')
                                 for (let i = 0; i < 10; i++) {
@@ -497,7 +574,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 let post = event.postback.data.replace(/,/g, '=')
                 // DB登録処理
-                const query = {
+                let query = {
                     text: 'UPDATE t_yoyaku' +
                         '   SET reserve_c_count = $1' +
                         ' WHERE id = $2',
@@ -586,10 +663,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                             console.log(res.rows[0].ninzu3)
                                             console.log(res.rows[0].ninzu4)
 
-                                            const canvas = createCanvas(400, 400);
-                                            const ctx = canvas.getContext('2d');
+                                            let canvas = createCanvas(400, 400);
+                                            let ctx = canvas.getContext('2d');
             
-                                            const graphdata = {
+                                            let graphdata = {
                                             datasets: [{
                                                 label: '来場者予定グラフ',
                                                 data: res.rows[0],
@@ -603,7 +680,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                             }]
                                             };
             
-                                            const chart = new Chart(ctx, {
+                                            let chart = new Chart(ctx, {
                                             type: 'bar',
                                             data: graphdata,
                                             options: {
@@ -626,14 +703,14 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                             let file = post.split('=')[4] + post.split('=')[5].replace(/\//g, '_')
             
-                                            const graphDir = path.join(__dirname, 'graph')
+                                            let graphDir = path.join(__dirname, 'graph')
                                             if (!fs.existsSync(graphDir)) {
                                                 fs.mkdirSync(graphDir)
                                             }
                                             app.use(express.static(graphDir))
 
-                                            const out = fs.createWriteStream(graphDir + '/' + file +'.png');
-                                            const stream = canvas.createPNGStream();
+                                            let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+                                            let stream = canvas.createPNGStream();
                                             stream.pipe(out);
 
                                             console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
@@ -655,7 +732,68 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 events_processed.push(bot.replyMessage(event.replyToken, message))                
             }
+            else if (event.postback.data.split('=')[0] == "torikesi") {
+                // DB登録処理
+                let query = {
+                    text: 'DELETE' +
+                          '  FROM t_yoyaku' +
+                          ' WHERE id = $1',
+                    values: [event.postback.data.split('=')[1]],
+                }
 
+                client.connect(function (err, client) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        client
+                            .query(query)
+                            .then(() => {
+                                console.log('Data Deleted.')
+
+                                let message = {
+                                    type: 'text',
+                                    text: '取消が完了しました'
+                                }
+                
+                                events_processed.push(bot.replyMessage(event.replyToken, message))     
+                            })
+                            .catch((e) => {
+                                console.error(e.stack)
+                            })
+                    }
+                })
+            }
+            else if (event.postback.data.split('=')[0] == "henko") {
+                // DB登録処理
+                let query = {
+                    text: 'UPDATE t_yoyaku' +
+                          '   SET reserve_time = $1' +
+                          ' WHERE id = $2',
+                    values: [event.postback.data.split('=')[2] + ' ' + event.postback.params.time + ':00.000', event.postback.data.split('=')[1]],
+                }
+
+                client.connect(function (err, client) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        client
+                            .query(query)
+                            .then(() => {
+                                console.log('Data Updated.')
+
+                                let message = {
+                                    type: 'text',
+                                    text: '変更が完了しました'
+                                }
+                
+                                events_processed.push(bot.replyMessage(event.replyToken, message))     
+                            })
+                            .catch((e) => {
+                                console.error(e.stack)
+                            })
+                    }
+                })
+            }
 
         }
         else {
