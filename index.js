@@ -48,21 +48,21 @@ const bot = new line.Client(line_config)
 //     ssl: true 
 // })
 
-// const client = new pg.Pool({
-//     user: process.env.PG_USER,
-//     host: process.env.PG_HOST,
-//     database: process.env.PG_DBNM,
-//     password: process.env.PG_PSWD,
-//     port: process.env.PG_PORT
-// })
-
 const client = new pg.Pool({
-    user: 'unis',
-    host: 'dpg-cgvn4qodh87joksvpj70-a',
-    database: 'event_f91d',
-    password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
-    port: 5432
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DBNM,
+    password: process.env.PG_PSWD,
+    port: process.env.PG_PORT
 })
+
+// const client = new pg.Pool({
+//     user: 'unis',
+//     host: 'dpg-cgvn4qodh87joksvpj70-a',
+//     database: 'event_f91d',
+//     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
+//     port: 5432
+// })
 
 app.post("/", (req, res) => {
     app.render('index.js')

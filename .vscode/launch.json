@@ -20,7 +20,7 @@
                 "PG_HOST" : "dpg-cgvn4qodh87joksvpj70-a",
                 "PG_DBNM" : "event_f91d",
                 "PG_PSWD" : "gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn",
-                "PG_PORT" : "5432",
+                "PG_PORT" : "5432"
             }
         }
     ]
