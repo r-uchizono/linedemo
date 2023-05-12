@@ -53,7 +53,7 @@ const client = new pg.Pool({
     host: process.env.PG_HOST,
     database: process.env.PG_DBNM,
     password: process.env.PG_PSWD,
-    port: process.env.PG_PORT,
+    port: process.env.PG_PORT
 })
 
 app.post("/", (req, res) => {
