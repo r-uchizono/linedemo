@@ -20,6 +20,13 @@
                         }
                     ]
                 },
+                "hero": {
+                    "type": "image",
+                    "url": "",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "fit"
+                },
                 "body": {
                     "type": "box",
                     "layout": "vertical",

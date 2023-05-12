@@ -15,12 +15,24 @@
           "type": "button",
           "action": {
             "type": "postback",
+            "label": "0名",
+            "data": "c_ninzu=0"
+          },
+          "height": "sm",
+          "style": "primary",
+          "margin": "10px",
+          "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
             "label": "1名",
             "data": "c_ninzu=1"
           },
           "height": "sm",
           "style": "primary",
-          "margin": "10px",
+          "margin": "5px",
           "color": "#f3981d"
         },
         {
