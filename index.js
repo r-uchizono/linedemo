@@ -729,9 +729,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 }
                                                 }
                                             })
-            
-                                            console.log(graphdata)
-                                            console.log(chart)
 
                                             let file = post.split('=')[4] + post.split('=')[5].replace(/\//g, '_')
             
@@ -948,9 +945,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         }
                                                         }
                                                     })
-                    
-                                                    console.log(graphdata)
-                                                    console.log(chart)
         
                                                     let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_')
                     
