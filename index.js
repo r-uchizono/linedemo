@@ -929,7 +929,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             text: '来場者予定グラフ'
                                                         }
                                                     }
-                                                    };
+                                                    }; 
                                                     
                                                     let chart = new Chart(ctx, {
                                                     type: 'bar',
