@@ -930,7 +930,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         }
                                                     }
                                                     };
-                    
+                                                    
                                                     let chart = new Chart(ctx, {
                                                     type: 'bar',
                                                     data: graphdata,
