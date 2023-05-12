@@ -61,7 +61,7 @@ const client = new pg.Pool({
     host: 'dpg-cgvn4qodh87joksvpj70-a',
     database: 'event_f91d',
     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
-    port: 5432
+    port: 5432 
 }) 
 
 app.post("/", (req, res) => {
