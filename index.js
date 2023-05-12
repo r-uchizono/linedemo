@@ -702,7 +702,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                             plugins: {
                                                 title: {
                                                     font: {
-                                                        family: 'sans-serif',
+                                                        family: 'Noto Sans CJK JP',
                                                         size: 16,
                                                         weight: 'bold'
                                                     },
@@ -902,6 +902,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
+                                                    //ctx.font = "12px 'Noto Sans CJK JP'";
                     
                                                     let graphdata = {
                                                     datasets: [{
@@ -918,7 +919,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     plugins: {
                                                         title: {
                                                             font: {
-                                                                family: 'sans-serif',
+                                                                family: 'Noto Sans CJK JP',
                                                                 size: 16,
                                                                 weight: 'bold'
                                                             },
