@@ -167,6 +167,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 let row = Math.ceil(res.rows.length / 6)
                                                 console.log(row)
 
+                                                let S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                                                let array = new Uint8Array(16)
+                                                let file = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
+
                                                 for (let I = 0; I < row; I++) {
                                                     console.log("roop start")
                                                     if (res.rows.length <= 6) {
@@ -228,7 +232,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let f_file = res.rows[i].kaisaiti_cd + f_dataDate.replace(/\//g, '_')
                                                         console.log(f_file)
 
-                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png0' 
+                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png?xxx=' + file 
 
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
@@ -266,7 +270,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
                                                             console.log(s_file)
 
-                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + 0 + '.png?id=3' 
+                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png?xxx=' + file
                                                             console.log(secondEventJson.hero.url)
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
@@ -926,7 +930,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     console.log(graphdata)
                                                     console.log(chart)
         
-                                                    let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_') + 0
+                                                    let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_')
                     
                                                     let graphDir = path.join(__dirname, 'graph')
                                                     if (!fs.existsSync(graphDir)) {
