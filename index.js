@@ -804,6 +804,146 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 }
                 
                                 events_processed.push(bot.replyMessage(event.replyToken, message))     
+
+                                let query_yoyaku = {
+                                    text: 'SELECT *' +
+                                          '  FROM t_yoyaku' +
+                                          ' WHERE id = $1',
+                                    values: [event.postback.data.split('=')[1]],
+                                }
+
+                                client.query(query_yoyaku)
+                                    .then((res) => {
+
+                                        let event_cd = res.rows[0].event_cd
+                                        let kaisaiti_cd = res.rows[0].kaisaiti_cd
+
+                                        let query_time = {
+                                            text: "SELECT " + 
+                                                "      CASE" +  
+                                                "          WHEN first_day = $1" +
+                                                "               THEN first_start_time" +
+                                                "          ELSE second_start_time" + 
+                                                "          END as start, " +
+                                                "      CASE" +  
+                                                "          WHEN first_day = $1" +
+                                                "               THEN first_end_time - first_start_time" +
+                                                "          ELSE second_end_time - second_start_time" + 
+                                                "          END " +
+                                                "    FROM m_event " +
+                                                "   WHERE event_cd = $2" +
+                                                "     AND kaisaiti_cd = $3" +
+                                                "     AND ( first_day = $1" +
+                                                "      OR second_day = $1)",
+                                            values: [event.postback.data.split('=')[2], event_cd, kaisaiti_cd],
+                                        }
+        
+                                        client.query(query_time)
+                                            .then((res) => {
+                                                let row = Math.ceil(res.rows[0].case.hours / 2)
+        
+                                                let select = ""
+                                                let selectdata = ""
+                                                let start = res.rows[0].start
+                                                let startTime = moment(start, 'HH:mm:ss');
+                                                let end 
+                                                let first = 0
+        
+                                                for (let i = 0; i < row; i++) {
+                                                    startTime.add(2, 'hours');
+                                                    end = startTime.format('HH:mm:ss')
+        
+                                                    select = 
+                                                    "( SELECT" +
+                                                    "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
+                                                    "  FROM" +
+                                                    "      t_yoyaku " +
+                                                    "  WHERE" +
+                                                    "      reserve_time BETWEEN '" + event.postback.data.split('=')[2] + " " + start + "' AND '" + event.postback.data.split('=')[2] + " " + end  + "') as " + '"' + start.slice(0,5) + '~"'
+              
+                                                    if(first != 0){
+                                                        select  = ',' + select
+                                                    }
+                                                    selectdata = selectdata + select                                            
+                                                    first = 1
+                                                    start = end
+                                                }
+        
+                                                console.log(selectdata)
+        
+                                                let query_graph = {
+                                                    text: "SELECT " + 
+                                                                selectdata +
+                                                          "  FROM t_yoyaku t1 " +
+                                                          " WHERE event_cd = $1 " +
+                                                          " GROUP BY event_cd",
+                                                    values: [event_cd],
+                                                }
+        
+                                                client.query(query_graph)
+                                                .then((res) => {
+                                                    console.log(res.rows[0].ninzu0)
+                                                    console.log(res.rows[0].ninzu1)
+                                                    console.log(res.rows[0].ninzu2)
+                                                    console.log(res.rows[0].ninzu3)
+                                                    console.log(res.rows[0].ninzu4)
+        
+                                                    let canvas = createCanvas(400, 400);
+                                                    let ctx = canvas.getContext('2d');
+                    
+                                                    let graphdata = {
+                                                    datasets: [{
+                                                        label: '来場者予定グラフ',
+                                                        data: res.rows[0],
+                                                        backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)'
+                                                        ],
+                                                        borderColor: [
+                                                        'rgba(255, 99, 132, 1)'
+                                                        ],
+                                                        borderWidth: 1,
+                                                    }]
+                                                    };
+                    
+                                                    let chart = new Chart(ctx, {
+                                                    type: 'bar',
+                                                    data: graphdata,
+                                                    options: {
+                                                        title: {
+                                                            display: false
+                                                        },
+                                                        scales: {
+                                                            y: {
+                                                                display: false
+                                                            },
+                                                            x: {
+                                                                display: true
+                                                            }
+                                                        }
+                                                        }
+                                                    })
+                    
+                                                    console.log(graphdata)
+                                                    console.log(chart)
+        
+                                                    let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_')
+                    
+                                                    let graphDir = path.join(__dirname, 'graph')
+                                                    if (!fs.existsSync(graphDir)) {
+                                                        fs.mkdirSync(graphDir)
+                                                    }
+                                                    app.use(express.static(graphDir))
+        
+                                                    let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+                                                    let stream = canvas.createPNGStream();
+                                                    stream.pipe(out);
+        
+                                                    console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
+                                                })
+                
+                                            
+                                            })
+                                    })
                             })
                             .catch((e) => {
                                 console.error(e.stack)
