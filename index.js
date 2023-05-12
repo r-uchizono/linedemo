@@ -266,7 +266,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
                                                             console.log(s_file)
 
-                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + 0 + '.png?id=1'
+                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + 0 + '.png?id=2' 
                                                             console.log(secondEventJson.hero.url)
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
