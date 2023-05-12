@@ -926,7 +926,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     console.log(graphdata)
                                                     console.log(chart)
         
-                                                    let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_')
+                                                    let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_') + 0
                     
                                                     let graphDir = path.join(__dirname, 'graph')
                                                     if (!fs.existsSync(graphDir)) {
