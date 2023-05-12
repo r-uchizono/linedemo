@@ -228,7 +228,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let f_file = res.rows[i].kaisaiti_cd + f_dataDate.replace(/\//g, '_')
                                                         console.log(f_file)
 
-                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png'
+                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png0' 
 
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
@@ -266,7 +266,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
                                                             console.log(s_file)
 
-                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png'
+                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + 0 + '.png?id=1'
                                                             console.log(secondEventJson.hero.url)
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
