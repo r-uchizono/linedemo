@@ -38,13 +38,21 @@ app.use(express.urlencoded({
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config)
+// const client = new pg.Pool({
+//     user: process.env.PG_USER,
+//     host: process.env.PG_HOST,
+//     database: process.env.PG_DBNM,
+//     password: process.env.PG_PSWD,
+//     port: process.env.PG_PORT,
+//     ssl: true
+// })
+
 const client = new pg.Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PG_DBNM,
-    password: process.env.PG_PSWD,
-    port: process.env.PG_PORT,
-    ssl: true
+    user: 'unis',
+    host: 'dpg-cgvn4qodh87joksvpj70-a',
+    database: 'event_f91d',
+    password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
+    port: 5432
 })
 
 app.post("/", (req, res) => {
