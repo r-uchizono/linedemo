@@ -65,8 +65,6 @@ const client = new pg.Pool({
     port: 5432 
 }) 
 
-console.log(client)
-
 app.post("/", (req, res) => {
     app.render('index.js')
 })
@@ -233,7 +231,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         }
 
                                                         let f_file = res.rows[i].kaisaiti_cd + f_dataDate.replace(/\//g, '_')
-                                                        console.log(f_file)
 
                                                         firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png?xxx=' + file 
 
@@ -271,10 +268,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             }
 
                                                             let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
-                                                            console.log(s_file)
 
                                                             secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png?xxx=' + file
-                                                            console.log(secondEventJson.hero.url)
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
                                                     }
@@ -904,12 +899,12 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     console.log(res.rows[0].ninzu3)
                                                     console.log(res.rows[0].ninzu4)
 
-                                                    app.use(express.urlencoded({ extended: true }));
-                                                    app.use(express.json());
                                                     app.use(function(req, res, next) {
                                                     res.setHeader('Content-Type', 'text/html; charset=utf-8');
                                                     next();
                                                     });
+                                                    app.use(express.urlencoded({ extended: true }));
+                                                    app.use(express.json());
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
