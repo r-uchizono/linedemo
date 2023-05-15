@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url'
 import Chart from 'chart.js/auto'
 import { createCanvas } from 'canvas'
 import moment from 'moment';
+import utf8 from 'utf8';
 
 
 // -----------------------------------------------------------------------------
@@ -48,21 +49,21 @@ const bot = new line.Client(line_config)
 //     ssl: true 
 // })
 
-// const client = new pg.Pool({
-//     user: process.env.PG_USER,
-//     host: process.env.PG_HOST,
-//     database: process.env.PG_DBNM,
-//     password: process.env.PG_PSWD,
-//     port: process.env.PG_PORT
-// })
-
 const client = new pg.Pool({
-    user: 'unis',
-    host: 'dpg-cgvn4qodh87joksvpj70-a',
-    database: 'event_f91d',
-    password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
-    port: 5432 
-}) 
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DBNM,
+    password: process.env.PG_PSWD,
+    port: process.env.PG_PORT
+})
+
+// const client = new pg.Pool({
+//     user: 'unis',
+//     host: 'dpg-cgvn4qodh87joksvpj70-a',
+//     database: 'event_f91d',
+//     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
+//     port: 5432 
+// }) 
 
 app.post("/", (req, res) => {
     app.render('index.js')
@@ -903,10 +904,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
-                                                    ctx.font = "12px 'Noto Sans CJK JP'";
+                                                    // ctx.font = "12px 'Noto Sans CJK JP'";
                     
                                                     let graphdata = {
                                                     datasets: [{
+                                                        charset: utf8, 
                                                         label: '来場者予定グラフ',
                                                         data: res.rows[0],
                                                         backgroundColor: [
@@ -920,7 +922,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     plugins: {
                                                         title: {
                                                             font: {
-                                                                family: 'Noto Sans CJK JP',
+                                                                family: 'Noto Sans CJK JP', 
                                                                 size: 16,
                                                                 weight: 'bold'
                                                             },
