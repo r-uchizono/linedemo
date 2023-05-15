@@ -11,7 +11,6 @@ import { fileURLToPath } from 'url'
 import Chart from 'chart.js/auto'
 import { createCanvas } from 'canvas'
 import moment from 'moment';
-import utf8 from 'utf8';
 
 
 // -----------------------------------------------------------------------------
@@ -908,7 +907,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     
                                                     let graphdata = {
                                                     datasets: [{
-                                                        charset: utf8, 
+                                                        charset: 'UTF-8', 
                                                         label: '来場者予定グラフ',
                                                         data: res.rows[0],
                                                         backgroundColor: [
