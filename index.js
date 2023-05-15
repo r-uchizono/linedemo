@@ -64,6 +64,8 @@ const client = new pg.Pool({
 //     port: 5432 
 // }) 
 
+console.log(client)
+
 app.post("/", (req, res) => {
     app.render('index.js')
 })
