@@ -36,6 +36,8 @@ app.use(express.urlencoded({
     extended: true
 }))
 
+console.log(process.env)
+
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config)
 //ローカル用
@@ -63,8 +65,6 @@ const client = new pg.Pool({
 //     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
 //     port: 5432 
 // }) 
-
-console.log(client)
 
 app.post("/", (req, res) => {
     app.render('index.js')
