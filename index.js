@@ -903,6 +903,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     console.log(res.rows[0].ninzu2)
                                                     console.log(res.rows[0].ninzu3)
                                                     console.log(res.rows[0].ninzu4)
+
+                                                    app.use(express.urlencoded({ extended: true }));
+                                                    app.use(express.json());
+                                                    app.use(function(req, res, next) {
+                                                    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+                                                    next();
+                                                    });
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
