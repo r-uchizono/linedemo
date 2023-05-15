@@ -901,11 +901,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
-                                                    // ctx.font = "12px 'Noto Sans CJK JP'";
+                                                    ctx.font = "12px 'ＭＳ Ｐゴシック'";
                     
                                                     let graphdata = {
                                                     datasets: [{
-                                                        label: '来場者予定グラ',
+                                                        label: 'raijograph',
                                                         data: res.rows[0],
                                                         backgroundColor: [
                                                         'rgba(255, 99, 132, 0.2)'
@@ -918,7 +918,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     plugins: {
                                                         title: {
                                                             font: {
-                                                                family: sans-serif, 
+                                                                family: 'sans-serif', 
                                                                 size: 16,
                                                                 weight: 'bold'
                                                             },
