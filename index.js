@@ -905,7 +905,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     
                                                     let graphdata = {
                                                     datasets: [{
-                                                        charset: 'UTF-8', 
                                                         label: 'raijograph',
                                                         data: res.rows[0],
                                                         backgroundColor: [
@@ -919,7 +918,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     plugins: {
                                                         title: {
                                                             font: {
-                                                                family: 'Noto Sans CJK JP', 
+                                                                family: sans-serif, 
                                                                 size: 16,
                                                                 weight: 'bold'
                                                             },
