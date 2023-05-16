@@ -36,8 +36,10 @@ app.use(express.urlencoded({
     extended: true
 }))
 
+
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config)
+
 const client = new pg.Pool({
     user: process.env.PG_USER,
     host: process.env.PG_HOST,
@@ -150,6 +152,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 let row = Math.ceil(res.rows.length / 6)
                                                 console.log(row)
 
+                                                let S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                                                let array = new Uint8Array(16)
+                                                let file = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
+
                                                 for (let I = 0; I < row; I++) {
                                                     console.log("roop start")
                                                     if (res.rows.length <= 6) {
@@ -209,9 +215,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         }
 
                                                         let f_file = res.rows[i].kaisaiti_cd + f_dataDate.replace(/\//g, '_')
-                                                        console.log(f_file)
 
-                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png'
+                                                        firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png?xxx=' + file 
 
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
@@ -247,10 +252,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             }
 
                                                             let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
-                                                            console.log(s_file)
 
-                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png'
-                                                            console.log(secondEventJson.hero.url)
+                                                            secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png?xxx=' + file
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
                                                     }
@@ -273,7 +276,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                         }
                                         events_processed.push(bot.replyMessage(event.replyToken, errmessage))
                                     })
-
                             })
                     }
                 })
@@ -379,7 +381,12 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
                                                         EventJson.body.contents[0].text = formattedDate
-                                                        if(dataDate == res.rows[i].first_day){
+
+                                                        console.log(dataDate)
+                                                        console.log(res.rows[i].first_day.toISOString().slice(0, 10).replace(/-/g, '/'))
+                                                        let first_day = res.rows[i].first_day.toISOString().slice(0, 10).replace(/-/g, '/')
+
+                                                        if(dataDate == first_day){
                                                             EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
                                                         }
                                                         else{
@@ -391,7 +398,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         EventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
                                                         EventJson.body.contents[4].text = '来場予定時間　' + dataTime
 
-                                                        EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id
+                                                        EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id  + '=' + dataDate
                                                         EventJson.footer.contents[1].action.data = 'henko=' + res.rows[i].id + '=' + dataDate
 
                                                         data[0].contents.contents.push({ ...EventJson })
@@ -581,8 +588,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     values: [post.split('=')[1], post.split('=')[2]],
                 }
 
-                console.log(post)
-
                 client.connect(function (err, client) {
                     if (err) {
                         console.log(err)
@@ -592,132 +597,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                             .then(() => {
                                 console.log('Data Updated.')
 
+                                graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'))
 
-                                let query_time = {
-                                    text: "SELECT " + 
-                                        "      CASE" +  
-                                        "          WHEN first_day = $1" +
-                                        "               THEN first_start_time" +
-                                        "          ELSE second_start_time" + 
-                                        "          END as start, " +
-                                        "      CASE" +  
-                                        "          WHEN first_day = $1" +
-                                        "               THEN first_end_time - first_start_time" +
-                                        "          ELSE second_end_time - second_start_time" + 
-                                        "          END " +
-                                        "    FROM m_event " +
-                                        "   WHERE event_cd = $2" +
-                                        "     AND kaisaiti_cd = $3" +
-                                        "     AND ( first_day = $1" +
-                                        "      OR second_day = $1)",
-                                    values: [post.split('=')[5], post.split('=')[3], post.split('=')[4]],
-                                }
-
-                                client.query(query_time)
-                                    .then((res) => {
-                                        let row = Math.ceil(res.rows[0].case.hours / 2)
-
-                                        let select = ""
-                                        let selectdata = ""
-                                        let start = res.rows[0].start
-                                        let startTime = moment(start, 'HH:mm:ss');
-                                        let end 
-                                        let first = 0
-
-                                        for (let i = 0; i < row; i++) {
-                                            startTime.add(2, 'hours');
-                                            end = startTime.format('HH:mm:ss')
-
-                                            select = 
-                                            "( SELECT" +
-                                            "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
-                                            "  FROM" +
-                                            "      t_yoyaku " +
-                                            "  WHERE" +
-                                            "      reserve_time BETWEEN '" + post.split('=')[5] + " " + start + "' AND '" + post.split('=')[5] + " " + end  + "') as " + '"' + start.slice(0,5) + '~"'
-      
-                                            if(first != 0){
-                                                select  = ',' + select
-                                            }
-                                            selectdata = selectdata + select                                            
-                                            first = 1
-                                            start = end
-                                        }
-
-                                        console.log(selectdata)
-
-                                        let query_graph = {
-                                            text: "SELECT " + 
-                                                        selectdata +
-                                                  "  FROM t_yoyaku t1 " +
-                                                  " WHERE event_cd = $1 " +
-                                                  " GROUP BY event_cd",
-                                            values: [post.split('=')[3]],
-                                        }
-
-                                        client.query(query_graph)
-                                        .then((res) => {
-                                            console.log(res.rows[0].ninzu0)
-                                            console.log(res.rows[0].ninzu1)
-                                            console.log(res.rows[0].ninzu2)
-                                            console.log(res.rows[0].ninzu3)
-                                            console.log(res.rows[0].ninzu4)
-
-                                            let canvas = createCanvas(400, 400);
-                                            let ctx = canvas.getContext('2d');
-            
-                                            let graphdata = {
-                                            datasets: [{
-                                                label: '来場者予定グラフ',
-                                                data: res.rows[0],
-                                                backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)'
-                                                ],
-                                                borderColor: [
-                                                'rgba(255, 99, 132, 1)'
-                                                ],
-                                                borderWidth: 1,
-                                            }]
-                                            };
-            
-                                            let chart = new Chart(ctx, {
-                                            type: 'bar',
-                                            data: graphdata,
-                                            options: {
-                                                title: {
-                                                    display: false
-                                                },
-                                                scales: {
-                                                    y: {
-                                                        display: false
-                                                    },
-                                                    x: {
-                                                        display: true
-                                                    }
-                                                }
-                                                }
-                                            })
-            
-                                            console.log(graphdata)
-                                            console.log(chart)
-
-                                            let file = post.split('=')[4] + post.split('=')[5].replace(/\//g, '_')
-            
-                                            let graphDir = path.join(__dirname, 'graph')
-                                            if (!fs.existsSync(graphDir)) {
-                                                fs.mkdirSync(graphDir)
-                                            }
-                                            app.use(express.static(graphDir))
-
-                                            let out = fs.createWriteStream(graphDir + '/' + file +'.png');
-                                            let stream = canvas.createPNGStream();
-                                            stream.pipe(out);
-
-                                            console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
-                                        })
-        
-                                    
-                                    })
                             })
                             .catch((e) => {
                                 console.error(e.stack)
@@ -733,7 +614,14 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, message))                
             }
             else if (event.postback.data.split('=')[0] == "torikesi") {
-                // DB登録処理
+                // DB処理
+                let query_yoyaku = {
+                    text: 'SELECT *' +
+                          '  FROM t_yoyaku' +
+                          ' WHERE id = $1',
+                    values: [event.postback.data.split('=')[1]],
+                }
+
                 let query = {
                     text: 'DELETE' +
                           '  FROM t_yoyaku' +
@@ -746,16 +634,24 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         console.log(err)
                     } else {
                         client
-                            .query(query)
-                            .then(() => {
-                                console.log('Data Deleted.')
+                            .query(query_yoyaku)
+                            .then((res) => {
+                                let event_cd = res.rows[0].event_cd
+                                let kaisaiti_cd = res.rows[0].kaisaiti_cd    
 
-                                let message = {
-                                    type: 'text',
-                                    text: '取消が完了しました'
-                                }
-                
-                                events_processed.push(bot.replyMessage(event.replyToken, message))     
+                                client.query(query)
+                                    .then(() => {
+                                        console.log('Data Deleted.')
+
+                                        let message = {
+                                            type: 'text',
+                                            text: '取消が完了しました'
+                                        }
+                        
+                                        events_processed.push(bot.replyMessage(event.replyToken, message))
+
+                                        graph(event_cd, kaisaiti_cd, event.postback.data.split('=')[2].replace(/\//g, '_'))
+                                    })
                             })
                             .catch((e) => {
                                 console.error(e.stack)
@@ -787,6 +683,23 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 }
                 
                                 events_processed.push(bot.replyMessage(event.replyToken, message))     
+
+                                let query_yoyaku = {
+                                    text: 'SELECT *' +
+                                          '  FROM t_yoyaku' +
+                                          ' WHERE id = $1',
+                                    values: [event.postback.data.split('=')[1]],
+                                }
+
+                                client.query(query_yoyaku)
+                                    .then((res) => {
+
+                                        let event_cd = res.rows[0].event_cd
+                                        let kaisaiti_cd = res.rows[0].kaisaiti_cd
+
+                                        graph(event_cd, kaisaiti_cd, event.postback.data.split('=')[2].replace(/\//g, '_'))
+
+                                    })
                             })
                             .catch((e) => {
                                 console.error(e.stack)
@@ -794,7 +707,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                 })
             }
-
         }
         else {
             return
@@ -820,3 +732,119 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)
 })
+
+
+function graph(event_cd, kaisaiti_cd, g_date){
+    let query_time = {
+        text: "SELECT " + 
+            "      CASE" +  
+            "          WHEN first_day = $1" +
+            "               THEN first_start_time" +
+            "          ELSE second_start_time" + 
+            "          END as start, " +
+            "      CASE" +  
+            "          WHEN first_day = $1" +
+            "               THEN first_end_time - first_start_time" +
+            "          ELSE second_end_time - second_start_time" + 
+            "          END " +
+            "    FROM m_event " +
+            "   WHERE event_cd = $2" +
+            "     AND kaisaiti_cd = $3" +
+            "     AND ( first_day = $1" +
+            "      OR second_day = $1)",
+        values: [g_date, event_cd, kaisaiti_cd],
+    }
+
+    client.query(query_time)
+        .then((res) => {
+            let row = Math.ceil(res.rows[0].case.hours / 2)
+
+            let select = ""
+            let selectdata = ""
+            let start = res.rows[0].start
+            let startTime = moment(start, 'HH:mm:ss');
+            let end 
+            let first = 0
+
+            for (let i = 0; i < row; i++) {
+                startTime.add(2, 'hours');
+                end = startTime.format('HH:mm:ss')
+
+                select = 
+                "( SELECT" +
+                "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
+                "  FROM" +
+                "      t_yoyaku " +
+                "  WHERE" +
+                "      reserve_time BETWEEN '" + g_date + " " + start + "' AND '" + g_date + " " + end  + "') as " + '"' + start.slice(0,5) + '~"'
+
+                if(first != 0){
+                    select  = ',' + select
+                }
+                selectdata = selectdata + select                                            
+                first = 1
+                start = end
+            }
+
+            let query_graph = {
+                text: "SELECT " + 
+                            selectdata +
+                      "  FROM t_yoyaku t1 " +
+                      " WHERE event_cd = $1 " +
+                      " GROUP BY event_cd",
+                values: [event_cd],
+            }
+
+            client.query(query_graph)
+            .then((res) => { 
+                let canvas = createCanvas(400, 400);
+                let ctx = canvas.getContext('2d');
+
+                let graphdata = {
+                datasets: [{
+                    label: '来場者予定グラフ',
+                    data: res.rows[0],
+                    backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                    'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1,
+                }]
+                }; 
+                
+                let chart = new Chart(ctx, {
+                type: 'bar',
+                data: graphdata,
+                options: {
+                    scales: {
+                        y: {
+                            display: false
+                        },
+                        x: {
+                            display: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                        display: false,
+                        },
+                        }
+                    }
+                })
+
+                let file = kaisaiti_cd + g_date
+
+                let graphDir = path.join(__dirname, 'graph')
+                if (!fs.existsSync(graphDir)) {
+                    fs.mkdirSync(graphDir)
+                }
+                app.use(express.static(graphDir))
+
+                let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+                let stream = canvas.createPNGStream();
+                stream.pipe(out);
+            })
+        })
+}

@@ -17,8 +17,28 @@
                             "position": "relative",
                             "align": "center",
                             "color": "#FFFFFF"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                              {
+                                "type": "text",
+                                "text": "来場者予定グラフ",
+                                "size": "12px",
+                                "align": "center",
+                                "color": "#000000"
+                              }
+                            ],
+                            "position": "absolute",
+                            "backgroundColor": "#FFFFFF",
+                            "width": "300px",
+                            "offsetStart": "0px",
+                            "offsetBottom": "0px",
+                            "height": "20px"
                         }
-                    ]
+                    ],
+                    "height": "80px"
                 },
                 "hero": {
                     "type": "image",
