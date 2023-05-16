@@ -436,16 +436,16 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let currentTime = moment()
                 let Time_jp = moment(currentTime, 'YYYY/MM/DD HH:mm:ss')
 
-                console.log(Time_jp._d)
+                console.log(Time_jp)
                 let newTime = Time_jp.add(8, 'hours')
                 
-                console.log(newTime._d)
+                console.log(newTime)
 
                 let query_kigen = {
                     text: 'UPDATE m_user' +
                         '   SET qr_expiration_date = $1' +
                         ' WHERE user_id = $2',
-                    values: [newTime._d, event.source.userId],
+                    values: [newTime, event.source.userId],
                 }
 
                 let userid
