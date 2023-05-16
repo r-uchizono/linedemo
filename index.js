@@ -901,7 +901,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
-                                                    ctx.font = "12px 'ＭＳ Ｐゴシック'";
+                                                    ctx.font = "12px 'MS Gothic', sans-serif";
                     
                                                     let graphdata = {
                                                     datasets: [{
@@ -915,17 +915,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         ],
                                                         borderWidth: 1,
                                                     }],
-                                                    plugins: {
-                                                        label: {
-                                                            font: {
-                                                                family: 'sans-serif', 
-                                                                size: 16,
-                                                                weight: 'bold'
-                                                            },
-                                                            display: true,
-                                                            text: '来場者予定グラフ'
-                                                        }
-                                                    }
                                                     }; 
                                                     
                                                     let chart = new Chart(ctx, {
