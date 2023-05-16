@@ -25,17 +25,17 @@
                               {
                                 "type": "text",
                                 "text": "来場予定グラフ",
-                                "size": "md",
+                                "size": "10px",
                                 "align": "center",
                                 "color": "#000000"
                               }
                             ],
                             "position": "absolute",
                             "backgroundColor": "#fbdac8",
-                            "width": "1500px",
+                            "width": "300px",
                             "offsetStart": "0px",
                             "offsetBottom": "0px",
-                            "height": "40px"
+                            "height": "20px"
                         }
                     ],
                     "height": "80px"
