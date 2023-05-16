@@ -402,8 +402,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         EventJson.body.contents[0].text = formattedDate
 
                                                         console.log(dataDate)
-                                                        console.log(res.rows[i].first_day.slice(0,10).replace(/_/g, '/'))
-                                                        let first_day = res.rows[i].first_day.slice(0,10).replace(/_/g, '/')
+                                                        console.log(res.rows[i].first_day.toString().slice(0,10).replace(/-/g, '/'))
+                                                        let first_day = res.rows[i].first_day.toString().slice(0,10).replace(/-/g, '/')
 
                                                         if(dataDate == first_day){
                                                             EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
