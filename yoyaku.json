@@ -33,7 +33,6 @@
                           ],
                           "position": "absolute",
                           "backgroundColor": "#000000",
-                          "borderWidth": "medium",
                           "width": "1500px",
                           "offsetStart": "0px",
                           "offsetBottom": "0px"
