@@ -933,9 +933,9 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             }
                                                         },
                                                         plugins: {
-                                                            title: {
+                                                            label: {
                                                                 font: {
-                                                                    family: 'Noto Sans CJK JP',
+                                                                    family: 'sans-serif',
                                                                     size: 16,
                                                                     weight: 'bold'
                                                                 },
