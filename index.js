@@ -930,12 +930,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             }
                                                         },
                                                         legend: {
-                                                            labels:{
-                                                            //   filter: function(items) {
-                                                            //     return items.text != 'trend';
-                                                            //   }
-                                                            display: false
-                                                            }
+                                                            display: false                                                        
                                                           }
                                                         }
                                                     })
