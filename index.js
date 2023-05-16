@@ -697,18 +697,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 'rgba(255, 99, 132, 1)'
                                                 ],
                                                 borderWidth: 1,
-                                            }],
-                                            plugins: {
-                                                title: {
-                                                    font: {
-                                                        family: 'Noto Sans CJK JP',
-                                                        size: 16,
-                                                        weight: 'bold'
-                                                    },
-                                                    display: true,
-                                                    text: '来場者予定グラフ'
-                                                }
-                                            }
+                                            }]
                                             };
             
                                             let chart = new Chart(ctx, {
@@ -724,6 +713,17 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     },
                                                     x: {
                                                         display: true
+                                                    }
+                                                },
+                                                plugins: {
+                                                    title: {
+                                                        font: {
+                                                            family: 'Noto Sans CJK JP',
+                                                            size: 16,
+                                                            weight: 'bold'
+                                                        },
+                                                        display: true,
+                                                        text: '来場者予定グラフ'
                                                     }
                                                 }
                                                 }
@@ -914,7 +914,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         'rgba(255, 99, 132, 1)'
                                                         ],
                                                         borderWidth: 1,
-                                                    }],
+                                                    }]
                                                     }; 
                                                     
                                                     let chart = new Chart(ctx, {
@@ -930,6 +930,17 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             },
                                                             x: {
                                                                 display: true
+                                                            }
+                                                        },
+                                                        plugins: {
+                                                            title: {
+                                                                font: {
+                                                                    family: 'Noto Sans CJK JP',
+                                                                    size: 16,
+                                                                    weight: 'bold'
+                                                                },
+                                                                display: true,
+                                                                text: '来場者予定グラフ'
                                                             }
                                                         }
                                                         }
