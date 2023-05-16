@@ -12,7 +12,6 @@ import Chart from 'chart.js/auto'
 import { createCanvas } from 'canvas'
 import moment from 'moment';
 
-
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
