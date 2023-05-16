@@ -630,7 +630,14 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 events_processed.push(bot.replyMessage(event.replyToken, message))                
             }
             else if (event.postback.data.split('=')[0] == "torikesi") {
-                // DB登録処理
+                // DB処理
+                let query_yoyaku = {
+                    text: 'SELECT *' +
+                          '  FROM t_yoyaku' +
+                          ' WHERE id = $1',
+                    values: [event.postback.data.split('=')[1]],
+                }
+
                 let query = {
                     text: 'DELETE' +
                           '  FROM t_yoyaku' +
@@ -643,29 +650,21 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         console.log(err)
                     } else {
                         client
-                            .query(query)
-                            .then(() => {
-                                console.log('Data Deleted.')
+                            .query(query_yoyaku)
+                            .then((res) => {
+                                let event_cd = res.rows[0].event_cd
+                                let kaisaiti_cd = res.rows[0].kaisaiti_cd    
 
-                                let message = {
-                                    type: 'text',
-                                    text: '取消が完了しました'
-                                }
-                
-                                events_processed.push(bot.replyMessage(event.replyToken, message))     
+                                client.query(query)
+                                    .then(() => {
+                                        console.log('Data Deleted.')
 
-                                let query_yoyaku = {
-                                    text: 'SELECT *' +
-                                          '  FROM t_yoyaku' +
-                                          ' WHERE id = $1',
-                                    values: [event.postback.data.split('=')[1]],
-                                }
-
-                                client.query(query_yoyaku)
-                                    .then((res) => {
-
-                                        let event_cd = res.rows[0].event_cd
-                                        let kaisaiti_cd = res.rows[0].kaisaiti_cd
+                                        let message = {
+                                            type: 'text',
+                                            text: '取消が完了しました'
+                                        }
+                        
+                                        events_processed.push(bot.replyMessage(event.replyToken, message))
 
                                         graph(event_cd, kaisaiti_cd, event.postback.data.split('=')[2].replace(/\//g, '_'))
                                     })
