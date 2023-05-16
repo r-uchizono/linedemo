@@ -400,6 +400,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
                                                         EventJson.body.contents[0].text = formattedDate
+
+                                                        console.log(dataDate)
+                                                        console.log(res.rows[i].first_day)
+
                                                         if(dataDate == res.rows[i].first_day){
                                                             EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
                                                         }
