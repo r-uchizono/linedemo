@@ -24,7 +24,7 @@
                             "contents": [
                               {
                                 "type": "text",
-                                "text": "来場予定グラフ",
+                                "text": "来場者予定グラフ",
                                 "size": "12px",
                                 "align": "center",
                                 "color": "#000000"

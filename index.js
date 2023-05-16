@@ -678,15 +678,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                         client.query(query_graph)
                                         .then((res) => {
-                                            console.log(res.rows[0].ninzu0)
-                                            console.log(res.rows[0].ninzu1)
-                                            console.log(res.rows[0].ninzu2)
-                                            console.log(res.rows[0].ninzu3)
-                                            console.log(res.rows[0].ninzu4)
-
                                             let canvas = createCanvas(400, 400);
                                             let ctx = canvas.getContext('2d');
-                                            ctx.font = "12px 'Noto Sans CJK JP'";
             
                                             let graphdata = {
                                             datasets: [{
@@ -703,31 +696,22 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                             };
             
                                             let chart = new Chart(ctx, {
-                                            type: 'bar',
-                                            data: graphdata,
-                                            options: {
-                                                title: {
-                                                    display: false
-                                                },
-                                                scales: {
-                                                    y: {
-                                                        display: false
-                                                    },
-                                                    x: {
-                                                        display: true
-                                                    }
-                                                },
-                                                plugins: {
-                                                    title: {
-                                                        font: {
-                                                            family: 'Noto Sans CJK JP',
-                                                            size: 16,
-                                                            weight: 'bold'
+                                                type: 'bar',
+                                                data: graphdata,
+                                                options: {
+                                                    scales: {
+                                                        y: {
+                                                            display: false
                                                         },
-                                                        display: true,
-                                                        text: '来場者予定グラフ'
+                                                        x: {
+                                                            display: true
+                                                        }
+                                                    },
+                                                    plugins: {
+                                                        legend: {
+                                                        display: false,
+                                                        },
                                                     }
-                                                }
                                                 }
                                             })
 
@@ -903,7 +887,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         
                                                     let canvas = createCanvas(400, 400);
                                                     let ctx = canvas.getContext('2d');
-                                                    ctx.font = "12px 'MS Gothic', sans-serif";
                     
                                                     let graphdata = {
                                                     datasets: [{
