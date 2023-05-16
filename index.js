@@ -199,17 +199,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
                                                         let S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
 
-                                                        let f_date = new Date(res.rows[i].first_day)
-                                                        let f_year = f_date.getFullYear()
-                                                        let f_month = ('0' + (f_date.getMonth() + 1)).slice(-2)
-                                                        let f_day = ('0' + f_date.getDate()).slice(-2)
-                                                        let f_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][f_date.getDay()]
-                                                        let f_formattedDate = `${f_year}年${f_month}月${f_day}日（${f_dayOfWeek}）`
-                                                        let f_dataDate = `${f_year}/${f_month}/${f_day}`
+                                                        let f_result = date_format(res.rows[i].first_day)
 
                                                         let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                                        firstEventJson.body.contents[0].text = f_formattedDate
+                                                        firstEventJson.body.contents[0].text = f_result.formattedDate
                                                         firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
                                                         firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
                                                         let address = res.rows[i].place_address
@@ -227,27 +221,22 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             }
                                                         }
                                                         else {
-                                                            firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_dataDate
+                                                            firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
                                                         }
 
-                                                        let f_file = res.rows[i].kaisaiti_cd + f_dataDate.replace(/\//g, '_')
+                                                        let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
 
                                                         firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png?xxx=' + file 
 
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
                                                         if (res.rows[i].second_day != null) {
-                                                            let s_date = new Date(res.rows[i].second_day)
-                                                            let s_year = s_date.getFullYear()
-                                                            let s_month = ('0' + (s_date.getMonth() + 1)).slice(-2)
-                                                            let s_day = ('0' + s_date.getDate()).slice(-2)
-                                                            let s_dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][s_date.getDay()]
-                                                            let s_formattedDate = `${s_year}年${s_month}月${s_day}日（${s_dayOfWeek}）`
-                                                            let s_dataDate = `${s_year}/${s_month}/${s_day}`
+
+                                                            let s_result = date_format(res.rows[i].second_day)
 
                                                             let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                             secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                                            secondEventJson.body.contents[0].text = s_formattedDate
+                                                            secondEventJson.body.contents[0].text = s_result.formattedDate
                                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime
                                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
                                                             secondEventJson.body.contents[3].action.label = address
@@ -264,10 +253,10 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                                 }
                                                             }
                                                             else {
-                                                                secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_dataDate
+                                                                secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
                                                             }
 
-                                                            let s_file = res.rows[i].kaisaiti_cd + s_dataDate.replace(/\//g, '_')
+                                                            let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
 
                                                             secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png?xxx=' + file
                                                             data[0].contents.contents.push({ ...secondEventJson })
@@ -277,8 +266,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     data_message.push({ ...data[0] })
                                                     data = JSON.parse(dataJSON)
                                                     data[0].contents.contents = []
-
-                                                    console.log(data_message[0].contents.contents[0].header.contents[1])
                                                 }
                                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                                 events_processed.push(bot.replyMessage(event.replyToken, data_message))
@@ -378,14 +365,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     }
                                                     for (let i = start; i < end; i++) {
 
-                                                        let date = new Date(res.rows[i].reserve_time)
-                                                        let year = date.getFullYear()
-                                                        let month = ('0' + (date.getMonth() + 1)).slice(-2)
-                                                        let day = ('0' + date.getDate()).slice(-2)
-                                                        let dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
-                                                        let formattedDate = `${year}年${month}月${day}日（${dayOfWeek}）`
-                                                        let dataDate = `${year}/${month}/${day}`
-                                                        let dataTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+                                                        let result = date_format(res.rows[i].reserve_time)
+                                                        let f_result = date_format(res.rows[i].first_day)
                                                         
                                                         let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time)
                                                         let f_etime = new Date('2023-04-01T' + res.rows[i].first_end_time)
@@ -398,26 +379,27 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                                         let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                                        EventJson.body.contents[0].text = formattedDate
+                                                        EventJson.body.contents[0].text = result.formattedDate
 
-                                                        console.log(dataDate)
-                                                        console.log(res.rows[i].first_day.toISOString().slice(0, 10).replace(/-/g, '/'))
-                                                        let first_day = res.rows[i].first_day.toISOString().slice(0, 10).replace(/-/g, '/')
+                                                        console.log(result.dataDate)
+                                                        console.log(f_result.dataDate)
 
-                                                        if(dataDate == first_day){
+                                                        if(result.dataDate == f_result.dataDate){
                                                             EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
                                                         }
                                                         else{
                                                             EventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime
                                                         }
-                                                        EventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
+                                                        EventJson.body.contents[2].text = '開催場所　' + res.rows[i].place_name
                                                         let address = res.rows[i].place_address
                                                         EventJson.body.contents[3].action.label = address
                                                         EventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
-                                                        EventJson.body.contents[4].text = '来場予定時間　' + dataTime
+                                                        EventJson.body.contents[4].text = '予約時間　' + result.dataTime
+                                                        EventJson.body.contents[6].text = '　　大人：' + res.rows[i].reserve_a_count + '名'
+                                                        EventJson.body.contents[7].text = '　　小人：' + res.rows[i].reserve_c_count + '名'
 
-                                                        EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id  + '=' + dataDate
-                                                        EventJson.footer.contents[1].action.data = 'henko=' + res.rows[i].id + '=' + dataDate
+                                                        EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id  + '=' + result.dataDate
+                                                        EventJson.footer.contents[1].action.data = 'henko=' + res.rows[i].id + '=' + result.dataDate
 
                                                         data[0].contents.contents.push({ ...EventJson })
                                                     }
@@ -452,9 +434,19 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
                 console.log(getRandomValues(array))
 
-                let query = {
-                    text: "SELECT user_id, qr_expiration_date FROM m_user WHERE user_id = $1",
-                    values: [event.source.userId],
+                let currentTime = moment()
+                let Time_jp = moment(currentTime, 'YYYY/MM/DD HH:mm:ss')
+
+                console.log(Time_jp._d)
+                let newTime = Time_jp.add(8, 'hours')
+                
+                console.log(newTime._d)
+
+                let query_kigen = {
+                    text: 'UPDATE m_user' +
+                        '   SET qr_expiration_date = $1' +
+                        ' WHERE user_id = $2',
+                    values: [newTime._d, event.source.userId],
                 }
 
                 let userid
@@ -463,47 +455,57 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         console.log(err)
                     } else {
                         client
-                            .query(query)
-                            .then((res) => {
-                                console.log(res.rows[0].user_id)
-                                userid = res.rows[0].user_id
+                            .query(query_kigen)
+                            .then(() => {
+                                console.log('Data Updated.')
 
-                                //フォルダに保存
-                                QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
-                                    if (error) {
-                                        console.error(error)
-                                        return
-                                    }
+                                let query = {
+                                    text: "SELECT user_id, qr_expiration_date FROM m_user WHERE user_id = $1",
+                                    values: [event.source.userId],
+                                }
 
-                                    console.log(req.protocol + '://' + req.get('host') + '/' + QRfile + '.png')
+                                client.query(query)
+                                    .then((res) => {
+                                        console.log(res.rows[0].user_id)
+                                        userid = res.rows[0].user_id
 
-                                    //ファイルのURLを生成し送信・拡張子注意
-                                    let message = {
-                                        type: "image",
-                                        originalContentUrl: 'https://' + req.get('host') + '/' + QRfile + '.png',
-                                        previewImageUrl: 'https://' + req.get('host') + '/' + QRfile + '.png'
-                                    }
+                                        //フォルダに保存
+                                        QRCode.toFile(path.join(imageDir, QRfile + '.png'), userid, (error) => {
+                                            if (error) {
+                                                console.error(error)
+                                                return
+                                            }
 
-                                    let addmessage = {
-                                        type: 'text',
-                                        text: 'イベント受付にてご提示ください'
-                                    }
+                                            console.log(req.protocol + '://' + req.get('host') + '/' + QRfile + '.png')
 
-                                    let date = new Date(res.rows[0].qr_expiration_date)
-                                    let month = ('0' + (date.getMonth() + 1)).slice(-2)
-                                    let day = ('0' + date.getDate()).slice(-2)
-                                    let dataDate = `${month}/${day}`
-                                    let formattedTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
-    
-                                    let addmessage2 = {
-                                        type: 'text',
-                                        text: '有効期限：' + dataDate + " " + formattedTime
-                                    };
-                    
-                                    events_processed.push(bot.replyMessage(event.replyToken, [message, addmessage, addmessage2])) 
-                                })
+                                            //ファイルのURLを生成し送信・拡張子注意
+                                            let message = {
+                                                type: "image",
+                                                originalContentUrl: 'https://' + req.get('host') + '/' + QRfile + '.png',
+                                                previewImageUrl: 'https://' + req.get('host') + '/' + QRfile + '.png'
+                                            }
 
-                            })                            
+                                            let addmessage = {
+                                                type: 'text',
+                                                text: 'イベント受付にてご提示ください'
+                                            }
+
+                                            let date = new Date(res.rows[0].qr_expiration_date)
+                                            let month = ('0' + (date.getMonth() + 1)).slice(-2)
+                                            let day = ('0' + date.getDate()).slice(-2)
+                                            let dataDate = `${month}/${day}`
+                                            let formattedTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
+            
+                                            let addmessage2 = {
+                                                type: 'text',
+                                                text: '有効期限：' + dataDate + " " + formattedTime
+                                            };
+                            
+                                            events_processed.push(bot.replyMessage(event.replyToken, [message, addmessage, addmessage2])) 
+                                        })
+
+                                    })    
+                            })                        
                             .catch((e) => {
                                 console.error(e.stack)
                                 let errmessage = {
@@ -605,8 +607,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         ' WHERE id = $2',
                     values: [post.split('=')[1], post.split('=')[2]],
                 }
-
-                console.log(post)
 
                 client.connect(function (err, client) {
                     if (err) {
@@ -806,8 +806,6 @@ function graph(event_cd, kaisaiti_cd, g_date){
                 start = end
             }
 
-            console.log(selectdata)
-
             let query_graph = {
                 text: "SELECT " + 
                             selectdata +
@@ -869,4 +867,21 @@ function graph(event_cd, kaisaiti_cd, g_date){
                 stream.pipe(out);
             })
         })
+}
+
+function date_format(previous_date){
+    let date = new Date(previous_date)
+    let year = date.getFullYear()
+    let month = ('0' + (date.getMonth() + 1)).slice(-2)
+    let day = ('0' + date.getDate()).slice(-2)
+    let dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+    let formattedDate = `${year}年${month}月${day}日（${dayOfWeek}）`
+    let dataDate = `${year}/${month}/${day}`
+    let dataTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+
+    return {
+        formattedDate: formattedDate,
+        dataDate: dataDate,
+        dataTime: dataTime
+    }
 }
