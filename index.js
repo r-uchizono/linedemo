@@ -433,7 +433,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
                 console.log(getRandomValues(array))
 
-                let currentTime = moment()
+                let currentTime = moment().local
                 let Time_jp = moment(currentTime, 'YYYY/MM/DD HH:mm:ss')
 
                 console.log(Time_jp)
