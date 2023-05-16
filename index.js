@@ -878,63 +878,59 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 }
         
                                                 client.query(query_graph)
-                                                .then((res) => {
-                                                    console.log(res.rows[0].ninzu0)
-                                                    console.log(res.rows[0].ninzu1)
-                                                    console.log(res.rows[0].ninzu2)
-                                                    console.log(res.rows[0].ninzu3)
-                                                    console.log(res.rows[0].ninzu4)
-        
-                                                    let canvas = createCanvas(400, 400);
-                                                    let ctx = canvas.getContext('2d');
+                                                .then((res) => {        
+                                                    // let canvas = createCanvas(400, 400);
+                                                    // let ctx = canvas.getContext('2d');
                     
-                                                    let graphdata = {
-                                                    datasets: [{
-                                                        label: '来場者予定グラフ',
-                                                        data: res.rows[0],
-                                                        backgroundColor: [
-                                                        'rgba(255, 99, 132, 0.2)'
-                                                        ],
-                                                        borderColor: [
-                                                        'rgba(255, 99, 132, 1)'
-                                                        ],
-                                                        borderWidth: 1,
-                                                    }]
-                                                    }; 
+                                                    // let graphdata = {
+                                                    // datasets: [{
+                                                    //     label: '来場者予定グラフ',
+                                                    //     data: res.rows[0],
+                                                    //     backgroundColor: [
+                                                    //     'rgba(255, 99, 132, 0.2)'
+                                                    //     ],
+                                                    //     borderColor: [
+                                                    //     'rgba(255, 99, 132, 1)'
+                                                    //     ],
+                                                    //     borderWidth: 1,
+                                                    // }]
+                                                    // }; 
                                                     
-                                                    let chart = new Chart(ctx, {
-                                                    type: 'bar',
-                                                    data: graphdata,
-                                                    options: {
-                                                        scales: {
-                                                            y: {
-                                                                display: false
-                                                            },
-                                                            x: {
-                                                                display: true
-                                                            }
-                                                        },
-                                                        plugins: {
-                                                            legend: {
-                                                            display: false,
-                                                            },
-                                                            }
-                                                        }
-                                                    })
+                                                    // let chart = new Chart(ctx, {
+                                                    // type: 'bar',
+                                                    // data: graphdata,
+                                                    // options: {
+                                                    //     scales: {
+                                                    //         y: {
+                                                    //             display: false
+                                                    //         },
+                                                    //         x: {
+                                                    //             display: true
+                                                    //         }
+                                                    //     },
+                                                    //     plugins: {
+                                                    //         legend: {
+                                                    //         display: false,
+                                                    //         },
+                                                    //         }
+                                                    //     }
+                                                    // })
         
-                                                    let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_')
+                                                    // let file = kaisaiti_cd + event.postback.data.split('=')[2].replace(/\//g, '_')
                     
-                                                    let graphDir = path.join(__dirname, 'graph')
-                                                    if (!fs.existsSync(graphDir)) {
-                                                        fs.mkdirSync(graphDir)
-                                                    }
-                                                    app.use(express.static(graphDir))
+                                                    // let graphDir = path.join(__dirname, 'graph')
+                                                    // if (!fs.existsSync(graphDir)) {
+                                                    //     fs.mkdirSync(graphDir)
+                                                    // }
+                                                    // app.use(express.static(graphDir))
         
-                                                    let out = fs.createWriteStream(graphDir + '/' + file +'.png');
-                                                    let stream = canvas.createPNGStream();
-                                                    stream.pipe(out);
+                                                    // let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+                                                    // let stream = canvas.createPNGStream();
+                                                    // stream.pipe(out);
         
-                                                    console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
+                                                    // console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
+
+                                                    graph(res.rows[0], kaisaiti_cd, event.postback.data.split('=')[2].replace(/\//g, '_'))
                                                 })
                 
                                             
@@ -972,3 +968,54 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)
 })
+
+function graph(g_data, kaisaiti_cd, g_date){
+    let canvas = createCanvas(400, 400);
+    let ctx = canvas.getContext('2d');
+
+    let graphdata = {
+    datasets: [{
+        label: '来場者予定グラフ',
+        data: g_data,
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.2)'
+        ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)'
+        ],
+        borderWidth: 1,
+    }]
+    }; 
+    
+    let chart = new Chart(ctx, {
+    type: 'bar',
+    data: graphdata,
+    options: {
+        scales: {
+            y: {
+                display: false
+            },
+            x: {
+                display: true
+            }
+        },
+        plugins: {
+            legend: {
+            display: false,
+            },
+            }
+        }
+    })
+
+    let file = kaisaiti_cd + g_date
+
+    let graphDir = path.join(__dirname, 'graph')
+    if (!fs.existsSync(graphDir)) {
+        fs.mkdirSync(graphDir)
+    }
+    app.use(express.static(graphDir))
+
+    let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+    let stream = canvas.createPNGStream();
+    stream.pipe(out);
+}
