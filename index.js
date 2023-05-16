@@ -614,124 +614,124 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 console.log('Data Updated.')
 
 
-                                let query_time = {
-                                    text: "SELECT " + 
-                                        "      CASE" +  
-                                        "          WHEN first_day = $1" +
-                                        "               THEN first_start_time" +
-                                        "          ELSE second_start_time" + 
-                                        "          END as start, " +
-                                        "      CASE" +  
-                                        "          WHEN first_day = $1" +
-                                        "               THEN first_end_time - first_start_time" +
-                                        "          ELSE second_end_time - second_start_time" + 
-                                        "          END " +
-                                        "    FROM m_event " +
-                                        "   WHERE event_cd = $2" +
-                                        "     AND kaisaiti_cd = $3" +
-                                        "     AND ( first_day = $1" +
-                                        "      OR second_day = $1)",
-                                    values: [post.split('=')[5], post.split('=')[3], post.split('=')[4]],
-                                }
+                                // let query_time = {
+                                //     text: "SELECT " + 
+                                //         "      CASE" +  
+                                //         "          WHEN first_day = $1" +
+                                //         "               THEN first_start_time" +
+                                //         "          ELSE second_start_time" + 
+                                //         "          END as start, " +
+                                //         "      CASE" +  
+                                //         "          WHEN first_day = $1" +
+                                //         "               THEN first_end_time - first_start_time" +
+                                //         "          ELSE second_end_time - second_start_time" + 
+                                //         "          END " +
+                                //         "    FROM m_event " +
+                                //         "   WHERE event_cd = $2" +
+                                //         "     AND kaisaiti_cd = $3" +
+                                //         "     AND ( first_day = $1" +
+                                //         "      OR second_day = $1)",
+                                //     values: [post.split('=')[5], post.split('=')[3], post.split('=')[4]],
+                                // }
 
-                                client.query(query_time)
-                                    .then((res) => {
-                                        let row = Math.ceil(res.rows[0].case.hours / 2)
+                                // client.query(query_time)
+                                //     .then((res) => {
+                                //         let row = Math.ceil(res.rows[0].case.hours / 2)
 
-                                        let select = ""
-                                        let selectdata = ""
-                                        let start = res.rows[0].start
-                                        let startTime = moment(start, 'HH:mm:ss');
-                                        let end 
-                                        let first = 0
+                                //         let select = ""
+                                //         let selectdata = ""
+                                //         let start = res.rows[0].start
+                                //         let startTime = moment(start, 'HH:mm:ss');
+                                //         let end 
+                                //         let first = 0
 
-                                        for (let i = 0; i < row; i++) {
-                                            startTime.add(2, 'hours');
-                                            end = startTime.format('HH:mm:ss')
+                                //         for (let i = 0; i < row; i++) {
+                                //             startTime.add(2, 'hours');
+                                //             end = startTime.format('HH:mm:ss')
 
-                                            select = 
-                                            "( SELECT" +
-                                            "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
-                                            "  FROM" +
-                                            "      t_yoyaku " +
-                                            "  WHERE" +
-                                            "      reserve_time BETWEEN '" + post.split('=')[5] + " " + start + "' AND '" + post.split('=')[5] + " " + end  + "') as " + '"' + start.slice(0,5) + '~"'
+                                //             select = 
+                                //             "( SELECT" +
+                                //             "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
+                                //             "  FROM" +
+                                //             "      t_yoyaku " +
+                                //             "  WHERE" +
+                                //             "      reserve_time BETWEEN '" + post.split('=')[5] + " " + start + "' AND '" + post.split('=')[5] + " " + end  + "') as " + '"' + start.slice(0,5) + '~"'
       
-                                            if(first != 0){
-                                                select  = ',' + select
-                                            }
-                                            selectdata = selectdata + select                                            
-                                            first = 1
-                                            start = end
-                                        }
+                                //             if(first != 0){
+                                //                 select  = ',' + select
+                                //             }
+                                //             selectdata = selectdata + select                                            
+                                //             first = 1
+                                //             start = end
+                                //         }
 
-                                        console.log(selectdata)
+                                //         console.log(selectdata)
 
-                                        let query_graph = {
-                                            text: "SELECT " + 
-                                                        selectdata +
-                                                  "  FROM t_yoyaku t1 " +
-                                                  " WHERE event_cd = $1 " +
-                                                  " GROUP BY event_cd",
-                                            values: [post.split('=')[3]],
-                                        }
+                                //         let query_graph = {
+                                //             text: "SELECT " + 
+                                //                         selectdata +
+                                //                   "  FROM t_yoyaku t1 " +
+                                //                   " WHERE event_cd = $1 " +
+                                //                   " GROUP BY event_cd",
+                                //             values: [post.split('=')[3]],
+                                //         }
 
-                                        client.query(query_graph)
-                                        .then((res) => {
-                                            let canvas = createCanvas(400, 400);
-                                            let ctx = canvas.getContext('2d');
+                                //         client.query(query_graph)
+                                //         .then((res) => {
+                                //             let canvas = createCanvas(400, 400);
+                                //             let ctx = canvas.getContext('2d');
             
-                                            let graphdata = {
-                                            datasets: [{
-                                                label: 'Visitor Graph',
-                                                data: res.rows[0],
-                                                backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)'
-                                                ],
-                                                borderColor: [
-                                                'rgba(255, 99, 132, 1)'
-                                                ],
-                                                borderWidth: 1,
-                                            }]
-                                            };
+                                //             let graphdata = {
+                                //             datasets: [{
+                                //                 label: 'Visitor Graph',
+                                //                 data: res.rows[0],
+                                //                 backgroundColor: [
+                                //                 'rgba(255, 99, 132, 0.2)'
+                                //                 ],
+                                //                 borderColor: [
+                                //                 'rgba(255, 99, 132, 1)'
+                                //                 ],
+                                //                 borderWidth: 1,
+                                //             }]
+                                //             };
             
-                                            let chart = new Chart(ctx, {
-                                                type: 'bar',
-                                                data: graphdata,
-                                                options: {
-                                                    scales: {
-                                                        y: {
-                                                            display: false
-                                                        },
-                                                        x: {
-                                                            display: true
-                                                        }
-                                                    },
-                                                    plugins: {
-                                                        legend: {
-                                                        display: false,
-                                                        },
-                                                    }
-                                                }
-                                            })
+                                //             let chart = new Chart(ctx, {
+                                //                 type: 'bar',
+                                //                 data: graphdata,
+                                //                 options: {
+                                //                     scales: {
+                                //                         y: {
+                                //                             display: false
+                                //                         },
+                                //                         x: {
+                                //                             display: true
+                                //                         }
+                                //                     },
+                                //                     plugins: {
+                                //                         legend: {
+                                //                         display: false,
+                                //                         },
+                                //                     }
+                                //                 }
+                                //             })
 
-                                            let file = post.split('=')[4] + post.split('=')[5].replace(/\//g, '_')
+                                //             let file = post.split('=')[4] + post.split('=')[5].replace(/\//g, '_')
             
-                                            let graphDir = path.join(__dirname, 'graph')
-                                            if (!fs.existsSync(graphDir)) {
-                                                fs.mkdirSync(graphDir)
-                                            }
-                                            app.use(express.static(graphDir))
+                                //             let graphDir = path.join(__dirname, 'graph')
+                                //             if (!fs.existsSync(graphDir)) {
+                                //                 fs.mkdirSync(graphDir)
+                                //             }
+                                //             app.use(express.static(graphDir))
 
-                                            let out = fs.createWriteStream(graphDir + '/' + file +'.png');
-                                            let stream = canvas.createPNGStream();
-                                            stream.pipe(out);
+                                //             let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+                                //             let stream = canvas.createPNGStream();
+                                //             stream.pipe(out);
 
-                                            console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
-                                        })
-        
+                                //             console.log(req.protocol + '://' + req.get('host') + '/' + file + '.png')
+                                //         })
+                                graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'))
                                     
-                                    })
+                                //     })
                             })
                             .catch((e) => {
                                 console.error(e.stack)
