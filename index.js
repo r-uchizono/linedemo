@@ -275,7 +275,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
 
-                                                        console.log(data)
+                                                        console.log(data[0].contents.contents)
                                                     }
 
                                                     data_message.push({ ...data[0] })
