@@ -929,9 +929,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                                 display: true
                                                             }
                                                         },
-                                                        legend: {
-                                                            display: false                                                        
-                                                          }
+                                                        plugins: {
+                                                            legend: {
+                                                            display: false,
+                                                            },
+                                                            }
                                                         }
                                                     })
         
