@@ -19,24 +19,24 @@
                             "color": "#FFFFFF"
                         },
                         {
-                          "type": "box",
-                          "layout": "vertical",
-                          "contents": [
-                            {
-                              "type": "text",
-                              "text": "来場予定グラフ",
-                              "size": "10px",
-                              "position": "relative",
-                              "align": "center",
-                              "color": "#000000"
-                            }
-                          ],
-                          "position": "absolute",
-                          "backgroundColor": "#000000",
-                          "width": "1500px",
-                          "offsetStart": "0px",
-                          "offsetBottom": "0px"
-                        }
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                              {
+                                "type": "text",
+                                "text": "来場予定グラフ",
+                                "size": "10px",
+                                "align": "center",
+                                "color": "#000000"
+                              }
+                            ],
+                            "position": "absolute",
+                            "backgroundColor": "#FFFFFF",
+                            "width": "1500px",
+                            "offsetStart": "0px",
+                            "offsetBottom": "0px",
+                            "height": "20px"
+                          }
                     ],
                     "height": "80px"
                 },
