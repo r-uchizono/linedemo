@@ -921,9 +921,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     type: 'bar',
                                                     data: graphdata,
                                                     options: {
-                                                        title: {
-                                                            display: false
-                                                        },
                                                         scales: {
                                                             y: {
                                                                 display: false
@@ -932,11 +929,14 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                                 display: true
                                                             }
                                                         },
-                                                        plugins: {
-                                                            label: {
-                                                                display: false,
+                                                        legend: {
+                                                            labels:{
+                                                            //   filter: function(items) {
+                                                            //     return items.text != 'trend';
+                                                            //   }
+                                                            display: false
                                                             }
-                                                        }
+                                                          }
                                                         }
                                                     })
         
