@@ -905,7 +905,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     
                                                     let graphdata = {
                                                     datasets: [{
-                                                        label: 'Visitor Graph',
+                                                        label: '来場者予定グラフ',
                                                         data: res.rows[0],
                                                         backgroundColor: [
                                                         'rgba(255, 99, 132, 0.2)'
