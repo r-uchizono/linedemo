@@ -17,6 +17,25 @@
                             "position": "relative",
                             "align": "center",
                             "color": "#FFFFFF"
+                        },
+                        {
+                          "type": "box",
+                          "layout": "vertical",
+                          "contents": [
+                            {
+                              "type": "text",
+                              "text": "来場予定グラフ",
+                              "size": "md",
+                              "position": "relative",
+                              "align": "center",
+                              "color": "#000000"
+                            }
+                          ],
+                          "offsetBottom": "-5px",
+                          "position": "absolute",
+                          "backgroundColor": "#FFFFFF",
+                          "borderWidth": "medium",
+                          "width": "1500px"
                         }
                     ]
                 },
