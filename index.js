@@ -433,19 +433,16 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
                 console.log(getRandomValues(array))
 
-                let currentTime = moment().local
-                let Time_jp = moment(currentTime, 'YYYY/MM/DD HH:mm:ss')
+                let currentTime = new Date()
+                currentTime.setHours(currentTime.getHours() + 8);
 
-                console.log(Time_jp)
-                let newTime = Time_jp.add(8, 'hours')
-                
-                console.log(newTime)
+                console.log(currentTime)
 
                 let query_kigen = {
                     text: 'UPDATE m_user' +
                         '   SET qr_expiration_date = $1' +
                         ' WHERE user_id = $2',
-                    values: [newTime, event.source.userId],
+                    values: [currentTime, event.source.userId],
                 }
 
                 let userid
