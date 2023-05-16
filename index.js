@@ -209,7 +209,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                                         let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                                        firstEventJson.header.contents[1].contents[0].text = '来場予定グラフ'
                                                         firstEventJson.body.contents[0].text = f_formattedDate
                                                         firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
                                                         firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
@@ -248,7 +247,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                                             let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                             secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                                            secondEventJson.header.contents[1].contents[0].text = '来場予定グラフ'
                                                             secondEventJson.body.contents[0].text = s_formattedDate
                                                             secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime
                                                             secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
