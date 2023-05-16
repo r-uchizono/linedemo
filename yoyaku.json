@@ -35,7 +35,8 @@
                           "position": "absolute",
                           "backgroundColor": "#FFFFFF",
                           "borderWidth": "medium",
-                          "width": "1500px"
+                          "width": "1500px",
+                          "offsetStart": "0px"
                         }
                     ]
                 },
