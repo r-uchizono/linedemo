@@ -280,7 +280,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                     data = JSON.parse(dataJSON)
                                                     data[0].contents.contents = []
 
-                                                    console.log(data_message[0].contents.contents[0].header)
+                                                    console.log(data_message[0].contents.contents[0].header.contents[1])
                                                 }
                                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                                 events_processed.push(bot.replyMessage(event.replyToken, data_message))
