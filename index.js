@@ -274,13 +274,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                             secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png?xxx=' + file
                                                             data[0].contents.contents.push({ ...secondEventJson })
                                                         }
-
-                                                        console.log(data[0].contents.contents)
                                                     }
 
                                                     data_message.push({ ...data[0] })
                                                     data = JSON.parse(dataJSON)
                                                     data[0].contents.contents = []
+
+                                                    console.log(data_message[0].contents.contents[0].header)
                                                 }
                                                 // replyMessage()で返信し、そのプロミスをevents_processedに追加。
                                                 events_processed.push(bot.replyMessage(event.replyToken, data_message))
