@@ -934,13 +934,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         },
                                                         plugins: {
                                                             label: {
-                                                                font: {
-                                                                    family: 'sans-serif',
-                                                                    size: 16,
-                                                                    weight: 'bold'
-                                                                },
-                                                                display: true,
-                                                                text: '来場者予定グラフ'
+                                                                display: false,
                                                             }
                                                         }
                                                         }
