@@ -10,7 +10,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Chart from 'chart.js/auto'
 import { createCanvas } from 'canvas'
-import moment from 'moment';
+import moment from 'moment'
+import date_fns_timezone from 'date-fns-timezone'
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -63,6 +64,10 @@ const client = new pg.Pool({
     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
     port: 5432 
 }) 
+
+const FORMAT = 'YYYY/MM/DD HH:mm:ss'
+const TIME_ZONE_TOKYO = 'Asia/Tokyo'
+
 
 app.post("/", (req, res) => {
     app.render('index.js')
@@ -434,10 +439,15 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 console.log(getRandomValues(array))
 
                 let currentTime = moment()
-                let Time_jp = moment(currentTime, 'YYYY/MM/DD HH:mm:ss')
+                let Time_jp = moment(currentTime, FORMAT)
 
                 console.log(Time_jp)
-                let newTime = Time_jp.add(9 + 8, 'hours')
+                // let newTime = Time_jp.add(9 + 8, 'hours')
+                // let newTime = new Date().toLocaleString({ timeZone: TIME_ZONE_TOKYO})
+
+                // npm -i date-fns-timezone をいんすとーる
+                // date-fns-timezone をインポート
+                let newTime = date_fns_timezone.formatToTimeZone(new Date(), FORMAT, {timeZone: TIME_ZONE_TOKYO})
                 
                 console.log(newTime)
                 
