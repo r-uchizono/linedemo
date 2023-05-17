@@ -10,8 +10,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Chart from 'chart.js/auto'
 import { createCanvas } from 'canvas'
-import moment from 'moment';
-
+import moment from 'moment'
+import date_fns_timezone from 'date-fns-timezone'
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -48,6 +48,10 @@ const client = new pg.Pool({
     port: process.env.PG_PORT,
     ssl: true
 })
+
+const FORMAT = 'YYYY/MM/DD HH:mm:ss'
+const TIME_ZONE_TOKYO = 'Asia/Tokyo'
+const LIFE_TIME = Number(process.env.LIMIT_TIME)
 
 app.post("/", (req, res) => {
     app.render('index.js')
@@ -418,19 +422,16 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
                 console.log(getRandomValues(array))
 
-                let currentTime = moment()
-                let Time_jp = moment(currentTime, 'YYYY/MM/DD HH:mm:ss')
+                let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
+                let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})            
 
-                console.log(Time_jp._d)
-                let newTime = Time_jp.add(8, 'hours')
-                
-                console.log(newTime._d)
+                console.log(newTime)
 
                 let query_kigen = {
                     text: 'UPDATE m_user' +
                         '   SET qr_expiration_date = $1' +
                         ' WHERE user_id = $2',
-                    values: [newTime._d, event.source.userId],
+                    values: [newTime, event.source.userId],
                 }
 
                 let userid
