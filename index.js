@@ -228,6 +228,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
 
                                                         firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png?xxx=' + file 
+                                                        console.log(firstEventJson.hero.url)
 
                                                         data[0].contents.contents.push({ ...firstEventJson })
 
