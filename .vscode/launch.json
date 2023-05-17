@@ -21,7 +21,7 @@
                 "PG_DBNM" : "event_f91d",
                 "PG_PSWD" : "gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn",
                 "PG_PORT" : "5432",
-                "QR_LIFE_TIME" : "8"
+                "LIMIT_TIME" : "8"
             }
         }
     ]

@@ -49,24 +49,25 @@ const bot = new line.Client(line_config)
 //     ssl: true 
 // })
 
-// const client = new pg.Pool({
-//     user: process.env.PG_USER,
-//     host: process.env.PG_HOST,
-//     database: process.env.PG_DBNM,
-//     password: process.env.PG_PSWD,
-//     port: process.env.PG_PORT
-// })
-
 const client = new pg.Pool({
-    user: 'unis',
-    host: 'dpg-cgvn4qodh87joksvpj70-a',
-    database: 'event_f91d',
-    password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
-    port: 5432 
-}) 
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DBNM,
+    password: process.env.PG_PSWD,
+    port: process.env.PG_PORT
+})
+
+// const client = new pg.Pool({
+//     user: 'unis',
+//     host: 'dpg-cgvn4qodh87joksvpj70-a',
+//     database: 'event_f91d',
+//     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
+//     port: 5432 
+// }) 
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
+const LIFE_TIME = Number(process.env.LIMIT_TIME)
 
 
 app.post("/", (req, res) => {
@@ -438,16 +439,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let QRfile = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
                 console.log(getRandomValues(array))
 
-                let currentTime = moment()
-                let Time_jp = moment(currentTime, FORMAT)
-
-                console.log(Time_jp)
-                // let newTime = Time_jp.add(9 + 8, 'hours')
-                // let newTime = new Date().toLocaleString({ timeZone: TIME_ZONE_TOKYO})
-
-                // npm -i date-fns-timezone をいんすとーる
-                // date-fns-timezone をインポート
-                let newTime = date_fns_timezone.formatToTimeZone(new Date(), FORMAT, {timeZone: TIME_ZONE_TOKYO})
+                let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
+                let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})
                 
                 console.log(newTime)
                 
