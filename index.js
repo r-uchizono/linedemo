@@ -32,6 +32,17 @@ if (!fs.existsSync(imageDir)) {
     fs.mkdirSync(imageDir)
 }
 app.use(express.static(imageDir))
+
+const graphDir = path.join(__dirname, 'graph')
+if (!fs.existsSync(graphDir)) {
+    fs.mkdirSync(graphDir)
+}
+app.use(express.static(graphDir))
+
+app.use(express.urlencoded({
+    extended: true
+}))
+
 app.use(express.urlencoded({
     extended: true
 }))
@@ -104,7 +115,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         client
                             .query(query_event_base)
                             .then((res) => {
-                                console.log(res.rows[0].event_cd)
 
                                 let query_user = {
                                     text: "SELECT *" +
@@ -163,7 +173,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 let start = 0
 
                                                 let row = Math.ceil(res.rows.length / 6)
-                                                console.log(row)
 
                                                 let S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                                                 let array = new Uint8Array(16)
@@ -343,7 +352,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 let start = 0
 
                                                 let row = Math.ceil(res.rows.length / 12)
-                                                console.log(row)
 
                                                 for (let I = 0; I < row; I++) {
                                                     console.log("roop start")
@@ -377,9 +385,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
                                                         EventJson.body.contents[0].text = result.formattedDate
-
-                                                        console.log(result.dataDate)
-                                                        console.log(f_result.dataDate)
 
                                                         if(result.dataDate == f_result.dataDate){
                                                             EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
@@ -434,8 +439,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
                 let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})
                 
-                console.log(newTime)
-                
                 let query_kigen = {
                     text: 'UPDATE m_user' +
                         '   SET qr_expiration_date = $1' +
@@ -460,7 +463,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                 client.query(query)
                                     .then((res) => {
-                                        console.log(res.rows[0].user_id)
                                         userid = res.rows[0].user_id
 
                                         //フォルダに保存
@@ -469,8 +471,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 console.error(error)
                                                 return
                                             }
-
-                                            console.log(req.protocol + '://' + req.get('host') + '/' + QRfile + '.png')
 
                                             //ファイルのURLを生成し送信・拡張子注意
                                             let message = {
@@ -849,12 +849,6 @@ function graph(event_cd, kaisaiti_cd, g_date){
                 })
 
                 let file = kaisaiti_cd + g_date
-
-                let graphDir = path.join(__dirname, 'graph')
-                if (!fs.existsSync(graphDir)) {
-                    fs.mkdirSync(graphDir)
-                }
-                app.use(express.static(graphDir))
 
                 let out = fs.createWriteStream(graphDir + '/' + file +'.png');
                 let stream = canvas.createPNGStream();
