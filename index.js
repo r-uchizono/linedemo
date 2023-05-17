@@ -442,6 +442,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
                 let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})
                 
+                console.log(LIFE_TIME)
                 console.log(lifeTime)
                 console.log(newTime)
                 
