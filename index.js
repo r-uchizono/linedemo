@@ -39,23 +39,23 @@ app.use(express.urlencoded({
 
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config)
-//ローカル用
-// const client = new pg.Pool({
-//     user: process.env.PG_USER,
-//     host: process.env.PG_HOST,
-//     database: process.env.PG_DBNM,
-//     password: process.env.PG_PSWD,
-//     port: process.env.PG_PORT,
-//     ssl: true 
-// })
 
 const client = new pg.Pool({
     user: process.env.PG_USER,
     host: process.env.PG_HOST,
     database: process.env.PG_DBNM,
     password: process.env.PG_PSWD,
-    port: process.env.PG_PORT
+    port: process.env.PG_PORT,
+    ssl: true 
 })
+
+// const client = new pg.Pool({
+//     user: process.env.PG_USER,
+//     host: process.env.PG_HOST,
+//     database: process.env.PG_DBNM,
+//     password: process.env.PG_PSWD,
+//     port: process.env.PG_PORT
+// })
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
