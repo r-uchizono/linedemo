@@ -848,6 +848,7 @@ function graph(event_cd, kaisaiti_cd, g_date){
                 let out = fs.createWriteStream(graphDir + '/' + file +'.png');
                 let stream = canvas.createPNGStream();
                 stream.pipe(out);
+                console.log(graphDir)
             })
         })
 }
