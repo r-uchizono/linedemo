@@ -49,21 +49,21 @@ const bot = new line.Client(line_config)
 //     ssl: true 
 // })
 
-const client = new pg.Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PG_DBNM,
-    password: process.env.PG_PSWD,
-    port: process.env.PG_PORT
-})
-
 // const client = new pg.Pool({
-//     user: 'unis',
-//     host: 'dpg-cgvn4qodh87joksvpj70-a',
-//     database: 'event_f91d',
-//     password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
-//     port: 5432 
-// }) 
+//     user: process.env.PG_USER,
+//     host: process.env.PG_HOST,
+//     database: process.env.PG_DBNM,
+//     password: process.env.PG_PSWD,
+//     port: process.env.PG_PORT
+// })
+
+const client = new pg.Pool({
+    user: 'unis',
+    host: 'dpg-cgvn4qodh87joksvpj70-a',
+    database: 'event_f91d',
+    password: 'gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn',
+    port: 5432 
+}) 
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
@@ -442,6 +442,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
                 let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})
                 
+                console.log(lifeTime)
                 console.log(newTime)
                 
                 let query_kigen = {
