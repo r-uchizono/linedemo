@@ -33,7 +33,7 @@ if (!fs.existsSync(imageDir)) {
 }
 app.use(express.static(imageDir))
 
-const graphDir = path.join(__dirname, 'graph')
+const graphDir = path.join('linedemo.onrender.com', 'graph')
 if (!fs.existsSync(graphDir)) {
     fs.mkdirSync(graphDir)
 }
