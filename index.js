@@ -43,7 +43,6 @@ app.use(express.urlencoded({
     extended: true
 }))
 
-
 // APIコールのためのクライアントインスタンスを作成
 const bot = new line.Client(line_config)
 
