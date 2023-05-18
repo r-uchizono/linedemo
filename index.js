@@ -32,6 +32,13 @@ if (!fs.existsSync(imageDir)) {
     fs.mkdirSync(imageDir)
 }
 app.use(express.static(imageDir))
+
+const graphDir = path.join(__dirname, 'graph')
+if (!fs.existsSync(graphDir)) {
+    fs.mkdirSync(graphDir)
+}
+app.use(express.static(graphDir))
+
 app.use(express.urlencoded({
     extended: true
 }))
@@ -95,7 +102,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                         client
                             .query(query_event_base)
                             .then((res) => {
-                                console.log(res.rows[0].event_cd)
 
                                 let query_user = {
                                     text: "SELECT *" +
@@ -154,7 +160,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 let start = 0
 
                                                 let row = Math.ceil(res.rows.length / 6)
-                                                console.log(row)
 
                                                 let S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                                                 let array = new Uint8Array(16)
@@ -334,7 +339,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 let start = 0
 
                                                 let row = Math.ceil(res.rows.length / 12)
-                                                console.log(row)
 
                                                 for (let I = 0; I < row; I++) {
                                                     console.log("roop start")
@@ -368,9 +372,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                         let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                         EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
                                                         EventJson.body.contents[0].text = result.formattedDate
-
-                                                        console.log(result.dataDate)
-                                                        console.log(f_result.dataDate)
 
                                                         if(result.dataDate == f_result.dataDate){
                                                             EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
@@ -423,9 +424,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 console.log(getRandomValues(array))
 
                 let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
-                let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})            
-
-                console.log(newTime)
+                let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})
 
                 let query_kigen = {
                     text: 'UPDATE m_user' +
@@ -445,13 +444,16 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                 console.log('Data Updated.')
 
                                 let query = {
-                                    text: "SELECT user_id, qr_expiration_date FROM m_user WHERE user_id = $1",
+                                    text: "SELECT user_id, qr_expiration_date" + 
+                                          "  FROM m_user" +
+                                          " INNER JOIN m_event_base e1" +
+                                          "    ON m1.event_cd = e1.event_cd" +
+                                          " WHERE user_id = $1",
                                     values: [event.source.userId],
                                 }
 
                                 client.query(query)
                                     .then((res) => {
-                                        console.log(res.rows[0].user_id)
                                         userid = res.rows[0].user_id
 
                                         //フォルダに保存
@@ -460,8 +462,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                                 console.error(error)
                                                 return
                                             }
-
-                                            console.log(req.protocol + '://' + req.get('host') + '/' + QRfile + '.png')
 
                                             //ファイルのURLを生成し送信・拡張子注意
                                             let message = {
@@ -489,6 +489,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                             events_processed.push(bot.replyMessage(event.replyToken, [message, addmessage, addmessage2])) 
                                         })
 
+                                    }).catch((e) => {
+                                        console.error(e.stack)
+                                        let errmessage = {
+                                            type: "text",
+                                            text: "お客様情報が未登録です。"
+                                        }
+                                        events_processed.push(bot.replyMessage(event.replyToken, errmessage))
                                     })    
                             })                        
                             .catch((e) => {
@@ -504,9 +511,50 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
 
             }
-            // この処理の対象をイベントタイプがポストバックだった場合。
+            // ユーザーからのテキストメッセージが「お知らせ」だった場合のみ反応。
+            else if (event.message.text == "お知らせ") {
+
+                let lifeTime = new Date()
+                let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO})
+
+                let query = {
+                    text: "SELECT naiyo"+
+                          "  FROM t_oshirase" +
+                          " WHERE kaisai_day = $1",
+                          values: [newTime],
+                }
+
+                client.connect(function (err, client) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        client
+                            .query(query)
+                            .then((res) => {
+
+                                console.log(res.rows[0].naiyo)
+
+                                let message = {
+                                    type: "text",
+                                    text: res.rows[0].naiyo
+                                }
+                                events_processed.push(bot.replyMessage(event.replyToken, message))
+                            }).catch((e) => {
+                                console.error(e.stack)
+                                let errmessage = {
+                                    type: "text",
+                                    text: "本日実施のイベントはありません。"
+                                }
+                                events_processed.push(bot.replyMessage(event.replyToken, errmessage))
+                            })
+                        }
+                    })
+
+
+            }
+        // この処理の対象をイベントタイプがポストバックだった場合。
         } else if (event.type == "postback") {
-            // 「イベント一覧」の場合
+            // 予約テーブルへの挿入
             if (event.postback.data.split('=')[0] == "event_id") {
                 // DB登録処理
                 let query = {
@@ -548,6 +596,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                 })
             }
+            //　大人人数登録
             else if (event.postback.data.split('=')[0] == "a_ninzu") {
 
                 let query = {
@@ -582,6 +631,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                 })
 
             }
+            //　小人人数登録
             else if (event.postback.data.split('=')[0] == "c_ninzu") {
 
                 let post = event.postback.data.replace(/,/g, '=')
@@ -618,6 +668,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 events_processed.push(bot.replyMessage(event.replyToken, message))                
             }
+            //　予約取消
             else if (event.postback.data.split('=')[0] == "torikesi") {
                 // DB処理
                 let query_yoyaku = {
@@ -664,6 +715,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                     }
                 })
             }
+            //  予約日時変更
             else if (event.postback.data.split('=')[0] == "henko") {
                 // DB登録処理
                 let query = {
@@ -738,7 +790,7 @@ app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)
 })
 
-
+//  グラフ作成
 function graph(event_cd, kaisaiti_cd, g_date){
     let query_time = {
         text: "SELECT " + 
@@ -841,12 +893,6 @@ function graph(event_cd, kaisaiti_cd, g_date){
 
                 let file = kaisaiti_cd + g_date
 
-                let graphDir = path.join(__dirname, 'graph')
-                if (!fs.existsSync(graphDir)) {
-                    fs.mkdirSync(graphDir)
-                }
-                app.use(express.static(graphDir))
-
                 let out = fs.createWriteStream(graphDir + '/' + file +'.png');
                 let stream = canvas.createPNGStream();
                 stream.pipe(out);
@@ -854,6 +900,7 @@ function graph(event_cd, kaisaiti_cd, g_date){
         })
 }
 
+//  日時編集
 function date_format(previous_date){
     let date = new Date(previous_date)
     let year = date.getFullYear()
