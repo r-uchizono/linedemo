@@ -164,10 +164,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
                                         client.query(query_event)
                                             .then((res) => {
 
+                                                let count = 6
                                                 let end = 0
                                                 let start = 0
 
-                                                let row = Math.ceil(res.rows.length / 6)
+                                                let row = Math.ceil(res.rows.length / count)
 
                                                 let S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                                                 let array = new Uint8Array(16)
@@ -175,18 +176,18 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                                 for (let I = 0; I < row; I++) {
                                                     console.log("roop start")
-                                                    if (res.rows.length <= 6) {
+                                                    if (res.rows.length <= count) {
                                                         end = res.rows.length
                                                     }
                                                     else {
-                                                        if (res.rows.length - end > 6) {
-                                                            end = (I + 1) * 6
+                                                        if (res.rows.length - end > count) {
+                                                            end = (I + 1) * count
                                                         }
                                                         else {
                                                             end = res.rows.length
                                                         }
 
-                                                        start = (I) * 6
+                                                        start = (I) * count
                                                     }
 
                                                     for (let i = start; i < end; i++) {
@@ -343,25 +344,27 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                                         client.query(query_yoyaku)
                                             .then((res) => {
+
+                                                let count = 12
                                                 let end = 0
                                                 let start = 0
 
-                                                let row = Math.ceil(res.rows.length / 12)
+                                                let row = Math.ceil(res.rows.length / count)
 
                                                 for (let I = 0; I < row; I++) {
                                                     console.log("roop start")
-                                                    if (res.rows.length <= 12) {
+                                                    if (res.rows.length <= count) {
                                                         end = res.rows.length
                                                     }
                                                     else {
-                                                        if (res.rows.length - end > 12) {
-                                                            end = (I + 1) * 12
+                                                        if (res.rows.length - end > count) {
+                                                            end = (I + 1) * count
                                                         }
                                                         else {
                                                             end = res.rows.length
                                                         }
 
-                                                        start = (I) * 12
+                                                        start = (I) * count
                                                     }
                                                     for (let i = start; i < end; i++) {
 
