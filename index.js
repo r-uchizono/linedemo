@@ -71,7 +71,7 @@ const LIFE_TIME = Number(process.env.LIMIT_TIME)
 app.post("/", (req, res) => {
     app.render('index.js')
 })
-
+ 
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
