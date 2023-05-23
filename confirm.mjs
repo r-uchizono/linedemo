@@ -33,7 +33,7 @@ export function confirm(event_data){
                             client.query(yoyakuquery.query_yoyaku)
                                 .then((res) => {
                                     //繰り返し出る固定値は設定へ
-                                    let count = Number(process.env.Message_Count) * 2
+                                    let count = Number(process.env.MESSAGE_COUNT) * 2
                                     let end = 0
                                     let start = 0
 

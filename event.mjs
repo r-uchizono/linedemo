@@ -35,7 +35,7 @@ export function list(event_data) {
                             client.query(eventquery.query_event)
                                 .then((res) => {
 
-                                    let count = Number(process.env.Message_Count)
+                                    let count = Number(process.env.MESSAGE_COUNT)
                                     let end = 0
                                     let start = 0
 
