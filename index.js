@@ -52,8 +52,7 @@ const client = new pg.Pool({
     host: process.env.PG_HOST,
     database: process.env.PG_DBNM,
     password: process.env.PG_PSWD,
-    port: process.env.PG_PORT,
-    ssl : true
+    port: process.env.PG_PORT
 })
 
 app.post("/", (req, res) => {
@@ -80,8 +79,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             graphDir : graphDir,
             imageDir : imageDir
         }
-
-        console.log(process.env.EVENT_MESSAGE)
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
