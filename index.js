@@ -19,8 +19,6 @@ const line_config = {
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 }
 
-console.log(process.env.LINE_CHANNEL_SECRET)
-
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const app = express()
@@ -62,7 +60,9 @@ app.post("/", (req, res) => {
     app.render('index.js')
 })
 
- 
+console.log(process.env.PG_USER)
+console.log(process.env.PG_DBNM)
+console.log(process.env.PG_PORT)
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
