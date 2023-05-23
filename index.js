@@ -27,13 +27,13 @@ const PORT = process.env.PORT || 3000
 //publicとgraphはlanchにもたせる
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const imageDir = path.join(__dirname, 'public')
+const imageDir = path.join(__dirname, process.env.QR_FILE)
 if (!fs.existsSync(imageDir)) {
     fs.mkdirSync(imageDir)
 }
 app.use(express.static(imageDir))
 
-const graphDir = path.join(__dirname, 'graph')
+const graphDir = path.join(__dirname, process.env.GRAPH_FILE)
 if (!fs.existsSync(graphDir)) {
     fs.mkdirSync(graphDir)
 }
