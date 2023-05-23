@@ -220,7 +220,7 @@ export function a_ninzu(event_data){
 export function c_ninzu(event_data){
     let post = event_data.event.postback.data.replace(/,/g, '=')
     let c_query = countquery(post.split('=')[1], post.split('=')[2])
-
+    console.log(post)
     event_data.client.connect(function (err, client) {
         if (err) {
             console.log(err)
