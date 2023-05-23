@@ -22,6 +22,7 @@
                 "PG_PSWD" : "gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn",
                 "PG_PORT" : "5432",
                 "LIMIT_TIME" : "8",
+                "Message_Count" : "6",
                 "EVENT_MESSAGE" : "イベント一覧",
                 "CONFIRM_MESSAGE" : "予約確認",
                 "ID_MESSAGE" : "会員ID",

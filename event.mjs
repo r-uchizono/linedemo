@@ -1,4 +1,9 @@
-exports.list = function(req, res){
+import fs from 'fs'
+import {date_format, random, graph, time_format} from './common.mjs'
+import {message} from './message.mjs'
+import { b_eventquery, countquery, e_eventquery, entryquery, setidquery, u_eventquery } from './query.mjs'
+
+export function list(event_data) {
     //データを取りだす
     let bufferData = fs.readFileSync('yoyaku.json')
     // データを文字列に変換
@@ -8,84 +13,36 @@ exports.list = function(req, res){
     let data_message = []
     data[0].contents.contents = []
 
-    let query_event_base = {
-        text: "SELECT *" +
-            "  FROM m_event_base t1 " +
-            " WHERE current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
-            "    OR current_date < t1.start_ymd" +
-            " ORDER BY t1.start_ymd",
-    }
+    let basequery = b_eventquery()
 
-    client.connect(function (err, client) {
+    event_data.client.connect(function (err, client) {
         if (err) {
             console.log(err)
         } else {
             client
-                .query(query_event_base)
+                .query(basequery.query_base)
                 .then((res) => {
 
-                    let query_user = {
-                        text: "SELECT *" +
-                            "  FROM m_user m1 " +
-                            "  LEFT OUTER JOIN" +
-                            "       m_eigyo_e e1" +
-                            "    ON m1.eigyo_cd = e1.eigyo_cd" +
-                            " WHERE m1.user_id = $1" +
-                            "   AND m1.event_cd = $2",
-                        values: [event.source.userId, res.rows[0].event_cd],
-                    }
+                    let userquery = u_eventquery(event_data.event.source.userId, res.rows[0].event_cd,"")
 
                     let event_nm = res.rows[0].event_nm
 
-                    client.query(query_user)
+                    client.query(userquery.query_user)
                         .then((res) => {
-                            let query_event = {
-                                text: "SELECT e1.*" +
-                                    "     , k.kaisaiti_nm" +
-                                    "     , t1.id as t1_id" +
-                                    "     , t2.id as t2_id" +
-                                    "  FROM m_event e1" +
-                                    " INNER JOIN m_kaisaiti k" +
-                                    "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
-                                    "  LEFT OUTER JOIN" +
-                                    "       m_event_eigyo e2" +
-                                    "    ON k.kaisaiti_cd = e2.kaisaiti_cd" +
-                                    "   AND e2.event_cd = $2" +
-                                    "   AND e2.eigyo_cd = $3" +
-                                    "  LEFT OUTER JOIN" +
-                                    "       t_yoyaku t1" +
-                                    "    ON e1.event_cd = t1.event_cd" +
-                                    "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
-                                    "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
-                                    "   AND t1.user_id = $1" +
-                                    "  LEFT OUTER JOIN" +
-                                    "       t_yoyaku t2" +
-                                    "    ON e1.event_cd = t2.event_cd" +
-                                    "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
-                                    "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
-                                    "   AND t2.user_id = $1" +
-                                    " WHERE e1.event_cd = $2" +
-                                    " ORDER BY" +
-                                    " CASE" +
-                                    "  WHEN e2.eigyo_cd = $3 THEN 0" +
-                                    "  ELSE 1" +
-                                    " END," +
-                                    "       e1.first_day",
-                                values: [event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd],
-                            }
 
-                            client.query(query_event)
+                            let eventquery = e_eventquery(event_data.event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd)
+
+                            client.query(eventquery.query_event)
                                 .then((res) => {
 
-                                    let count = 6
+                                    let count = Number(process.env.Message_Count)
                                     let end = 0
                                     let start = 0
 
                                     let row = Math.ceil(res.rows.length / count)
 
-                                    let S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-                                    let array = new Uint8Array(16)
-                                    let file = Array.from(getRandomValues(array)).map((n) => S[n % S.length]).join('')
+                                    //画像ファイル名としてランダムな文字列作成
+                                    let random_data =  random()
 
                                     for (let I = 0; I < row; I++) {
                                         console.log("roop start")
@@ -105,21 +62,17 @@ exports.list = function(req, res){
 
                                         for (let i = start; i < end; i++) {
 
-                                            let f_stime = new Date('2023-04-01T' + res.rows[i].first_start_time)
-                                            let f_etime = new Date('2023-04-01T' + res.rows[i].first_end_time)
-                                            let s_stime = new Date('2023-04-01T' + res.rows[i].second_start_time)
-                                            let s_etime = new Date('2023-04-01T' + res.rows[i].second_end_time)
-                                            let F_SformattedTime = f_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
-                                            let F_EformattedTime = f_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
-                                            let S_SformattedTime = s_stime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) // ロケールに基づいた形式の時間に変換する
-                                            let S_EformattedTime = s_etime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+                                            let F_SformattedTime = time_format(res.rows[i].first_start_time)
+                                            let F_EformattedTime = time_format(res.rows[i].first_end_time)
+                                            let S_SformattedTime = time_format(res.rows[i].second_start_time)
+                                            let S_EformattedTime = time_format(res.rows[i].second_end_time)
 
                                             let f_result = date_format(res.rows[i].first_day)
 
                                             let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                             firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
                                             firstEventJson.body.contents[0].text = f_result.formattedDate
-                                            firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime + '～' + F_EformattedTime
+                                            firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
                                             firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
                                             let address = res.rows[i].place_address
                                             firstEventJson.body.contents[3].action.label = address
@@ -141,7 +94,7 @@ exports.list = function(req, res){
 
                                             let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
 
-                                            firstEventJson.hero.url = 'https://' + req.get('host') + '/' + f_file + '.png?xxx=' + file 
+                                            firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
 
                                             data[0].contents.contents.push({ ...firstEventJson })
 
@@ -152,7 +105,7 @@ exports.list = function(req, res){
                                                 let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                                                 secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
                                                 secondEventJson.body.contents[0].text = s_result.formattedDate
-                                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime + '～' + S_EformattedTime
+                                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
                                                 secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
                                                 secondEventJson.body.contents[3].action.label = address
                                                 secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
@@ -173,7 +126,7 @@ exports.list = function(req, res){
 
                                                 let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
 
-                                                secondEventJson.hero.url = 'https://' + req.get('host') + '/' + s_file + '.png?xxx=' + file
+                                                secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
                                                 data[0].contents.contents.push({ ...secondEventJson })
                                             }
                                         }
@@ -183,44 +136,36 @@ exports.list = function(req, res){
                                         data[0].contents.contents = []
                                     }
                                     // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                                    events_processed.push(bot.replyMessage(event.replyToken, data_message))
+                                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
 
 
                                 })
 
                         }).catch((e) => {
                             console.error(e.stack)
-                            let errmessage = {
-                                type: "text",
-                                text: "お客様情報が未登録です。"
-                            }
-                            events_processed.push(bot.replyMessage(event.replyToken, errmessage))
+                            let errmessage = message()
+                            event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
                         })
                 })
         }
     })
 }
 
-exports.yoyaku = function(req, res){
+export function yoyaku(event_data){
     // DB登録処理
-    let query = {
-        text: 'INSERT INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) VALUES($1, $2, $3, $4)',
-        values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2], event.source.userId, event.postback.data.split('=')[3] + ' ' + event.postback.params.time + ':00.000'],
-    }
+    let entry_query = entryquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2], event_data.event.source.userId, event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000')
 
-    let query_id = {
-        text: "SELECT setval('t_yoyaku_id_seq', (SELECT MAX(id) FROM t_yoyaku))",
-    }
+    let setid_query = setidquery()
 
-    client.connect(function (err, client) {
+    event_data.client.connect(function (err, client) {
         if (err) {
             console.log(err)
         } else {
             client
-                .query(query)
+                .query(entry_query.query_entry)
                 .then(() => {
                     console.log('Data Inserted.')
-                    client.query(query_id)
+                    client.query(setid_query.query_id)
                         .then((res) => {
                             //データを取りだす
                             let bufferData = fs.readFileSync('a_ninzu.json')
@@ -229,11 +174,11 @@ exports.yoyaku = function(req, res){
                             //JSONのデータをJavascriptのオブジェクトに
                             let data = JSON.parse(dataJSON)
 
-                            var post = event.postback.data.split('=')
+                            var post = event_data.event.postback.data.split('=')
                             for (let i = 1; i < 10; i++) {
                                 data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res.rows[0].setval + '=' + post.slice(1)
                             }
-                            events_processed.push(bot.replyMessage(event.replyToken, data))
+                            event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
                         })
                 })
                 .catch((e) => {
@@ -243,19 +188,15 @@ exports.yoyaku = function(req, res){
     })
 }
 
-exports.a_ninzu = function(req, res){
-    let query = {
-        text: 'UPDATE t_yoyaku' +
-            '   SET reserve_a_count = $1' +
-            ' WHERE id = $2',
-        values: [event.postback.data.split('=')[1], event.postback.data.split('=')[2]],
-    }
-    client.connect(function (err, client) {
+export function a_ninzu(event_data){
+    let a_query = countquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2])
+
+    event_data.client.connect(function (err, client) {
         if (err) {
             console.log(err)
         } else {
             client
-                .query(query)
+                .query(a_query.query_a)
                 .then(() => {
                     console.log('Data Updated.')
                     //データを取りだす
@@ -265,37 +206,31 @@ exports.a_ninzu = function(req, res){
                     //JSONのデータをJavascriptのオブジェクトに
                     let data = JSON.parse(dataJSON)
 
-                    var post = event.postback.data.split('=')
+                    var post = event_data.event.postback.data.split('=')
                     for (let i = 0; i < 10; i++) {
                         data.contents.body.contents[i + 1].action.data = 'c_ninzu=' + i + '=' + post.slice(2)
                     }
 
-                    events_processed.push(bot.replyMessage(event.replyToken, data))
+                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
                 })
         }
     })
 }
 
-exports.c_ninzu = function(req, res){
-    let post = event.postback.data.replace(/,/g, '=')
-    // DB登録処理
-    let query = {
-        text: 'UPDATE t_yoyaku' +
-            '   SET reserve_c_count = $1' +
-            ' WHERE id = $2',
-        values: [post.split('=')[1], post.split('=')[2]],
-    }
+export function c_ninzu(event_data){
+    let post = event_data.event.postback.data.replace(/,/g, '=')
+    let c_query = countquery(post.split('=')[1], post.split('=')[2])
 
-    client.connect(function (err, client) {
+    event_data.client.connect(function (err, client) {
         if (err) {
             console.log(err)
         } else {
             client
-                .query(query)
+                .query(c_query.query_c)
                 .then(() => {
                     console.log('Data Updated.')
 
-                    graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'))
+                    graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'), client, event_data.graphDir)
 
                 })
                 .catch((e) => {
@@ -304,10 +239,7 @@ exports.c_ninzu = function(req, res){
         }
     })
 
-    let message = {
-        type: 'text',
-        text: '予約が完了しました'
-    }
+    let eventmessage = message()
 
-    events_processed.push(bot.replyMessage(event.replyToken, message))    
+    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, eventmessage.event_message))    
 }
