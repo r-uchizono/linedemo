@@ -19,6 +19,8 @@ const line_config = {
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 }
 
+console.log(process.env.LINE_CHANNEL_SECRET)
+
 // -----------------------------------------------------------------------------
 // Webサーバー設定
 const app = express()
