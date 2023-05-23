@@ -60,9 +60,6 @@ app.post("/", (req, res) => {
     app.render('index.js')
 })
 
-console.log(process.env.PG_USER)
-console.log(process.env.PG_DBNM)
-console.log(process.env.PG_PORT)
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
@@ -83,6 +80,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             graphDir : graphDir,
             imageDir : imageDir
         }
+
+        console.log(event_data)
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
