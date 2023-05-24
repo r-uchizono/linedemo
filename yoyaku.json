@@ -1,0 +1,111 @@
+[{
+    "type": "flex",
+    "altText": "イベント一覧",
+    "contents": {
+        "type": "carousel",
+        "contents": [
+            {
+                "type": "bubble",
+                "header": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "会場",
+                            "size": "md",
+                            "position": "relative",
+                            "align": "center",
+                            "color": "#FFFFFF"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                              {
+                                "type": "text",
+                                "text": "来場者予定グラフ",
+                                "size": "12px",
+                                "align": "center",
+                                "color": "#000000"
+                              }
+                            ],
+                            "position": "absolute",
+                            "backgroundColor": "#FFFFFF",
+                            "width": "300px",
+                            "offsetStart": "0px",
+                            "offsetBottom": "0px",
+                            "height": "20px"
+                        }
+                    ],
+                    "height": "80px"
+                },
+                "hero": {
+                    "type": "image",
+                    "url": "",
+                    "size": "full",
+                    "aspectRatio": "20:13",
+                    "aspectMode": "fit"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "年月日",
+                            "size": "lg",
+                            "margin": "none"
+                        },
+                        {
+                            "type": "text",
+                            "text": "開催時間",
+                            "size": "16px"
+                        },
+                        {
+                            "type": "text",
+                            "text": "場所",
+                            "size": "16px"
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "uri",
+                                "label": "住所",
+                                "uri": "https://www.google.com/maps/search/?api=1&query="
+                            },
+                            "offsetStart": "29px",
+                            "offsetTop": "-15px"
+                        }
+                    ],
+                    "backgroundColor": "#fbdac8",
+                    "alignItems": "flex-start"
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "datetimepicker",
+                                "label": "日時を選択してください",
+                                "data": "event_id=100",
+                                "mode": "time"
+                            },
+                            "color": "#FFFFFF"
+                        }
+                    ]
+                },
+                "styles": {
+                    "header": {
+                        "backgroundColor": "#f3981d"
+                    },
+                    "footer": {
+                        "backgroundColor": "#f3981d"
+                    }
+                }
+            }
+        ]
+    }
+}]
