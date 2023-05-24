@@ -49,51 +49,53 @@ export function graph(event_cd, kaisaiti_cd, g_date, client, graphDir){
 
             let graph_query = graphquery(selectdata, event_cd)
 
-            client.query(graph_query.query_graph)
-            .then((res) => { 
-                let canvas = createCanvas(400, 400);
-                let ctx = canvas.getContext('2d');
+            return client.query(graph_query.query_graph)
+        }).then((res) => {
+            let canvas = createCanvas(400, 400);
+            let ctx = canvas.getContext('2d');
 
-                let graphdata = {
-                datasets: [{
-                    label: '来場者予定グラフ',
-                    data: res.rows[0],
-                    backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)'
-                    ],
-                    borderColor: [
-                    'rgba(255, 99, 132, 1)'
-                    ],
-                    borderWidth: 1,
-                }]
-                }; 
-                
-                let chart = new Chart(ctx, {
-                type: 'bar',
-                data: graphdata,
-                options: {
-                    scales: {
-                        y: {
-                            display: false
-                        },
-                        x: {
-                            display: true
-                        }
+            let graphdata = {
+            datasets: [{
+                label: '来場者予定グラフ',
+                data: res.rows[0],
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1,
+            }]
+            }; 
+            
+            let chart = new Chart(ctx, {
+            type: 'bar',
+            data: graphdata,
+            options: {
+                scales: {
+                    y: {
+                        display: false
                     },
-                    plugins: {
-                        legend: {
-                        display: false,
-                        },
-                        }
+                    x: {
+                        display: true
                     }
-                })
-
-                let file = kaisaiti_cd + g_date
-
-                let out = fs.createWriteStream(graphDir + '/' + file +'.png');
-                let stream = canvas.createPNGStream();
-                stream.pipe(out);
+                },
+                plugins: {
+                    legend: {
+                    display: false,
+                    },
+                    }
+                }
             })
+
+            let file = kaisaiti_cd + g_date
+
+            let out = fs.createWriteStream(graphDir + '/' + file +'.png');
+            let stream = canvas.createPNGStream();
+            stream.pipe(out);
+    
+        }).catch((e) => {
+            console.error(e.stack)
         })
 }
 

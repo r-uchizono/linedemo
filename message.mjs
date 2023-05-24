@@ -29,13 +29,19 @@ export function message(){
         text: 'イベント受付にてご提示ください'
     }
 
+    let qr_errmessage = {
+        type: 'text',
+        text: 'QRコードを取得できませんでした'
+    }
+
     return{
         info_errmessage : info_errmessage,
         errmessage : errmessage,
         event_message : event_message,
         cancel_message : cancel_message,
         change_message : change_message,
-        qr_message : qr_message
+        qr_message : qr_message,
+        qr_errmessage : qr_errmessage
     }
 }
 
