@@ -11,27 +11,32 @@ export function message(){
 
     let event_message = {
         type: 'text',
-        text: '予約が完了しました'
+        text: '予約が完了しました。'
     }
 
     let cancel_message = {
         type: 'text',
-        text: '取消が完了しました'
+        text: '取消が完了しました。'
     }
 
     let change_message = {
         type: 'text',
-        text: '変更が完了しました'
+        text: '変更が完了しました。'
     }
 
     let qr_message = {
         type: 'text',
-        text: 'イベント受付にてご提示ください'
+        text: 'イベント受付にてご提示ください。'
     }
 
     let qr_errmessage = {
         type: 'text',
-        text: 'QRコードを取得できませんでした'
+        text: 'QRコードを取得に失敗しました。'
+    }
+
+    let held_message = {
+        type: 'text',
+        text: '予約される場合はイベント一覧からご予約ください。'
     }
 
     return{
@@ -41,7 +46,8 @@ export function message(){
         cancel_message : cancel_message,
         change_message : change_message,
         qr_message : qr_message,
-        qr_errmessage : qr_errmessage
+        qr_errmessage : qr_errmessage,
+        held_message : held_message
     }
 }
 

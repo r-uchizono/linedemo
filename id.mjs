@@ -38,8 +38,6 @@ export function id(event_data) {
 
                     //フォルダに保存
                     QRCode.toFile(path.join(event_data.imageDir, random_data.file + '.png'), userid, (error) => {
-                        //QRCode.toFile(path.join(event_data.imageDir, random_data.file + '.png'), userid, (error) => {
-                        //try catchでくくる41～57
                         try {
                             console.log('処理３')
 

@@ -1,0 +1,52 @@
+{
+    "type": "flex",
+    "altText": "開催イベント情報",
+    "contents": {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": "イベント名",
+                    "size": "16px",
+                    "margin": "none"
+                },
+                {
+                    "type": "text",
+                    "text": "会場名",
+                    "size": "16px"
+                },
+                {
+                    "type": "text",
+                    "text": "日程",
+                    "size": "16px"
+                },
+                {
+                    "type": "text",
+                    "text": "開催時間",
+                    "size": "16px"
+                },
+                {
+                    "type": "text",
+                    "text": "開催場所",
+                    "size": "16px"
+                },
+                {
+                    "type": "button",
+                    "action": {
+                        "type": "uri",
+                        "label": "住所",
+                        "uri": "https://www.google.com/maps/search/?api=1&query="
+                    },
+                    "offsetStart": "59px",
+                    "offsetTop": "-15px"
+                }
+            ],
+            "backgroundColor": "#FFFFFF",
+            "alignItems": "flex-start",
+            "height": "160px"
+        }
+    }
+}
