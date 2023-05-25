@@ -11,6 +11,7 @@ import {list, yoyaku, a_ninzu, c_ninzu} from './event.mjs'
 import {confirm, cancel, change} from './confirm.mjs'
 import {id} from './id.mjs'
 import {info} from './info.mjs'
+import {held} from './held.mjs'
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -104,6 +105,11 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 info(event_data)
             }
+            // ユーザーからのテキストメッセージが「お知らせ」だった場合のみ反応。
+            else if (event.message.text == process.env.HELD_MESSAGE) {
+
+                held(event_data)
+            }
         // この処理の対象をイベントタイプがポストバックだった場合。
         } else if (event.type == "postback") {
             // 予約テーブルへの挿入
@@ -136,21 +142,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             return
         }
     })
-
-    //すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
-    Promise.all(events_processed)
-        .then((res) => {
-            console.log(`${res.length} event(s) processed.`)
-        })
-        .catch((e) => {
-            console.error(
-                JSON.stringify({
-                    message: e.message,
-                    status: e.originalError.response.status,
-                    data: e.originalError.response.data,
-                })
-            )
-        })
 })
 
 app.listen(PORT, () => {

@@ -1,4 +1,30 @@
 // お知らせメッセージ
+export function b_infoquery(){
+    let query = {
+        text: "SELECT *" +
+            "  FROM m_event_base" +
+            " WHERE current_date BETWEEN start_ymd AND end_ymd" +
+            "    OR current_date < start_ymd" +
+            " ORDER BY start_ymd",
+    }
+    return{
+        query_base : query
+    }
+}
+
+export function u_infoquery(argument, argument2){
+    let query = {
+        text: "SELECT *" +
+            "  FROM m_user" +
+            " WHERE user_id = $1" +
+            "   AND event_cd = $2",
+        values: [argument, argument2],
+    }
+    return{
+        query_user : query
+    }
+}
+
 export function infoquery(argument){
     let query = {
         text: "SELECT naiyo"+
@@ -139,12 +165,13 @@ export function b_confirmquery(){
     }
 }
 
-export function u_confirmquery(argument){
+export function u_confirmquery(argument, argument2){
     let query = {
         text: "SELECT *" +
             "  FROM m_user" +
-            " WHERE user_id = $1",
-        values: [argument],
+            " WHERE user_id = $1" +
+            "   AND event_cd = $2",
+        values: [argument, argument2],
     }
     return{
         query_user : query
@@ -234,6 +261,64 @@ export function getuserquery(argument){
     }
     return{
         query_id : query
+    }
+}
+
+// 開催イベント情報メッセージ
+export function b_heldquery(){
+    let query = {
+        text: "SELECT *" +
+            "  FROM m_event_base" +
+            " WHERE current_date BETWEEN start_ymd AND end_ymd" +
+            "    OR current_date < start_ymd" +
+            " ORDER BY start_ymd",
+    }
+    return{
+        query_base : query
+    }
+}
+
+export function u_heldquery(argument, argument2){
+    let query = {
+        text: "SELECT *" +
+            "  FROM m_user" +
+            " WHERE user_id = $1" +
+            "   AND event_cd = $2",
+        values: [argument, argument2],
+    }
+    return{
+        query_user : query
+    }
+}
+
+export function heldquery(argument, argument2){
+    let query = {
+        text: "SELECT e1.*" +
+            "     , k.kaisaiti_nm" +
+            "     , t1.id as t1_id" +
+            "     , t2.id as t2_id" +
+            "  FROM m_event e1" +
+            " INNER JOIN m_kaisaiti k" +
+            "    ON e1.kaisaiti_cd = k.kaisaiti_cd" +
+            "  LEFT OUTER JOIN" +
+            "       t_yoyaku t1" +
+            "    ON e1.event_cd = t1.event_cd" +
+            "   AND e1.kaisaiti_cd = t1.kaisaiti_cd" +
+            "   AND e1.first_day = date_trunc('day',t1.reserve_time)" +
+            "   AND t1.user_id = $1" +
+            "  LEFT OUTER JOIN" +
+            "       t_yoyaku t2" +
+            "    ON e1.event_cd = t2.event_cd" +
+            "   AND e1.kaisaiti_cd = t2.kaisaiti_cd" +
+            "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
+            "   AND t2.user_id = $1" +
+            " WHERE e1.event_cd = $2" +
+            "   AND (e1.second_day = current_date" +
+            "   OR e1.first_day = current_date)",
+        values: [argument, argument2],
+    }
+    return{
+        query_held : query     
     }
 }
 
