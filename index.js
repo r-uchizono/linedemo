@@ -60,6 +60,9 @@ app.post("/", (req, res) => {
     app.render('index.js')
 })
 
+
+const userid = 'kadenko_test'
+
  
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -79,7 +82,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             events_processed : events_processed,
             bot : bot,
             graphDir : graphDir,
-            imageDir : imageDir
+            imageDir : imageDir,
+            userid : userid
         }
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。

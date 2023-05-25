@@ -23,14 +23,14 @@ export function list(event_data) {
                 .query(basequery.query_base)
                 .then((res) => {
 
-                    let userquery = u_eventquery(event_data.event.source.userId, res.rows[0].event_cd,"")
+                    let userquery = u_eventquery(event_data.userid, res.rows[0].event_cd,"")
 
                     let event_nm = res.rows[0].event_nm
 
                     return Promise.all([client.query(userquery.query_user), event_nm])
 
                 }).then(([res, event_nm]) => {
-                    let eventquery = e_eventquery(event_data.event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd)
+                    let eventquery = e_eventquery(event_data.userid, res.rows[0].event_cd, res.rows[0].eigyo_cd)
 
                     return Promise.all([client.query(eventquery.query_event), event_nm])
                 }).then(([res, event_nm]) => {
@@ -149,7 +149,7 @@ export function list(event_data) {
 
 export function yoyaku(event_data){
     // DB登録処理
-    let entry_query = entryquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2], event_data.event.source.userId, event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000')
+    let entry_query = entryquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2], event_data.userid, event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000')
 
     let setid_query = setidquery()
 
