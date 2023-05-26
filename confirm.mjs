@@ -4,6 +4,7 @@ import {message} from './message.mjs'
 import { b_confirmquery, cancelquery, changequery, getquery, u_confirmquery, y_confirmquery } from './query.mjs'
 
 export function confirm(event_data){
+    let errmessage = message()
     //データを取りだす
     let bufferData = fs.readFileSync('kakunin.json')
     // データを文字列に変換
@@ -93,12 +94,16 @@ export function confirm(event_data){
                         data[0].contents.contents = []
                     }
 
-                    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
-      
+                    if(row == 0)
+                    {
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.confirm_errmessage))
+                    }
+                    else{
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
+                    }
+                    
                 }).catch((e) => {
                     console.error(e.stack)
-                    let errmessage = message()
 
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
                 })
