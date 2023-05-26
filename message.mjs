@@ -39,6 +39,11 @@ export function message(){
         text: '予約される場合はイベント一覧からご予約ください。'
     }
 
+    let confirm_errmessage = {
+        type: 'text',
+        text: 'ご予約のイベントはありません。'
+    }
+
     return{
         info_errmessage : info_errmessage,
         errmessage : errmessage,
@@ -47,7 +52,8 @@ export function message(){
         change_message : change_message,
         qr_message : qr_message,
         qr_errmessage : qr_errmessage,
-        held_message : held_message
+        held_message : held_message,
+        confirm_errmessage : confirm_errmessage
     }
 }
 
