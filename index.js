@@ -59,10 +59,6 @@ const client = new pg.Pool({
 app.post("/", (req, res) => {
     app.render('index.js')
 })
-
-
-const userid = 'kadenko_test'
-
  
 // -----------------------------------------------------------------------------
 // ルーター設定
@@ -82,8 +78,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             events_processed : events_processed,
             bot : bot,
             graphDir : graphDir,
-            imageDir : imageDir,
-            userid : userid
+            imageDir : imageDir
         }
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。

@@ -16,7 +16,7 @@ export function id(event_data) {
     let lifeTime = new Date().setHours(new Date().getHours() + LIFE_TIME)
     let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
 
-    let time_query = lifetimequery(newTime, event_data.userid)
+    let time_query = lifetimequery(newTime, event_data.event.source.userId)
     let errmessage = message()
 
     event_data.client.connect(function (err, client) {
@@ -28,7 +28,7 @@ export function id(event_data) {
                 .then(() => {
                     console.log('処理１')
 
-                    const id_query = getuserquery(event_data.userid)
+                    const id_query = getuserquery(event_data.event.source.userId)
 
                     return client.query(id_query.query_id)
                 })
