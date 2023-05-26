@@ -33,7 +33,11 @@ export function graph(event_cd, kaisaiti_cd, g_date, client, graphDir){
 
                 select = 
                 "( SELECT" +
-                "      SUM(reserve_a_count) + SUM(reserve_c_count) " +
+                "      COALESCE(SUM(reserve_a_count) + SUM(reserve_c_count), 10) +" +
+                "      CASE" +
+                "       WHEN SUM(reserve_a_count) + SUM(reserve_c_count) IS NOT NULL THEN 10" +
+                "       ELSE 0" +
+                "      END" +
                 "  FROM" +
                 "      t_yoyaku " +
                 "  WHERE" +
