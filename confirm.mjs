@@ -25,7 +25,7 @@ export function confirm(event_data){
                 .then((res) => {
                     let event_cd = res.rows[0].event_cd
 
-                    let userquery = u_confirmquery(event_data.event.source.userId, event_cd)
+                    let userquery = u_confirmquery(event_data.userid, event_cd)
                     return Promise.all([client.query(userquery.query_user), event_cd])
 
                 }).then(([res, event_cd]) => {

@@ -23,7 +23,7 @@ export function held(event_data) {
                     let event_cd = res.rows[0].event_cd
                     event_nm = res.rows[0].event_nm
 
-                    let userquery = u_heldquery(event_data.event.source.userId, event_cd)
+                    let userquery = u_heldquery(event_data.userid, event_cd)
                     return Promise.all([client.query(userquery.query_user), event_cd])
                 }).then(([res, event_cd]) => {
                     let userid = res.rows[0].user_id
