@@ -3,8 +3,9 @@ export function b_infoquery(){
     let query = {
         text: "SELECT *" +
             "  FROM m_event_base" +
-            " WHERE current_date BETWEEN start_ymd AND end_ymd" +
-            "    OR current_date < start_ymd" +
+            " WHERE (current_date BETWEEN start_ymd AND end_ymd" +
+            "    OR current_date < start_ymd)" +
+            "   AND kaisai_flg = TRUE" +
             " ORDER BY start_ymd",
     }
     return{
@@ -42,8 +43,9 @@ export function b_eventquery(){
     let query = {
         text: "SELECT *" +
             "  FROM m_event_base t1 " +
-            " WHERE current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
-            "    OR current_date < t1.start_ymd" +
+            " WHERE (current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
+            "    OR current_date < t1.start_ymd)" +
+            "   AND t1.kaisai_flg = TRUE" +
             " ORDER BY t1.start_ymd",
     }
     return{
@@ -156,8 +158,9 @@ export function b_confirmquery(){
     let query = {
         text: "SELECT *" +
             "  FROM m_event_base t1 " +
-            " WHERE current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
-            "    OR current_date < t1.start_ymd" +
+            " WHERE (current_date BETWEEN t1.start_ymd AND t1.end_ymd" +
+            "    OR current_date < t1.start_ymd)" +
+            "   AND t1.kaisai_flg = TRUE" +
             " ORDER BY t1.start_ymd",
     }
     return{
@@ -269,8 +272,9 @@ export function b_heldquery(){
     let query = {
         text: "SELECT *" +
             "  FROM m_event_base" +
-            " WHERE current_date BETWEEN start_ymd AND end_ymd" +
-            "    OR current_date < start_ymd" +
+            " WHERE (current_date BETWEEN start_ymd AND end_ymd" +
+            "    OR current_date < start_ymd)" +
+            "   AND kaisai_flg = TRUE" +
             " ORDER BY start_ymd",
     }
     return{
