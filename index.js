@@ -223,7 +223,7 @@ const setUserInfo = (req, res) => {
             "     , :$6 " +
             " ) ",
 
-        values: [data.user_id, "2023B", "200", data.torihikisa_nm, data.torihikisa_cd, json.user_nm],
+        values: [data.user_id, "2023B", "200", data.torihikisa_nm, data.torihikisa_cd, data.user_nm],
     }
 
 
