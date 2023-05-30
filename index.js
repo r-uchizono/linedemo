@@ -215,12 +215,12 @@ const setUserInfo = (req, res) => {
             "     , user_nm " +
             " ) " +
             " VALUES ( " +
-            "     :$1 " +
-            "     , :$2 " +
-            "     , :$3 " +
-            "     , :$4 " +
-            "     , :$5 " +
-            "     , :$6 " +
+            "     $1 " +
+            "     , $2 " +
+            "     , $3 " +
+            "     , $4 " +
+            "     , $5 " +
+            "     , $6 " +
             " ) ",
 
         values: [data.user_id, "2023B", "200", data.torihikisa_nm, data.torihikisa_cd, data.user_nm],
