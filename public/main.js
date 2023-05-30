@@ -93,7 +93,7 @@ function getProfile() {
             const displayName = document.getElementById('customerName');
             const displayUserId = document.getElementById('userId');
             displayName.value = name;
-            displayUserId.innerHTML = profile.userId;
+            displayUserId.value = profile.userId;
         })
         .catch((err) => {
             alert(err)
