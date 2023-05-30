@@ -166,16 +166,16 @@ const getUserInfo = (req, res) => {
         response.json().then(json => {
             const lineId = json.sub;
             const userName = json.name;
-            const select_query = {
-                text: `SELECT * FROM users WHERE line_uid='${lineId}';`
-            };
+            //const select_query = {
+            //    text: `SELECT * FROM users WHERE line_uid='${lineId}';`
+            //};
 
-            connection.query(select_query)
-                .then(data => {
-                    console.log('data.rows[0]:', data.rows[0]);
-                    const age = data.rows[0].age;
-                    res.status(200).send({ age });
-                }).catch(e => console.log(e));
+            //connection.query(select_query)
+            //    .then(data => {
+            //        console.log('data.rows[0]:', data.rows[0]);
+            //        const age = data.rows[0].age;
+            //        res.status(200).send({ age });
+            //    }).catch(e => console.log(e));
         });
     }).catch(e => console.log(e));
 }
