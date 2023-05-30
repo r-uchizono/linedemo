@@ -155,6 +155,7 @@ app.post('/api', (req, res) => getUserInfo(req, res))
 const getUserInfo = (req, res) => {
     const data = req.body;
     const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
+    console.log('postData:', postData);
     fetch('https://api.line.me/oauth2/v2.1/verify', {
         method: 'POST',
         headers: {
