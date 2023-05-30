@@ -52,9 +52,9 @@ window.onload = () => {
 
     //LIFFÇ≈óßÇøè„Ç∞ÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©ÇÃîªíË
     if (liff.isInClient()) {
-        pElement.innerHTML = 'Ç±ÇÍÇÕLIFFâÊñ Ç≈Ç∑'
+        pElement.innerHTML = 'YES LIFF'
     } else {
-        pElement.innerHTML = 'Ç±ÇÍÇÕLIFFâÊñ Ç∂Ç·Ç†ÇËÇ‹ÇπÇÒ'
+        pElement.innerHTML = 'NO LIFF'
     }
 
     divPage.appendChild(pElement);
