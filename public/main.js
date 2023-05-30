@@ -150,37 +150,37 @@ function getProfile() {
         });
 }
 
-function sendMessage(message) {
-    liff
-        .sendMessages([
-            {
-                type: "text",
-                text: message,
-            },
-        ])
-        .then(() => {
-            alert("message sent");
-        })
-        .catch((err) => {
-            alert(err);
-        });
-}
+//function sendMessage(message) {
+//    liff
+//        .sendMessages([
+//            {
+//                type: "text",
+//                text: message,
+//            },
+//        ])
+//        .then(() => {
+//            alert("message sent");
+//        })
+//        .catch((err) => {
+//            alert(err);
+//        });
+//}
 
-function scanCode() {
-    liff
-        .scanCodeV2()
-        .then((result) => {
-            alert(result);
-        })
-        .catch((err) => {
-            alert(err);
-        });
-}
-function friendshipFlag() {
-    liff.getFriendship().then((data) => {
-        alert(data.friendFlag);
-    })
-        .catch((err) => {
-            alert(err);
-        });
-}
+//function scanCode() {
+//    liff
+//        .scanCodeV2()
+//        .then((result) => {
+//            alert(result);
+//        })
+//        .catch((err) => {
+//            alert(err);
+//        });
+//}
+//function friendshipFlag() {
+//    liff.getFriendship().then((data) => {
+//        alert(data.friendFlag);
+//    })
+//        .catch((err) => {
+//            alert(err);
+//        });
+//}
