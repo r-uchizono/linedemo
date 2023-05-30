@@ -17,30 +17,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="col-12 col-md-6">
-                 <h2 class="mb-4">お客様情報情報登録</h2>
-                 <form>
-                     <div class="mb-3">
-                         <label for="companyName" class="form-label">会社名</label>
-                         <input type="text" class="form-control" id="companyName" placeholder="例：株式会社〇〇">
-                     </div>
-                     <div class="mb-3">
-                         <label for="customerName" class="form-label">氏名</label>
-                         <input type="text" class="form-control" id="customerName" placeholder="例：山田 太郎">
-                     </div>
-                     <div class="mb-3">
-                         <label for="contactPerson" class="form-label">得意先コード</label>
-                         <input type="text" class="form-control" id="contactPerson" placeholder="例：12345">
-                     </div>
-                     <div class="mb-3">
-                         <label for="contactPerson" class="form-label">ユーザーID(非表示)</label>
-                         <input type="text" class="form-control" id="userId" placeholder="例：12345">
-                     </div>
-                     <button type="submit" class="btn btn-primary">登録</button>
-                 </form>
-             </div>
-         </div>
-     </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <h2 class="mb-4">お客様情報情報登録</h2>
+                <form id="form">
+                    <div class="mb-3">
+                        <label for="companyName" class="form-label">会社名</label>
+                        <input type="text" class="form-control" id="companyName" name="companyName" placeholder="例：株式会社〇〇">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">氏名</label>
+                        <input type="text" class="form-control" id="customerName" name="customerName" placeholder="例：山田 太郎">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactPerson" class="form-label">得意先コード</label>
+                        <input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="例：12345">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactPerson" class="form-label">ユーザーID(非表示)</label>
+                        <input type="text" class="form-control" id="userId" name="userId" placeholder="例：12345">
+                    </div>
+                    <button type="submit" class="btn btn-primary">登録</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- liffを使うためのCDN -->
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 

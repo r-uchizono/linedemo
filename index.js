@@ -164,8 +164,18 @@ const getUserInfo = (req, res) => {
         body: postData
     }).then(response => {
         response.json().then(json => {
-            console.log('response data:', json);
-            //ここにPostgresからデータを取得する処理を実装する
+            const lineId = json.sub;
+            const userName = json.name;
+            const select_query = {
+                text: `SELECT * FROM users WHERE line_uid='${lineId}';`
+            };
+
+            connection.query(select_query)
+                .then(data => {
+                    console.log('data.rows[0]:', data.rows[0]);
+                    const age = data.rows[0].age;
+                    res.status(200).send({ age });
+                }).catch(e => console.log(e));
         });
     }).catch(e => console.log(e));
 }

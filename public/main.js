@@ -79,6 +79,13 @@ window.onload = () => {
 
     divPage.appendChild(pElement);
 }
+
+//form—v‘f‚Ìid‘®«‚ğæ“¾‚µA•Ï”form‚É‘ã“ü
+let from = document.getElementById('form');
+form.onsubmit = function (event) {
+    event.preventDefault();
+    console.log(form.userId.value)
+}
 //const liffId = "1660891355-wrO0ydxA";
 //liff.init({
 //    liffId: liffId,
