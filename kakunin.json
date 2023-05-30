@@ -47,14 +47,32 @@
                                 "label": "住所",
                                 "uri": "https://www.google.com/maps/search/?api=1&query="
                             },
-                            "offsetStart": "29px",
+                            "offsetStart": "59px",
                             "offsetTop": "-15px"
                         },
                         {
                             "type": "text",
-                            "text": "来場予定時間",
+                            "text": "予約時間",
                             "size": "16px",
                             "offsetTop": "-30px"
+                        },
+                        {
+                          "type": "text",
+                          "text": "予約人数",
+                          "size": "16px",
+                          "offsetTop": "-30px"
+                        },
+                        {
+                          "type": "text",
+                          "text": "大人",
+                          "size": "16px",
+                          "offsetTop": "-30px"
+                        },
+                        {
+                          "type": "text",
+                          "text": "小人",
+                          "size": "16px",
+                          "offsetTop": "-30px"
                         }
                     ],
                     "backgroundColor": "#fbdac8",

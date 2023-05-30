@@ -118,6 +118,18 @@
           "style": "primary",
           "margin": "5px",
           "color": "#f3981d"
+        },
+        {
+          "type": "button",
+          "action": {
+            "type": "postback",
+            "label": "10名",
+            "data": "a_ninzu=10"
+          },
+          "height": "sm",
+          "style": "primary",
+          "margin": "5px",
+          "color": "#f3981d"
         }
       ],
       "backgroundColor": "#fbdac8"
