@@ -80,7 +80,7 @@ window.onload = () => {
                     })
             }).catch(e => console.log(e));
 
-            getProfile();
+            //getProfile();
         }).catch((err) => {
             alert(err);
         });

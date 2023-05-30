@@ -173,7 +173,7 @@ const getUserInfo = (req, res) => {
                 values: [lineId],
             }
 
-            connection.query(query)
+            client.query(query)
                 .then(data => {
                     let obj;
                     if (data.rows.length > 0) {
