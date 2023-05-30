@@ -91,9 +91,9 @@ function getProfile() {
         .then((profile) => {
             const name = profile.displayName;
             const displayName = document.getElementById('customerName');
-            //const displayUserId = document.getElementById('userId');
+            const displayUserId = document.getElementById('userId');
             displayName.value = name;
-            //displayUserId.innerHTML = profile.userId;
+            displayUserId.innerHTML = profile.userId;
         })
         .catch((err) => {
             alert(err)
