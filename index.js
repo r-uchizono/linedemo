@@ -39,6 +39,7 @@ if (!fs.existsSync(graphDir)) {
     fs.mkdirSync(graphDir)
 }
 app.use(express.static(graphDir))
+app.use(express.static('public'))
 
 app.use(express.urlencoded({
     extended: true
