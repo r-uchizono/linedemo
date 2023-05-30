@@ -146,3 +146,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)
 })
+
+// お客様情報登録LIFF用
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.post('/api', (req, res) => getUserInfo(req, res))
+
+const getUserInfo = (req, res) => {
+    const data = req.body;
+    console.log('id_token:', data.id_token);
+}

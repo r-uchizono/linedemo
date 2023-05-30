@@ -53,6 +53,23 @@ window.onload = () => {
             liffId: myLiffId,
             withLoginOnExternalBrowser: true,
         }).then(() => {
+            //idトークンによる年齢情報の取得
+            const idToken = liff.getIDToken();
+            const jsonData = JSON.stringify({
+                id_token: idToken
+            });
+
+            fetch('/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData,
+                creadentials: 'same-origin'
+            }).then(res => {
+                //ここにレスポンス返ってくる
+            }).catch(e => console.log(e));
+
             getProfile();
         }).catch((err) => {
             alert(err);
