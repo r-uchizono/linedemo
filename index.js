@@ -166,16 +166,37 @@ const getUserInfo = (req, res) => {
         response.json().then(json => {
             const lineId = json.sub;
             const userName = json.name;
-            //const select_query = {
-            //    text: `SELECT * FROM users WHERE line_uid='${lineId}';`
-            //};
+            const query = {
+                text: "SELECT *" +
+                    "  FROM m_user" +
+                    " WHERE user_id = $1",
+                values: [lineId],
+            }
 
-            //connection.query(select_query)
-            //    .then(data => {
-            //        console.log('data.rows[0]:', data.rows[0]);
-            //        const age = data.rows[0].age;
-            //        res.status(200).send({ age });
-            //    }).catch(e => console.log(e));
+            connection.query(query)
+                .then(data => {
+                    let obj;
+                    if (data.rows.length > 0) {
+                        console.log("GetData Succes");
+                        console.log('data.rows[0]:', data.rows[0]);
+                        obj = {
+                            companyName: data.rows[0].torihikisa_nm,
+                            customerName: userName,
+                            contactPerson: data.rows[0].torihikisa_cd,
+                            userId: lineId,
+                        }
+                    } else {
+                        console.log("GetData failed");
+                        obj = {
+                            companyName: "aaa",
+                            customerName: userName,
+                            contactPerson: "",
+                            userId: lineId,
+                        }
+                    }
+                    
+                    res.status(200).send(obj);
+                }).catch(e => console.log(e));
         });
     }).catch(e => console.log(e));
 }

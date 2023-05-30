@@ -67,17 +67,24 @@ window.onload = () => {
                 body: jsonData,
                 creadentials: 'same-origin'
             }).then(res => {
-                //ここにレスポンス返ってくる
+                res.json()
+                    .then(json => {
+                        const displayName = document.getElementById('customerName');
+                        const displayUserId = document.getElementById('userId');
+                        const displayCompanyName = document.getElementById('companyName');
+                        const displayContactPerson = document.getElementById('contactPerson');
+                        displayName.value = json.customerName;
+                        displayUserId.value = json.userId;
+                        displayCompanyName.value = json.companyName;
+                        displayContactPerson.value = json.contactPerson;
+                    })
             }).catch(e => console.log(e));
 
             getProfile();
         }).catch((err) => {
             alert(err);
         });
-    } else {
     }
-
-    divPage.appendChild(pElement);
 }
 
 //form要素のid属性を取得し、変数formに代入
