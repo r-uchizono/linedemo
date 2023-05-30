@@ -69,14 +69,14 @@ window.onload = () => {
             }).then(res => {
                 res.json()
                     .then(json => {
-                        const displayName = document.getElementById('customerName');
-                        const displayUserId = document.getElementById('userId');
-                        const displayCompanyName = document.getElementById('companyName');
-                        const displayContactPerson = document.getElementById('contactPerson');
-                        displayName.value = json.customerName;
-                        displayUserId.value = json.userId;
-                        displayCompanyName.value = json.companyName;
-                        displayContactPerson.value = json.contactPerson;
+                        const displayName = document.getElementById('user_nm');
+                        const displayUserId = document.getElementById('user_id');
+                        const displayCompanyName = document.getElementById('torihikisa_nm');
+                        const displayContactPerson = document.getElementById('torihikisa_cd');
+                        displayName.value = json.user_nm;
+                        displayUserId.value = json.user_id;
+                        displayCompanyName.value = json.torihikisa_nm;
+                        displayContactPerson.value = json.torihikisa_cd;
                     })
             }).catch(e => console.log(e));
 
@@ -90,8 +90,26 @@ window.onload = () => {
 //form—v‘f‚Ìid‘®«‚ðŽæ“¾‚µA•Ï”form‚É‘ã“ü
 let from = document.getElementById('form');
 form.onsubmit = function (event) {
-    event.preventDefault();
-    console.log(form.userId.value)
+    const jsonData = JSON.stringify({
+        torihikisa_nm: form.torihikisa_nm.value,
+        user_nm: form.user_nm.value,
+        torihikisa_cd: form.torihikisa_cd.value,
+        user_id: form.user_id.value,
+    });
+
+    fetch('/toroku', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonData,
+        creadentials: 'same-origin'
+    }).then(res => {
+        res.json()
+            .then(json => {
+                alert("OK");
+            })
+    }).catch(e => console.log(e));
 }
 //const liffId = "1660891355-wrO0ydxA";
 //liff.init({

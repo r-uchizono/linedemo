@@ -150,7 +150,8 @@ app.listen(PORT, () => {
 // お客様情報登録LIFF用
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.post('/api', (req, res) => getUserInfo(req, res))
+app.post('/api', (req, res) => getUserInfo(req, res));
+app.post('/toroku', (req, res) => setUserInfo(req, res));
 
 const getUserInfo = (req, res) => {
     const data = req.body;
@@ -180,23 +181,75 @@ const getUserInfo = (req, res) => {
                         console.log("GetData Succes");
                         console.log('data.rows[0]:', data.rows[0]);
                         obj = {
-                            companyName: data.rows[0].torihikisa_nm,
-                            customerName: userName,
-                            contactPerson: data.rows[0].torihikisa_cd,
-                            userId: lineId,
+                            torihikisa_nm: data.rows[0].torihikisa_nm,
+                            user_nm: userName,
+                            torihikisa_cd: data.rows[0].torihikisa_cd,
+                            user_id: lineId,
                         }
                     } else {
                         console.log("GetData failed");
                         obj = {
-                            companyName: "aaa",
-                            customerName: userName,
-                            contactPerson: "",
-                            userId: lineId,
+                            torihikisa_nm: "aaa",
+                            user_nm: userName,
+                            torihikisa_cd: "",
+                            user_id: lineId,
                         }
                     }
-                    
+
                     res.status(200).send(obj);
                 }).catch(e => console.log(e));
         });
     }).catch(e => console.log(e));
+}
+
+const setUserInfo = (req, res) => {
+    const data = req.body;
+    const query = {
+        text: " INSERT " +
+            " INTO public.m_user( " +
+            "     user_id " +
+            "     , event_cd " +
+            "     , eigyo_cd " +
+            "     , torihikisa_nm " +
+            "     , torihikisa_cd " +
+            "     , user_nm " +
+            " ) " +
+            " VALUES ( " +
+            "     :$1 " +
+            "     , :$2 " +
+            "     , :$3 " +
+            "     , :$4 " +
+            "     , :$5 " +
+            "     , :$6 " +
+            " ) ",
+
+        values: [data.user_id, "2023B", "200", data.torihikisa_nm, data.torihikisa_cd, json.user_nm],
+    }
+
+
+
+    client.query(query)
+        .then(data => {
+            //let obj;
+            //if (data.rows.length > 0) {
+            //    console.log("GetData Succes");
+            //    console.log('data.rows[0]:', data.rows[0]);
+            //    obj = {
+            //        torihikisa_nm: data.rows[0].torihikisa_nm,
+            //        user_nm: userName,
+            //        torihikisa_cd: data.rows[0].torihikisa_cd,
+            //        user_id: lineId,
+            //    }
+            //} else {
+            //    //console.log("GetData failed");
+            //    //obj = {
+            //    //    torihikisa_nm: "aaa",
+            //    //    user_nm: userName,
+            //    //    torihikisa_cd: "",
+            //    //    user_id: lineId,
+            //    //}
+            //}
+
+            res.status(200).send("OK");
+        }).catch(e => console.log(e));
 }
