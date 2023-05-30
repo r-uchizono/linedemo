@@ -7,11 +7,11 @@ import pg from 'pg'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import {list, yoyaku, a_ninzu, c_ninzu} from './event.mjs'
-import {confirm, cancel, change} from './confirm.mjs'
-import {id} from './id.mjs'
-import {info} from './info.mjs'
-import {held} from './held.mjs'
+import { list, yoyaku, a_ninzu, c_ninzu } from './event.mjs'
+import { confirm, cancel, change } from './confirm.mjs'
+import { id } from './id.mjs'
+import { info } from './info.mjs'
+import { held } from './held.mjs'
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -60,7 +60,7 @@ const client = new pg.Pool({
 app.post("/", (req, res) => {
     app.render('index.js')
 })
- 
+
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
@@ -73,13 +73,13 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
 
         let event_data = {
-            client : client,
-            event : event,
-            req : req,
-            events_processed : events_processed,
-            bot : bot,
-            graphDir : graphDir,
-            imageDir : imageDir
+            client: client,
+            event: event,
+            req: req,
+            events_processed: events_processed,
+            bot: bot,
+            graphDir: graphDir,
+            imageDir: imageDir
         }
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
@@ -109,7 +109,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 held(event_data)
             }
-        // この処理の対象をイベントタイプがポストバックだった場合。
+            // この処理の対象をイベントタイプがポストバックだった場合。
         } else if (event.type == "postback") {
             // 予約テーブルへの挿入
             if (event.postback.data.split('=')[0] == "event_id") {
@@ -124,7 +124,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             //　小人人数登録
             else if (event.postback.data.split('=')[0] == "c_ninzu") {
 
-                c_ninzu(event_data)          
+                c_ninzu(event_data)
             }
             //　予約取消
             else if (event.postback.data.split('=')[0] == "torikesi") {
@@ -154,5 +154,17 @@ app.post('/api', (req, res) => getUserInfo(req, res))
 
 const getUserInfo = (req, res) => {
     const data = req.body;
-    console.log('id_token:', data.id_token);
+    const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
+    fetch('https://api.line.me/oauth2/v2.1/verify', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: postData
+    }).then(response => {
+        response.json().then(json => {
+            console.log('response data:', json);
+            //ここにPostgresからデータを取得する処理を実装する
+        });
+    }).catch(e => console.log(e));
 }
