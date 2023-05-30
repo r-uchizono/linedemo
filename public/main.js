@@ -45,16 +45,19 @@
 /*const name = '–¼‘O‚ª•s–¾‚Å‚·';*/
 window.onload = () => {
     const myLiffId = '1660891355-wrO0ydxA';
-    const divPage = document.getElementById('liff-page');
 
     //p—v‘f‚ÌŽæ“¾
-    const pElement = document.getElementById('liff-message');
-
     //LIFF‚Å—§‚¿ã‚°‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ì”»’è
     if (liff.isInClient()) {
-        pElement.innerHTML = 'YES LIFF'
+        liff.init({
+            liffId: myLiffId,
+            withLoginOnExternalBrowser: true,
+        }).then(() => {
+            getProfile();
+        }).catch((err) => {
+            alert(err);
+        });
     } else {
-        pElement.innerHTML = 'NO LIFF'
     }
 
     divPage.appendChild(pElement);
