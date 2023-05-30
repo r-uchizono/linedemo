@@ -90,6 +90,7 @@ window.onload = () => {
 //form—v‘f‚Ìid‘®«‚ğæ“¾‚µA•Ï”form‚É‘ã“ü
 let from = document.getElementById('form');
 form.onsubmit = function (event) {
+    event.preventDefault();
     const jsonData = JSON.stringify({
         torihikisa_nm: form.torihikisa_nm.value,
         user_nm: form.user_nm.value,
