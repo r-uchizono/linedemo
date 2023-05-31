@@ -229,27 +229,7 @@ const setUserInfo = (req, res) => {
 
 
     client.query(query)
-        .then(data => {
-            //let obj;
-            //if (data.rows.length > 0) {
-            //    console.log("GetData Succes");
-            //    console.log('data.rows[0]:', data.rows[0]);
-            //    obj = {
-            //        torihikisa_nm: data.rows[0].torihikisa_nm,
-            //        user_nm: userName,
-            //        torihikisa_cd: data.rows[0].torihikisa_cd,
-            //        user_id: lineId,
-            //    }
-            //} else {
-            //    //console.log("GetData failed");
-            //    //obj = {
-            //    //    torihikisa_nm: "aaa",
-            //    //    user_nm: userName,
-            //    //    torihikisa_cd: "",
-            //    //    user_id: lineId,
-            //    //}
-            //}
-
-            res.status(200).send("OK");
+        .then(() => {
+            res.status(200).send({ status: "OK"});
         }).catch(e => console.log(e));
 }
