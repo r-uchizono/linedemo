@@ -34,19 +34,16 @@ window.onload = () => {
                         displayCompanyName.value = json.torihikisa_nm;
                         displayContactPerson.value = json.torihikisa_cd;
 
-                        const loader = document.getElementById('loader');
-                        loader.classList.add('loaded');
+                        stopload();
                     })
             }).catch((e) => {
                 console.log(e);
-                const loader = document.getElementById('loader');
-                loader.classList.add('loaded');
+                stopload();
             });
 
         }).catch((err) => {
             console.log(err);
-            const loader = document.getElementById('loader');
-            loader.classList.add('loaded');
+            stopload();
         });
     }
 }
@@ -85,19 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('spinner').style.height = h + "px";
     document.getElementById('spinner').style.display = 'block';
 });
-
-window.addEventListener('load', function () {
-    document.getElementById('wrap').style.display = 'block';
-    setTimeout(function () {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('spinner').style.display = 'none';
-    }, 500);
-});
-
-// 5秒たったら強制的にロード画面を非表示
-setTimeout(function () {
-    stopload();
-}, 5000);
 
 function stopload() {
     document.getElementById('wrap').style.display = 'block';
