@@ -18,6 +18,8 @@ window.onload = () => {
             });
             liff.getProfile()
                 .then((profile) => {
+                    console.log("userIdÅF" + profile.userId);
+                    console.log("profileÅF", profile);
                     const name = profile.displayName;
                     const displayName = document.getElementById('user_nm');
                     const displayUserId = document.getElementById('user_id');
