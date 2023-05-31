@@ -19,8 +19,8 @@ window.onload = () => {
             liff.getProfile()
                 .then((profile) => {
                     const name = profile.displayName;
-                    const displayName = document.getElementById('customerName');
-                    const displayUserId = document.getElementById('userId');
+                    const displayName = document.getElementById('user_nm');
+                    const displayUserId = document.getElementById('user_id');
                     displayName.value = name;
                     displayUserId.innerHTML = profile.userId;
                 })
