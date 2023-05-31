@@ -17,31 +17,33 @@ window.onload = () => {
                 id_token: idToken
             });
 
-            fetch('/api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData,
-                creadentials: 'same-origin'
-            }).then(res => {
-                res.json()
-                    .then(json => {
-                        const displayName = document.getElementById('user_nm');
-                        const displayUserId = document.getElementById('user_id');
-                        const displayCompanyName = document.getElementById('torihikisa_nm');
-                        const displayContactPerson = document.getElementById('torihikisa_cd');
-                        displayName.value = json.user_nm;
-                        displayUserId.value = json.user_id;
-                        displayCompanyName.value = json.torihikisa_nm;
-                        displayContactPerson.value = json.torihikisa_cd;
+            //fetch('/api', {
+            //    method: 'POST',
+            //    headers: {
+            //        'Content-Type': 'application/json'
+            //    },
+            //    body: jsonData,
+            //    creadentials: 'same-origin'
+            //}).then(res => {
+            //    res.json()
+            //        .then(json => {
+            //            const displayName = document.getElementById('user_nm');
+            //            const displayUserId = document.getElementById('user_id');
+            //            const displayCompanyName = document.getElementById('torihikisa_nm');
+            //            const displayContactPerson = document.getElementById('torihikisa_cd');
+            //            displayName.value = json.user_nm;
+            //            displayUserId.value = json.user_id;
+            //            displayCompanyName.value = json.torihikisa_nm;
+            //            displayContactPerson.value = json.torihikisa_cd;
 
-                        stopload();
-                    })
-            }).catch((e) => {
-                console.log(e);
-                stopload();
-            });
+            //            stopload();
+            //        })
+            //}).catch((e) => {
+            //    console.log(e);
+            //    stopload();
+            //});
+            stopload();
+            getProfile();
 
         }).catch((err) => {
             console.log(err);
@@ -102,4 +104,18 @@ function stopload() {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('spinner').style.display = 'none';
     }, 500);
+}
+
+function getProfile() {
+    liff.getProfile()
+        .then((profile) => {
+            const name = profile.displayName;
+            const displayName = document.getElementById('customerName');
+            const displayUserId = document.getElementById('userId');
+            displayName.value = name;
+            displayUserId.innerHTML = profile.userId;
+        })
+        .catch((err) => {
+            alert(err)
+        });
 }
