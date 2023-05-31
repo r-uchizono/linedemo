@@ -35,6 +35,8 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-6">
                             <h2 class="mb-4">お客様情報情報登録</h2>
+                            <label id="succesLbl" class="form-label">登録しました</label>
+                            <label id="failedLbl" class="form-label">登録失敗しました</label>
                             <form id="form">
                                 <div class="mb-3">
                                     <label for="companyName" class="form-label">会社名</label>
@@ -52,7 +54,7 @@
                                     <label for="contactPerson" class="form-label">ユーザーID(非表示)</label>
                                     <input type="text" class="form-control" id="user_id" name="user_id" placeholder="例：12345">
                                 </div>
-                                <button type="submit" class="btn btn-primary">登録</button>
+                                <button type="submit" id="toroku_btn" class="btn btn-primary">登録</button>
                             </form>
                         </div>
                     </div>

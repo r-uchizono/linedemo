@@ -1,4 +1,5 @@
 
+// “Çž
 window.onload = () => {
     const myLiffId = '1660891355-wrO0ydxA';
 
@@ -48,8 +49,10 @@ window.onload = () => {
     }
 }
 
+// submitƒCƒxƒ“ƒgŽæ“¾‚Ì‚½‚ß
 let from = document.getElementById('form');
 form.onsubmit = function (event) {
+    document.getElementById('toroku_btn').disabled = "disabled";
     event.preventDefault();
     const jsonData = JSON.stringify({
         torihikisa_nm: form.torihikisa_nm.value,
@@ -68,15 +71,24 @@ form.onsubmit = function (event) {
     }).then(res => {
         res.json()
             .then(json => {
-                alert("OK");
+                document.getElementById('succesLbl').style.display = 'block';
+                document.getElementById('failedLbl').style.display = 'none';
+                document.getElementById('toroku_btn').disabled = null;
             })
-    }).catch(e => console.log(e));
+    }).catch((e) => {
+        console.log(e);
+        document.getElementById('succesLbl').style.display = 'none';
+        document.getElementById('failedLbl').style.display = 'block';
+        document.getElementById('toroku_btn').disabled = null;
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
     var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
     document.getElementById('wrap').style.display = 'none';
+    document.getElementById('succesLbl').style.display = 'none';
+    document.getElementById('failedLbl').style.display = 'none';
     document.getElementById('loading').style.height = h + "px";
     document.getElementById('loading').style.display = 'block';
     document.getElementById('spinner').style.height = h + "px";
