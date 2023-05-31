@@ -75,75 +75,34 @@ form.onsubmit = function (event) {
             })
     }).catch(e => console.log(e));
 }
-//const liffId = "1660891355-wrO0ydxA";
-//liff.init({
-//    liffId: liffId,
-//    withLoginOnExternalBrowser: true,
-//}).then(() => {
-//    getProfile();
-//}).catch((err) => {
-//    alert(err);
-//})
 
-//let query = {
-//    text: "SELECT *" +
-//        "  FROM m_event_base" +
-//        " WHERE current_date BETWEEN start_ymd AND end_ymd" +
-//        "    OR current_date < start_ymd" +
-//        " ORDER BY start_ymd"
-//}
+document.addEventListener("DOMContentLoaded", function () {
+    var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
-//client
-//    .query(query)
-//    .then((res) => {
-//        console.log('ˆ—‚P');
-//    });
+    document.getElementById('wrap').style.display = 'none';
+    document.getElementById('loading').style.height = h + "px";
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('spinner').style.height = h + "px";
+    document.getElementById('spinner').style.display = 'block';
+});
 
-function getProfile() {
-    liff.getProfile()
-        .then((profile) => {
-            const name = profile.displayName;
-            const displayName = document.getElementById('customerName');
-            const displayUserId = document.getElementById('userId');
-            displayName.value = name;
-            displayUserId.value = profile.userId;
-        })
-        .catch((err) => {
-            alert(err)
-        });
+window.addEventListener('load', function () {
+    document.getElementById('wrap').style.display = 'block';
+    setTimeout(function () {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('spinner').style.display = 'none';
+    }, 500);
+});
+
+// 5•b‚½‚Á‚½‚ç‹­§“I‚Éƒ[ƒh‰æ–Ê‚ð”ñ•\Ž¦
+setTimeout(function () {
+    stopload();
+}, 5000);
+
+function stopload() {
+    document.getElementById('wrap').style.display = 'block';
+    setTimeout(function () {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('spinner').style.display = 'none';
+    }, 500);
 }
-
-//function sendMessage(message) {
-//    liff
-//        .sendMessages([
-//            {
-//                type: "text",
-//                text: message,
-//            },
-//        ])
-//        .then(() => {
-//            alert("message sent");
-//        })
-//        .catch((err) => {
-//            alert(err);
-//        });
-//}
-
-//function scanCode() {
-//    liff
-//        .scanCodeV2()
-//        .then((result) => {
-//            alert(result);
-//        })
-//        .catch((err) => {
-//            alert(err);
-//        });
-//}
-//function friendshipFlag() {
-//    liff.getFriendship().then((data) => {
-//        alert(data.friendFlag);
-//    })
-//        .catch((err) => {
-//            alert(err);
-//        });
-//}
