@@ -82,6 +82,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             imageDir: imageDir
         }
 
+        console.log('event:', event);
+
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
             // ユーザーからのテキストメッセージが「イベント一覧」だった場合のみ反応。
