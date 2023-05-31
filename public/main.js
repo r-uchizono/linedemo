@@ -16,6 +16,17 @@ window.onload = () => {
             const jsonData = JSON.stringify({
                 id_token: idToken
             });
+            liff.getProfile()
+                .then((profile) => {
+                    const name = profile.displayName;
+                    const displayName = document.getElementById('customerName');
+                    const displayUserId = document.getElementById('userId');
+                    displayName.value = name;
+                    displayUserId.innerHTML = profile.userId;
+                })
+                .catch((err) => {
+
+                });
 
             //fetch('/api', {
             //    method: 'POST',
@@ -106,16 +117,16 @@ function stopload() {
     }, 500);
 }
 
-function getProfile() {
-    liff.getProfile()
-        .then((profile) => {
-            const name = profile.displayName;
-            const displayName = document.getElementById('customerName');
-            const displayUserId = document.getElementById('userId');
-            displayName.value = name;
-            displayUserId.innerHTML = profile.userId;
-        })
-        .catch((err) => {
-            alert(err)
-        });
-}
+//function getProfile() {
+//    liff.getProfile()
+//        .then((profile) => {
+//            const name = profile.displayName;
+//            const displayName = document.getElementById('customerName');
+//            const displayUserId = document.getElementById('userId');
+//            displayName.value = name;
+//            displayUserId.innerHTML = profile.userId;
+//        })
+//        .catch((err) => {
+//            alert(err)
+//        });
+//}
