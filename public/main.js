@@ -2,7 +2,7 @@
 // “Çž
 window.onload = () => {
     //const myLiffId = '1660891355-wrO0ydxA';
-    const myLiffId = '1661281696-GrvmvEP2';
+    const myLiffId = '1660863634-BnGNVK4d';
 
     //p—v‘f‚ÌŽæ“¾
     //LIFF‚Å—§‚¿ã‚°‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ì”»’è
@@ -16,47 +16,32 @@ window.onload = () => {
             const jsonData = JSON.stringify({
                 id_token: idToken
             });
-            liff.getProfile()
-                .then((profile) => {
-                    console.log("userIdF" + profile.userId);
-                    console.log("profileF", profile);
-                    const name = profile.displayName;
-                    const displayName = document.getElementById('user_nm');
-                    const displayUserId = document.getElementById('user_id');
-                    displayName.value = name;
-                    displayUserId.innerHTML = profile.userId;
-                })
-                .catch((err) => {
 
-                });
+            fetch('/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData,
+                creadentials: 'same-origin'
+            }).then(res => {
+                res.json()
+                    .then(json => {
+                        const displayName = document.getElementById('user_nm');
+                        const displayUserId = document.getElementById('user_id');
+                        const displayCompanyName = document.getElementById('torihikisa_nm');
+                        const displayContactPerson = document.getElementById('torihikisa_cd');
+                        displayName.value = json.user_nm;
+                        displayUserId.value = json.user_id;
+                        displayCompanyName.value = json.torihikisa_nm;
+                        displayContactPerson.value = json.torihikisa_cd;
 
-            //fetch('/api', {
-            //    method: 'POST',
-            //    headers: {
-            //        'Content-Type': 'application/json'
-            //    },
-            //    body: jsonData,
-            //    creadentials: 'same-origin'
-            //}).then(res => {
-            //    res.json()
-            //        .then(json => {
-            //            const displayName = document.getElementById('user_nm');
-            //            const displayUserId = document.getElementById('user_id');
-            //            const displayCompanyName = document.getElementById('torihikisa_nm');
-            //            const displayContactPerson = document.getElementById('torihikisa_cd');
-            //            displayName.value = json.user_nm;
-            //            displayUserId.value = json.user_id;
-            //            displayCompanyName.value = json.torihikisa_nm;
-            //            displayContactPerson.value = json.torihikisa_cd;
-
-            //            stopload();
-            //        })
-            //}).catch((e) => {
-            //    console.log(e);
-            //    stopload();
-            //});
-            stopload();
-            //getProfile();
+                        stopload();
+                    })
+            }).catch((e) => {
+                console.log(e);
+                stopload();
+            });
 
         }).catch((err) => {
             console.log(err);
@@ -118,17 +103,3 @@ function stopload() {
         document.getElementById('spinner').style.display = 'none';
     }, 500);
 }
-
-//function getProfile() {
-//    liff.getProfile()
-//        .then((profile) => {
-//            const name = profile.displayName;
-//            const displayName = document.getElementById('customerName');
-//            const displayUserId = document.getElementById('userId');
-//            displayName.value = name;
-//            displayUserId.innerHTML = profile.userId;
-//        })
-//        .catch((err) => {
-//            alert(err)
-//        });
-//}
