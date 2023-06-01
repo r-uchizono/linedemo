@@ -169,7 +169,8 @@ const getUserInfo = (req, res) => {
     }).then(response => {
         response.json().then(json => {
             const userName = json.name;
-            const lineId = crypto.AES.encrypt(json.sub, 'key');
+            const lineId_obj = crypto.AES.encrypt(json.sub, 'key');
+            const lineId = lineId_obj.toString();
             console.log(lineId);
             const query = {
                 text: "SELECT *" +
