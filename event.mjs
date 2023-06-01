@@ -22,7 +22,7 @@ export function list(event_data) {
             client
                 .query(basequery.query_base)
                 .then((res) => {
-                    console.log("userId：" + event_data.event.source.userId);
+
                     let userquery = u_eventquery(event_data.event.source.userId, res.rows[0].event_cd,"")
 
                     let event_nm = res.rows[0].event_nm
