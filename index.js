@@ -6,6 +6,7 @@ import fs from 'fs'
 import pg from 'pg'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import crypto from 'crypto-js'
 
 import { list, yoyaku, a_ninzu, c_ninzu } from './event.mjs'
 import { confirm, cancel, change } from './confirm.mjs'
@@ -167,8 +168,9 @@ const getUserInfo = (req, res) => {
         body: postData
     }).then(response => {
         response.json().then(json => {
-            const lineId = json.sub;
             const userName = json.name;
+            const lineId = crypto.AES.encrypt(json.sub, 'key');
+            console.log(lineId);
             const query = {
                 text: "SELECT *" +
                     "  FROM m_user" +
