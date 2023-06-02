@@ -174,7 +174,7 @@ const getUserInfo = (req, res) => {
         response.json().then(json => {
             const userName = json.name;
             let lineId = "";
-            async_digestMessage(text).then(
+            async_digestMessage(json.sub).then(
                 shatxt => {
                     return shatxt;
                 }
