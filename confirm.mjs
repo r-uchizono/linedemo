@@ -29,6 +29,7 @@ export function confirm(event_data){
                     return Promise.all([client.query(userquery.query_user), event_cd])
 
                 }).then(([res, event_cd]) => {
+                    console.log("res.rows", res.rows);
                     let yoyakuquery = y_confirmquery(res.rows[0].user_id, event_cd)
 
                     return client.query(yoyakuquery.query_yoyaku)
