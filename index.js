@@ -72,6 +72,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     let events_processed = []
 
     req.body.events.forEach((event) => {
+
         console.log("event.source.userId:", event.source.userId);
         let tempId = crypto.AES.encrypt(event.source.userId, 'key');
         event.source.userId = tempId.toString();
