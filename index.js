@@ -173,46 +173,45 @@ const getUserInfo = (req, res) => {
     }).then(response => {
         response.json().then(json => {
             const userName = json.name;
-
-            var sha512 = crypto.createHash('sha512');
-            sha512.update(json.sub);
-            //var hash = sha512.digest('hex')
-
-            //const lineId_obj = crypto.AES.encrypt(json.sub, 'key');
-            const lineId_obj = sha512.digest('hex');
-            const lineId = lineId_obj.toString();
-            console.log(lineId);
-            const query = {
-                text: "SELECT *" +
-                    "  FROM m_user" +
-                    " WHERE user_id = $1",
-                values: [lineId],
-            }
-
-            client.query(query)
-                .then(data => {
-                    let obj;
-                    if (data.rows.length > 0) {
-                        console.log("GetData Succes");
-                        console.log('data.rows[0]:', data.rows[0]);
-                        obj = {
-                            torihikisa_nm: data.rows[0].torihikisa_nm,
-                            user_nm: userName,
-                            torihikisa_cd: data.rows[0].torihikisa_cd,
-                            user_id: lineId,
-                        }
-                    } else {
-                        console.log("GetData failed");
-                        obj = {
-                            torihikisa_nm: "aaa",
-                            user_nm: userName,
-                            torihikisa_cd: "",
-                            user_id: lineId,
-                        }
+            let lineId = "";
+            async_digestMessage(text).then(
+                shatxt => {
+                    return shatxt;
+                }
+            ).then(shatxt => {
+                lineId = shatxt;
+                console.log(lineId);
+                const query = {
+                    text: "SELECT *" +
+                        "  FROM m_user" +
+                        " WHERE user_id = $1",
+                    values: [lineId],
+                }
+            }).then(query => {
+                return client.query(query)
+            }).then(data => {
+                let obj;
+                if (data.rows.length > 0) {
+                    console.log("GetData Succes");
+                    console.log('data.rows[0]:', data.rows[0]);
+                    obj = {
+                        torihikisa_nm: data.rows[0].torihikisa_nm,
+                        user_nm: userName,
+                        torihikisa_cd: data.rows[0].torihikisa_cd,
+                        user_id: lineId,
                     }
+                } else {
+                    console.log("GetData failed");
+                    obj = {
+                        torihikisa_nm: "aaa",
+                        user_nm: userName,
+                        torihikisa_cd: "",
+                        user_id: lineId,
+                    }
+                }
 
-                    res.status(200).send(obj);
-                }).catch(e => console.log(e));
+                res.status(200).send(obj);
+            }).catch(e => console.log(e));
         });
     }).catch(e => console.log(e));
 }
@@ -245,6 +244,18 @@ const setUserInfo = (req, res) => {
 
     client.query(query)
         .then(() => {
-            res.status(200).send({ status: "OK"});
+            res.status(200).send({ status: "OK" });
         }).catch(e => console.log(e));
+}
+
+function async_digestMessage(message) {
+    return new Promise(function (resolve) {
+        var msgUint8 = new TextEncoder("utf-8").encode(message);
+        crypto.subtle.digest('SHA-256', msgUint8).then(
+            function (hashBuffer) {
+                var hashArray = Array.from(new Uint8Array(hashBuffer));
+                var hashHex = hashArray.map(function (b) { return b.toString(16).padStart(2, '0') }).join('');
+                return resolve(hashHex);
+            });
+    })
 }
