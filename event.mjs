@@ -26,7 +26,9 @@ export function list(event_data) {
                     let userquery = u_eventquery(event_data.event.source.userId, res.rows[0].event_cd,"")
 
                     let event_nm = res.rows[0].event_nm
-
+                    
+                    console.log("userquery:", userquery);
+                    console.log("userquery.query_user:", userquery.query_user);
                     return Promise.all([client.query(userquery.query_user), event_nm])
 
                 }).then(([res, event_nm]) => {
