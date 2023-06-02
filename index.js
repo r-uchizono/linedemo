@@ -173,7 +173,13 @@ const getUserInfo = (req, res) => {
     }).then(response => {
         response.json().then(json => {
             const userName = json.name;
-            const lineId_obj = crypto.AES.encrypt(json.sub, 'key');
+
+            var sha512 = crypto.createHash('sha512');
+            sha512.update(json.sub);
+            //var hash = sha512.digest('hex')
+
+            //const lineId_obj = crypto.AES.encrypt(json.sub, 'key');
+            const lineId_obj = sha512.digest('hex');
             const lineId = lineId_obj.toString();
             console.log(lineId);
             const query = {
