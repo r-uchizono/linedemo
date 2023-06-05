@@ -29,12 +29,12 @@ window.onload = () => {
                     .then(json => {
                         const displayName = document.getElementById('user_nm');
                         const displayUserId = document.getElementById('user_id');
-                        const displayCompanyName = document.getElementById('torihikisa_nm');
-                        const displayContactPerson = document.getElementById('torihikisa_cd');
+                        const displayCompanyName = document.getElementById('tokuisaki_nm');
+                        const displayContactPerson = document.getElementById('tokuisaki_cd');
                         displayName.value = json.user_nm;
                         displayUserId.value = json.user_id;
-                        displayCompanyName.value = json.torihikisa_nm;
-                        displayContactPerson.value = json.torihikisa_cd;
+                        displayCompanyName.value = json.tokuisaki_nm;
+                        displayContactPerson.value = json.tokuisaki_cd;
 
                         stopload();
                     })
@@ -56,9 +56,9 @@ form.onsubmit = function (event) {
     document.getElementById('toroku_btn').disabled = "disabled";
     event.preventDefault();
     const jsonData = JSON.stringify({
-        torihikisa_nm: form.torihikisa_nm.value,
+        tokuisaki_nm: form.tokuisaki_nm.value,
         user_nm: form.user_nm.value,
-        torihikisa_cd: form.torihikisa_cd.value,
+        tokuisaki_cd: form.tokuisaki_cd.value,
         user_id: form.user_id.value,
     });
 

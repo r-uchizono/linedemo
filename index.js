@@ -188,17 +188,17 @@ const getUserInfo = (req, res) => {
                         console.log("GetData Succes");
                         console.log('data.rows[0]:', data.rows[0]);
                         obj = {
-                            torihikisa_nm: data.rows[0].torihikisa_nm,
+                            tokuisaki_nm: data.rows[0].tokuisaki_nm,
                             user_nm: userName,
-                            torihikisa_cd: data.rows[0].torihikisa_cd,
+                            tokuisaki_cd: data.rows[0].tokuisaki_cd,
                             user_id: lineId,
                         }
                     } else {
                         console.log("GetData failed");
                         obj = {
-                            torihikisa_nm: "aaa",
+                            tokuisaki_nm: "aaa",
                             user_nm: userName,
-                            torihikisa_cd: "",
+                            tokuisaki_cd: "",
                             user_id: lineId,
                         }
                     }
@@ -217,8 +217,8 @@ const setUserInfo = (req, res) => {
             "     user_id " +
             "     , event_cd " +
             "     , eigyo_cd " +
-            "     , torihikisa_nm " +
-            "     , torihikisa_cd " +
+            "     , tokuisaki_nm " +
+            "     , tokuisaki_cd " +
             "     , user_nm " +
             " ) " +
             " VALUES ( " +
@@ -230,7 +230,7 @@ const setUserInfo = (req, res) => {
             "     , $6 " +
             " ) ",
 
-        values: [data.user_id, "2023B", "200", data.torihikisa_nm, data.torihikisa_cd, data.user_nm],
+        values: [data.user_id, "2023B", "200", data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm],
     }
 
 
