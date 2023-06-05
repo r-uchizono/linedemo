@@ -202,6 +202,7 @@ const getUserInfo = (req, res) => {
                             user_id: lineId,
                         }
                     }
+
                     res.status(200).send(obj);
                 }).catch(e => console.log(e));
         });
