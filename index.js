@@ -204,6 +204,7 @@ const getUserInfo = (req, res) => {
                     }
 
                     res.status(200).send(obj);
+
                 }).catch(e => console.log(e));
         });
     }).catch(e => console.log(e));
