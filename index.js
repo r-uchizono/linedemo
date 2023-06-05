@@ -6,7 +6,7 @@ import fs from 'fs'
 import pg from 'pg'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import crypto from 'crypto-js'
+import crypto from 'crypto'
 
 import { list, yoyaku, a_ninzu, c_ninzu } from './event.mjs'
 import { confirm, cancel, change } from './confirm.mjs'
