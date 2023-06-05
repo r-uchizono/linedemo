@@ -74,8 +74,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
 
         console.log("event.source.userId:", event.source.userId);
-        let tempId = crypto(event.source.userId);
-        event.source.userId = tempId.toString();
+        event.source.userId = crypto('sha256').update(event.source.userId).digest('hex');
         console.log("event.source.userId:", event.source.userId);
         let event_data = {
             client: client,
@@ -173,8 +172,7 @@ const getUserInfo = (req, res) => {
     }).then(response => {
         response.json().then(json => {
             const userName = json.name;
-            const tempId = crypto(json.sub);
-            let lineId = tempId.toString();
+            let lineId = crypto('sha256').update(json.sub).digest('hex');
             console.log(lineId);
             const query = {
                 text: "SELECT *" +
