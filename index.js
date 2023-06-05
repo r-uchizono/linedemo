@@ -6,7 +6,8 @@ import fs from 'fs'
 import pg from 'pg'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import crypto from 'crypto'
+//import crypto from 'crypto'
+import { createHash } from 'crypto'
 
 import { list, yoyaku, a_ninzu, c_ninzu } from './event.mjs'
 import { confirm, cancel, change } from './confirm.mjs'
@@ -74,7 +75,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
 
         console.log("event.source.userId:", event.source.userId);
-        event.source.userId = crypto('sha256').update(event.source.userId).digest('hex');
+        event.source.userId = createHash('sha256').update(event.source.userId).digest('hex');
         console.log("event.source.userId:", event.source.userId);
         let event_data = {
             client: client,
@@ -172,7 +173,7 @@ const getUserInfo = (req, res) => {
     }).then(response => {
         response.json().then(json => {
             const userName = json.name;
-            let lineId = crypto('sha256').update(json.sub).digest('hex');
+            let lineId = createHash('sha256').update(json.sub).digest('hex');
             console.log(lineId);
             const query = {
                 text: "SELECT *" +
