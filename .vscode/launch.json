@@ -13,24 +13,25 @@
             ],
             "program": "${workspaceFolder}\\index.js",
             "cwd": "${workspaceFolder}",
-            "env":{
-                "LINE_CHANNEL_SECRET":"38afbbce1df025e759cdc3ea57218301",
-                "LINE_ACCESS_TOKEN":"nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
-                "PG_USER" : "unis",
-                "PG_HOST" : "dpg-cgvn4qodh87joksvpj70-a.oregon-postgres.render.com",
-                "PG_DBNM" : "event_f91d",
-                "PG_PSWD" : "gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn",
-                "PG_PORT" : "5432",
-                "LIMIT_TIME" : "8",
-                "MESSAGE_COUNT" : "6",
-                "EVENT_MESSAGE" : "イベント一覧",
-                "CONFIRM_MESSAGE" : "予約確認",
-                "ID_MESSAGE" : "会員ID",
-                "INFO_MESSAGE" : "お知らせ",
-                "HELD_MESSAGE" : "開催イベント情報",
-                "QR_FILE" : "public",
-                "GRAPH_FILE" : "graph"
-            }
+          "env": {
+            "LINE_CHANNEL_SECRET": "38afbbce1df025e759cdc3ea57218301",
+            "LINE_ACCESS_TOKEN": "nECvQRB+BXql3hB78/VCyU9P1BuT4n0QIECFxsUBiocpOwrtTLrp+zgwdem+cRuTA/MnYsIzE3WScgrq//AWOxU6pQsqGzySlI3t+92Ia73pxu36G78AqNNYnj8JNHb0SfSWcoLuDfWCqpvHj0f0FAdB04t89/1O/w1cDnyilFU=",
+            "PG_USER": "unis",
+            "PG_HOST": "dpg-cgvn4qodh87joksvpj70-a.oregon-postgres.render.com",
+            "PG_DBNM": "event_f91d",
+            "PG_PSWD": "gbFeZ4j0o2mXOlCdCw0qF4TMaYTkldcn",
+            "PG_PORT": "5432",
+            "LIMIT_TIME": "8",
+            "MESSAGE_COUNT": "6",
+            "EVENT_MESSAGE": "イベント一覧",
+            "CONFIRM_MESSAGE": "予約確認",
+            "ID_MESSAGE": "会員ID",
+            "INFO_MESSAGE": "お知らせ",
+            "HELD_MESSAGE": "開催イベント情報",
+            "QR_FILE": "public",
+            "GRAPH_FILE": "graph",
+            "LIFF_LOGIN": "1660891355"
+          }
         }
     ]
 }

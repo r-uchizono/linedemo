@@ -6,12 +6,14 @@ import fs from 'fs'
 import pg from 'pg'
 import path from 'path'
 import { fileURLToPath } from 'url'
+//import crypto from 'crypto'
+import { createHash } from 'crypto'
 
-import {list, yoyaku, a_ninzu, c_ninzu} from './event.mjs'
-import {confirm, cancel, change} from './confirm.mjs'
-import {id} from './id.mjs'
-import {info} from './info.mjs'
-import {held} from './held.mjs'
+import { list, yoyaku, a_ninzu, c_ninzu } from './event.mjs'
+import { confirm, cancel, change } from './confirm.mjs'
+import { id } from './id.mjs'
+import { info } from './info.mjs'
+import { held } from './held.mjs'
 
 // -----------------------------------------------------------------------------
 // パラメータ設定
@@ -39,6 +41,7 @@ if (!fs.existsSync(graphDir)) {
     fs.mkdirSync(graphDir)
 }
 app.use(express.static(graphDir))
+app.use(express.static('public'))
 
 app.use(express.urlencoded({
     extended: true
@@ -59,7 +62,7 @@ const client = new pg.Pool({
 app.post("/", (req, res) => {
     app.render('index.js')
 })
- 
+
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
@@ -71,15 +74,20 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
     req.body.events.forEach((event) => {
 
+        console.log("event.source.userId:", event.source.userId);
+        event.source.userId = createHash('sha256').update(event.source.userId).digest('hex');
+        console.log("event.source.userId:", event.source.userId);
         let event_data = {
-            client : client,
-            event : event,
-            req : req,
-            events_processed : events_processed,
-            bot : bot,
-            graphDir : graphDir,
-            imageDir : imageDir
+            client: client,
+            event: event,
+            req: req,
+            events_processed: events_processed,
+            bot: bot,
+            graphDir: graphDir,
+            imageDir: imageDir
         }
+
+        console.log('event:', event);
 
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text") {
@@ -108,7 +116,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
                 held(event_data)
             }
-        // この処理の対象をイベントタイプがポストバックだった場合。
+            // この処理の対象をイベントタイプがポストバックだった場合。
         } else if (event.type == "postback") {
             // 予約テーブルへの挿入
             if (event.postback.data.split('=')[0] == "event_id") {
@@ -123,7 +131,7 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             //　小人人数登録
             else if (event.postback.data.split('=')[0] == "c_ninzu") {
 
-                c_ninzu(event_data)          
+                c_ninzu(event_data)
             }
             //　予約取消
             else if (event.postback.data.split('=')[0] == "torikesi") {
@@ -145,3 +153,90 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)
 })
+
+// お客様情報登録LIFF用
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.post('/api', (req, res) => getUserInfo(req, res));
+app.post('/toroku', (req, res) => setUserInfo(req, res));
+
+const getUserInfo = (req, res) => {
+    const data = req.body;
+    const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
+    console.log('postData:', postData);
+    fetch('https://api.line.me/oauth2/v2.1/verify', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: postData
+    }).then(response => {
+        response.json().then(json => {
+            const userName = json.name;
+            let lineId = createHash('sha256').update(json.sub).digest('hex');
+            console.log(lineId);
+            const query = {
+                text: "SELECT *" +
+                    "  FROM m_user" +
+                    " WHERE user_id = $1",
+                values: [lineId],
+            }
+            client.query(query)
+                .then(data => {
+                    let obj;
+                    if (data.rows.length > 0) {
+                        console.log("GetData Succes");
+                        console.log('data.rows[0]:', data.rows[0]);
+                        obj = {
+                            tokuisaki_nm: data.rows[0].tokuisaki_nm,
+                            user_nm: userName,
+                            tokuisaki_cd: data.rows[0].tokuisaki_cd,
+                            user_id: lineId,
+                        }
+                    } else {
+                        console.log("GetData failed");
+                        obj = {
+                            tokuisaki_nm: "aaa",
+                            user_nm: userName,
+                            tokuisaki_cd: "",
+                            user_id: lineId,
+                        }
+                    }
+
+                    res.status(200).send(obj);
+                }).catch(e => console.log(e));
+        });
+    }).catch(e => console.log(e));
+}
+
+const setUserInfo = (req, res) => {
+    const data = req.body;
+    const query = {
+        text: " INSERT " +
+            " INTO public.m_user( " +
+            "     user_id " +
+            "     , event_cd " +
+            "     , eigyo_cd " +
+            "     , tokuisaki_nm " +
+            "     , tokuisaki_cd " +
+            "     , user_nm " +
+            " ) " +
+            " VALUES ( " +
+            "     $1 " +
+            "     , $2 " +
+            "     , $3 " +
+            "     , $4 " +
+            "     , $5 " +
+            "     , $6 " +
+            " ) ",
+
+        values: [data.user_id, "2023B", "200", data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm],
+    }
+
+
+
+    client.query(query)
+        .then(() => {
+            res.status(200).send({ status: "OK" });
+        }).catch(e => console.log(e));
+}

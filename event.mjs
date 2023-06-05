@@ -22,14 +22,17 @@ export function list(event_data) {
             client
                 .query(basequery.query_base)
                 .then((res) => {
-
+                    console.log("1res.rows:", res.rows);
                     let userquery = u_eventquery(event_data.event.source.userId, res.rows[0].event_cd,"")
 
                     let event_nm = res.rows[0].event_nm
-
+                    
+                    console.log("userquery:", userquery);
+                    console.log("userquery.query_user:", userquery.query_user);
                     return Promise.all([client.query(userquery.query_user), event_nm])
 
                 }).then(([res, event_nm]) => {
+                    console.log("2res.rows:", res.rows);
                     let eventquery = e_eventquery(event_data.event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd)
 
                     return Promise.all([client.query(eventquery.query_event), event_nm])
