@@ -89,8 +89,8 @@ window.onload = () => {
                             displayUserId.value = json.user_id;
                             displayCompanyName.value = json.tokuisaki_nm;
                             displayContactPerson.value = json.tokuisaki_cd;
-                            displayEventCd.value = json.event_cd;
-                            displayEigyoCd.value = json.eigyo_cd;
+                            displayEventCd.value = urlQuery.event_cd ? urlQuery.event_cd : json.event_cd;
+                            displayEigyoCd.value = urlQuery.eigyo_cd ? urlQuery.eigyo_cd : json.eigyo_cd;
                             displayAddFlg.value = json.add_flg;
                         }
 
