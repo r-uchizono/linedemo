@@ -21,8 +21,8 @@ export function info(event_data) {
                     let userquery = u_infoquery(event_data.event.source.userId, event_cd)
                     return Promise.all([client.query(userquery.query_user), event_cd])
                 }).then(([res, event_cd]) => {
-                    let lifeTime = new Date()
-                    let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
+                    let lnfoTime = new Date()
+                    let newTime = date_fns_timezone.formatToTimeZone(lnfoTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
 
                     let info_query = infoquery(newTime)
 

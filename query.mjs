@@ -267,6 +267,18 @@ export function getuserquery(argument){
     }
 }
 
+export function qrcodequery(argument, argument2){
+    let query = {
+        text: 'UPDATE m_user' +
+            '   SET qr_code = $1' +
+            ' WHERE user_id = $2',
+        values: [argument, argument2],
+    }
+    return{
+        query_qr : query
+    }
+}
+
 // 開催イベント情報メッセージ
 export function b_heldquery(){
     let query = {

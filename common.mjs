@@ -114,12 +114,14 @@ export function date_format(previous_date){
     let dataDate = `${year}/${month}/${day}`
     let dataTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
     let dataDate_id = `${month}/${day}`
+    let dataDate_qr = `${year}${month}${day}${hour}${minute}`
 
     return {
         formattedDate: formattedDate,
         dataDate: dataDate,
         dataTime: dataTime,
-        dataDate_id : dataDate_id
+        dataDate_id : dataDate_id,
+        dateDate_qr : dataDate_qr
     }
 }
 

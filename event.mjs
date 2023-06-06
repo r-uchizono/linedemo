@@ -85,7 +85,7 @@ export function list(event_data) {
                                     "type": "button",
                                     "action": {
                                         "type": "postback",
-                                        "label": "予約済みです",
+                                        "label": "予約済み",
                                         "data": "dummy"
                                     }
                                 }
