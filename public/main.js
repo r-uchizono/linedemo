@@ -1,6 +1,11 @@
+import { parse } from 'querystring'
 
 // “Çž
 window.onload = () => {
+    const params = parse(window.location.search.slice(1));
+
+    const test = document.getElementById('test');
+    test.value = params;
     //const myLiffId = '1660891355-wrO0ydxA';
     const myLiffId = '1660863634-BnGNVK4d';
 
