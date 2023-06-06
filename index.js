@@ -235,7 +235,7 @@ const addUserInfo = (req, res) => {
             "     , $6 " +
             " ) ",
 
-        values: [data.user_id, "2023B", "200", data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm],
+        values: [data.user_id, data.event_cd, data.eigyo_cd, data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm],
     }
 
     client.query(query)

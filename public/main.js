@@ -43,11 +43,6 @@ window.onload = () => {
 
         return params;
     })();
-
-    const test = document.getElementById('test');
-    if (urlQuery.event_cd) {
-        test.value = urlQuery.event_cd;
-    }
     const myLiffId = '1660863634-BnGNVK4d';
 
     //p—v‘f‚ÌŽæ“¾
