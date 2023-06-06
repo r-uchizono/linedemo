@@ -83,7 +83,7 @@ window.onload = () => {
                         const displayAddFlg = document.getElementById('add_flg');
                         if (!json.user_nm && !urlQuery.event_cd) {
                             document.getElementById('form').style.display = 'none';
-                            document.getElementById('failedLbl').innerHTML = "招待QRコードから登録してください";
+                            document.getElementById('failedLbl').innerText = "招待QRコードから登録してください";
                             document.getElementById('failedLbl').style.display = 'block';
                         } else {
                             displayName.value = json.user_nm;
