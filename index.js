@@ -189,17 +189,19 @@ const getUserInfo = (req, res) => {
                         console.log('data.rows[0]:', data.rows[0]);
                         obj = {
                             tokuisaki_nm: data.rows[0].tokuisaki_nm,
-                            user_nm: userName,
+                            user_nm: data.rows[0].user_nm,
                             tokuisaki_cd: data.rows[0].tokuisaki_cd,
-                            user_id: lineId,
+                            user_id: data.rows[0].user_id,
+                            add_flg: "0"
                         }
                     } else {
                         console.log("GetData failed");
                         obj = {
-                            tokuisaki_nm: "aaa",
-                            user_nm: userName,
+                            tokuisaki_nm: "",
+                            user_nm: "",
                             tokuisaki_cd: "",
                             user_id: lineId,
+                            add_flg: "1"
                         }
                     }
 

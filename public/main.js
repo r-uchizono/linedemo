@@ -32,10 +32,12 @@ window.onload = () => {
                         const displayUserId = document.getElementById('user_id');
                         const displayCompanyName = document.getElementById('tokuisaki_nm');
                         const displayContactPerson = document.getElementById('tokuisaki_cd');
+                        const displayAddFlg = document.getElementById('add_flg');
                         displayName.value = json.user_nm;
                         displayUserId.value = json.user_id;
                         displayCompanyName.value = json.tokuisaki_nm;
                         displayContactPerson.value = json.tokuisaki_cd;
+                        displayAddFlg.value = json.add_flg;
 
                         stopload();
                     })
