@@ -252,8 +252,8 @@ const updateUserInfo = (req, res) => {
               "        eigyo_cd = $2, " +
               "        tokuisaki_nm = $3, " +
               "        tokuisaki_cd = $4, " +
-              "        user_nm = : $5" +
-              "  WHERE user_id = : $6",
+              "        user_nm = $5" +
+              "  WHERE user_id = $6",
         values: [data.event_cd, data.eigyo_cd, data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm, data.user_id],
     }
 
