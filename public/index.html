@@ -35,8 +35,12 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-6">
                             <h2 class="mb-4">お客様情報情報登録</h2>
-                            <label id="succesLbl" class="form-label">登録しました</label>
-                            <label id="failedLbl" class="form-label">登録失敗しました</label>
+                            <div id="succesLbl" class="alert alert-success" role="alert">
+                                登録しました
+                            </div>
+                            <div id="failedLbl" class="alert alert-danger" role="alert">
+                                登録失敗しました
+                            </div>
                             <form id="form">
                                 <div class="mb-3">
                                     <label for="companyName" class="form-label">会社名 <span class="badge badge-danger">必須</span></label>
