@@ -81,13 +81,19 @@ window.onload = () => {
                         const displayEventCd = document.getElementById('event_cd');
                         const displayEigyoCd = document.getElementById('eigyo_cd');
                         const displayAddFlg = document.getElementById('add_flg');
-                        displayName.value = json.user_nm;
-                        displayUserId.value = json.user_id;
-                        displayCompanyName.value = json.tokuisaki_nm;
-                        displayContactPerson.value = json.tokuisaki_cd;
-                        displayEventCd.value = json.event_cd;
-                        displayEigyoCd.value = json.eigyo_cd;
-                        displayAddFlg.value = json.add_flg;
+                        if (!json.user_nm && !urlQuery.event_cd) {
+                            document.getElementById('form').style.display = 'none';
+                            document.getElementById('failedLbl').innerHTML = 'èµë“QRÉRÅ[ÉhÇ©ÇÁìoò^ÇµÇƒÇ≠ÇæÇ≥Ç¢';
+                            document.getElementById('failedLbl').style.display = 'block';
+                        } else {
+                            displayName.value = json.user_nm;
+                            displayUserId.value = json.user_id;
+                            displayCompanyName.value = json.tokuisaki_nm;
+                            displayContactPerson.value = json.tokuisaki_cd;
+                            displayEventCd.value = json.event_cd;
+                            displayEigyoCd.value = json.eigyo_cd;
+                            displayAddFlg.value = json.add_flg;
+                        }
 
                         stopload();
                     })
