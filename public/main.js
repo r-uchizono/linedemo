@@ -54,6 +54,10 @@ window.onload = () => {
 let from = document.getElementById('form');
 form.onsubmit = function (event) {
     document.getElementById('toroku_btn').disabled = "disabled";
+    if (!form.tokuisaki_nm.value && form.user_nm.value && form.tokuisaki_cd.value) {
+        document.getElementById('toroku_btn').disabled = "disabled";
+        return;
+    }
     event.preventDefault();
     const jsonData = JSON.stringify({
         tokuisaki_nm: form.tokuisaki_nm.value,

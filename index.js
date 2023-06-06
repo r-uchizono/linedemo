@@ -172,9 +172,9 @@ const getUserInfo = (req, res) => {
         body: postData
     }).then(response => {
         response.json().then(json => {
+            console.log("json", json);
             const userName = json.name;
             let lineId = createHash('sha256').update(json.sub).digest('hex');
-            console.log(lineId);
             const query = {
                 text: "SELECT *" +
                     "  FROM m_user" +
