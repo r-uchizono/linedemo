@@ -45,8 +45,9 @@ window.onload = () => {
     })();
 
     const test = document.getElementById('test');
-    test.value = urlQuery.event_cd;
-    //const myLiffId = '1660891355-wrO0ydxA';
+    if (urlQuery.event_cd) {
+        test.value = urlQuery.event_cd;
+    }
     const myLiffId = '1660863634-BnGNVK4d';
 
     //p—v‘f‚ÌŽæ“¾
