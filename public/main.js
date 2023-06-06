@@ -32,11 +32,15 @@ window.onload = () => {
                         const displayUserId = document.getElementById('user_id');
                         const displayCompanyName = document.getElementById('tokuisaki_nm');
                         const displayContactPerson = document.getElementById('tokuisaki_cd');
+                        const displayEventCd = document.getElementById('event_cd');
+                        const displayEigyoCd = document.getElementById('eigyo_cd');
                         const displayAddFlg = document.getElementById('add_flg');
                         displayName.value = json.user_nm;
                         displayUserId.value = json.user_id;
                         displayCompanyName.value = json.tokuisaki_nm;
                         displayContactPerson.value = json.tokuisaki_cd;
+                        displayEventCd.value = json.event_cd;
+                        displayEigyoCd.value = json.eigyo_cd;
                         displayAddFlg.value = json.add_flg;
 
                         stopload();
@@ -57,10 +61,6 @@ window.onload = () => {
 let from = document.getElementById('form');
 form.onsubmit = function (event) {
     document.getElementById('toroku_btn').disabled = "disabled";
-    //if (!form.tokuisaki_nm.value && form.user_nm.value && form.tokuisaki_cd.value) {
-    //    document.getElementById('toroku_btn').disabled = "disabled";
-    //    return;
-    //}
     event.preventDefault();
     const jsonData = JSON.stringify({
         tokuisaki_nm: form.tokuisaki_nm.value,
@@ -69,7 +69,9 @@ form.onsubmit = function (event) {
         user_id: form.user_id.value,
     });
 
-    fetch('/toroku', {
+    let apiString = form.add_flg.value === "1" ? '/toroku' : '/koshin';
+
+    fetch(apiString, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

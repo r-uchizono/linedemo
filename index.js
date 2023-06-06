@@ -158,7 +158,8 @@ app.listen(PORT, () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.post('/api', (req, res) => getUserInfo(req, res));
-app.post('/toroku', (req, res) => setUserInfo(req, res));
+app.post('/toroku', (req, res) => addUserInfo(req, res));
+app.post('/koshin', (req, res) => addUserInfo(req, res));
 
 const getUserInfo = (req, res) => {
     const data = req.body;
@@ -192,6 +193,8 @@ const getUserInfo = (req, res) => {
                             user_nm: data.rows[0].user_nm,
                             tokuisaki_cd: data.rows[0].tokuisaki_cd,
                             user_id: data.rows[0].user_id,
+                            event_cd: data.rows[0].event_cd,
+                            eigyo_cd: data.rows[0].eigyo_cd,
                             add_flg: "0"
                         }
                     } else {
@@ -211,7 +214,7 @@ const getUserInfo = (req, res) => {
     }).catch(e => console.log(e));
 }
 
-const setUserInfo = (req, res) => {
+const addUserInfo = (req, res) => {
     const data = req.body;
     const query = {
         text: " INSERT " +
@@ -235,7 +238,24 @@ const setUserInfo = (req, res) => {
         values: [data.user_id, "2023B", "200", data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm],
     }
 
+    client.query(query)
+        .then(() => {
+            res.status(200).send({ status: "OK" });
+        }).catch(e => console.log(e));
+}
 
+const updateUserInfo = (req, res) => {
+    const data = req.body;
+    const query = {
+        text: " UPDATE public.m_user" +
+              "    SET event_cd = $1, " +
+              "        eigyo_cd = $2, " +
+              "        tokuisaki_nm = $3, " +
+              "        tokuisaki_cd = $4, " +
+              "        user_nm = : $5" +
+              "  WHERE user_id = : $6",
+        values: [data.event_cd, data.eigyo_cd, data.tokuisaki_nm, data.tokuisaki_cd, data.user_nm, data.user_id],
+    }
 
     client.query(query)
         .then(() => {
