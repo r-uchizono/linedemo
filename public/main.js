@@ -67,6 +67,8 @@ form.onsubmit = function (event) {
         user_nm: form.user_nm.value,
         tokuisaki_cd: form.tokuisaki_cd.value,
         user_id: form.user_id.value,
+        event_cd: form.event_cd.value,
+        eigyo_cd: form.eigyo_cd.value,
     });
 
     let apiString = form.add_flg.value === "1" ? '/toroku' : '/koshin';
