@@ -83,8 +83,7 @@ window.onload = () => {
                         const displayAddFlg = document.getElementById('add_flg');
                         if (!json.user_nm && !urlQuery.event_cd) {
                             document.getElementById('form').style.display = 'none';
-                            document.getElementById('failedLbl').innerText = "èµë“QRÉRÅ[ÉhÇ©ÇÁìoò^ÇµÇƒÇ≠ÇæÇ≥Ç¢";
-                            document.getElementById('failedLbl').style.display = 'block';
+                            document.getElementById('notQRlbl').style.display = 'block';
                         } else {
                             displayName.value = json.user_nm;
                             displayUserId.value = json.user_id;
@@ -153,6 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('wrap').style.display = 'none';
     document.getElementById('succesLbl').style.display = 'none';
     document.getElementById('failedLbl').style.display = 'none';
+    document.getElementById('notQRlbl').style.display = 'none';
     document.getElementById('loading').style.height = h + "px";
     document.getElementById('loading').style.display = 'block';
     document.getElementById('spinner').style.height = h + "px";
