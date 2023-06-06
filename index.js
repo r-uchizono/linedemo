@@ -159,7 +159,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.post('/api', (req, res) => getUserInfo(req, res));
 app.post('/toroku', (req, res) => addUserInfo(req, res));
-app.post('/koshin', (req, res) => addUserInfo(req, res));
+app.post('/koshin', (req, res) => updateUserInfo(req, res));
 
 const getUserInfo = (req, res) => {
     const data = req.body;
