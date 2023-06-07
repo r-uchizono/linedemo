@@ -4,6 +4,9 @@ import {message} from './message.mjs'
 import { b_eventquery, countquery, e_eventquery, entryquery, setidquery, u_eventquery } from './query.mjs'
 import date_fns_timezone from 'date-fns-timezone'
 
+const FORMAT = 'YYYY/MM/DD HH:mm:ss'
+const TIME_ZONE_TOKYO = 'Asia/Tokyo'
+
 export function list(event_data) {
     //データを取りだす
     let bufferData = fs.readFileSync('yoyaku.json')
