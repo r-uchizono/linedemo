@@ -69,36 +69,42 @@ export function list(event_data) {
                             let S_SformattedTime = time_format(res.rows[i].second_start_time)
                             let S_EformattedTime = time_format(res.rows[i].second_end_time)
 
+                            let date = new Date()
+                            let newdate = date_fns_timezone.formatToTimeZone(date, FORMAT, { timeZone: TIME_ZONE_TOKYO })
+                            let new_result = date_format(newdate)
                             let f_result = date_format(res.rows[i].first_day)
 
-                            let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
-                            firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                            firstEventJson.body.contents[0].text = f_result.formattedDate
-                            firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
-                            firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
-                            let address = res.rows[i].place_address
-                            firstEventJson.body.contents[3].action.label = address
-                            firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
-                            if (res.rows[i].t1_id != null) {
-                                firstEventJson.footer.contents = []
-                                firstEventJson.footer.contents[0] = {
-                                    "type": "button",
-                                    "action": {
-                                        "type": "postback",
-                                        "label": "予約済み",
-                                        "data": "dummy"
+                            if(new_result.dataDate <= f_result.dataDate){
+
+                                let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
+                                firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
+                                firstEventJson.body.contents[0].text = f_result.formattedDate
+                                firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
+                                firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
+                                let address = res.rows[i].place_address
+                                firstEventJson.body.contents[3].action.label = address
+                                firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
+                                if (res.rows[i].t1_id != null) {
+                                    firstEventJson.footer.contents = []
+                                    firstEventJson.footer.contents[0] = {
+                                        "type": "button",
+                                        "action": {
+                                            "type": "postback",
+                                            "label": "予約済み",
+                                            "data": "dummy"
+                                        }
                                     }
                                 }
+                                else {
+                                    firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
+                                }
+
+                                let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
+
+                                firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
+
+                                data[0].contents.contents.push({ ...firstEventJson })
                             }
-                            else {
-                                firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
-                            }
-
-                            let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
-
-                            firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
-
-                            data[0].contents.contents.push({ ...firstEventJson })
 
                             if (res.rows[i].second_day != null) {
 
@@ -117,7 +123,7 @@ export function list(event_data) {
                                         "type": "button",
                                         "action": {
                                             "type": "postback",
-                                            "label": "予約済みです",
+                                            "label": "予約済み",
                                             "data": "dummy"
                                         }
                                     }

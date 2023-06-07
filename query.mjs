@@ -96,6 +96,8 @@ export function e_eventquery(argument, argument2, argument3){
             "   AND e1.second_day = date_trunc('day',t2.reserve_time)" +
             "   AND t2.user_id = $1" +
             " WHERE e1.event_cd = $2" +
+            "   AND (e1.first_day >= current_date" +
+            "    OR e1.second_day >= current_date)" +
             " ORDER BY" +
             " CASE" +
             "  WHEN e2.eigyo_cd = $3 THEN 0" +
