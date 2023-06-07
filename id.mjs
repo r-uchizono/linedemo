@@ -35,6 +35,7 @@ export function id(event_data) {
                 .then((res) => {
                     console.log('処理２')
 
+                    let result = date_format(res.rows[0].qr_expiration_date)
                     let QrTime = new Date()
                     let newQrTime = date_fns_timezone.formatToTimeZone(QrTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
                     let qrdate = date_format(newQrTime)
@@ -57,8 +58,6 @@ export function id(event_data) {
                             }
 
                             let idmessage = message()
-
-                            let result = date_format(res.rows[0].qr_expiration_date)
 
                             let lifemessage = arg_message('有効期限：' + result.dataDate_id + " " + result.dataTime)
 
