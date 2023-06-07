@@ -198,6 +198,7 @@ export function y_confirmquery(argument, argument2){
             "    ON m1.kaisaiti_cd = k.kaisaiti_cd" +
             " WHERE t1.user_id = $1" + 
             "   AND t1.event_cd = $2" +
+            "   AND t1.reserve_time >= current_date" +
             " ORDER BY t1.reserve_time",
         values: [argument, argument2],
     }

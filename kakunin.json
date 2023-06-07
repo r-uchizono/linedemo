@@ -97,7 +97,10 @@
                                 "type": "datetimepicker",
                                 "label": "時間変更",
                                 "data": "henko=id",
-                                "mode": "time"
+                                "mode": "time",
+                                "initial": "00:00",
+                                "min": "00:00",
+                                "max": "23:59"
                             },
                             "color": "#FFFFFF"
                         }

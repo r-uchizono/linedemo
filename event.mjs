@@ -102,6 +102,9 @@ export function list(event_data) {
                                 }
                                 else {
                                     firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
+                                    firstEventJson.footer.contents[0].action.initial = F_SformattedTime.formattedTime
+                                    firstEventJson.footer.contents[0].action.min = F_SformattedTime.formattedTime
+                                    firstEventJson.footer.contents[0].action.max = F_EformattedTime.formattedTime
                                 }
 
                                 let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
@@ -137,6 +140,9 @@ export function list(event_data) {
                                     }
                                     else {
                                         secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
+                                        secondEventJson.footer.contents[0].action.initial = S_SformattedTime.formattedTime
+                                        secondEventJson.footer.contents[0].action.min = S_SformattedTime.formattedTime
+                                        secondEventJson.footer.contents[0].action.max = S_EformattedTime.formattedTime
                                     }
 
                                     let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
