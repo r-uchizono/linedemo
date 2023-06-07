@@ -19,10 +19,13 @@ export function info(event_data) {
                     let event_cd = res.rows[0].event_cd
 
                     let userquery = u_infoquery(event_data.event.source.userId, event_cd)
-                    return Promise.all([client.query(userquery.query_user), event_cd])
-                }).then(([res, event_cd]) => {
+                    return client.query(userquery.query_user)
+                }).then((res) => {
                     let lnfoTime = new Date()
                     let newTime = date_fns_timezone.formatToTimeZone(lnfoTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
+
+                    // 正常にエラーを出すために必要
+                    console.log(res.rows[0].event_cd)
 
                     let info_query = infoquery(newTime)
 
