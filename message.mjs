@@ -44,6 +44,11 @@ export function message(){
         text: 'ご予約のイベントはありません。'
     }
 
+    let noenent_errmessage = {
+        type: 'text',
+        text: '開催イベントの予定がありません。'
+    }
+
     return{
         info_errmessage : info_errmessage,
         errmessage : errmessage,
@@ -53,7 +58,8 @@ export function message(){
         qr_message : qr_message,
         qr_errmessage : qr_errmessage,
         held_message : held_message,
-        confirm_errmessage : confirm_errmessage
+        confirm_errmessage : confirm_errmessage,
+        noenent_errmessage : noenent_errmessage
     }
 }
 

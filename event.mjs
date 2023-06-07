@@ -8,6 +8,7 @@ const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
 
 export function list(event_data) {
+    let errmessage = message()
     //データを取りだす
     let bufferData = fs.readFileSync('yoyaku.json')
     // データを文字列に変換
@@ -157,12 +158,16 @@ export function list(event_data) {
                         data = JSON.parse(dataJSON)
                         data[0].contents.contents = []
                     }
-                    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
 
+                    if(row == 0)
+                    {
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.noenent_errmessage))
+                    }
+                    else{
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
+                    }
                 }).catch((e) => {
                     console.error(e.stack)
-                    let errmessage = message()
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
                 })
                 

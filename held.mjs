@@ -31,6 +31,10 @@ export function held(event_data) {
 
                     client.query(held_query.query_held)
                         .then((res) => {
+                            if(res.rows.length == 0){
+                                event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.noenent_errmessage))
+                                return
+                            }
                             //データを取りだす
                             let bufferData = fs.readFileSync('held.json')
                             // データを文字列に変換
