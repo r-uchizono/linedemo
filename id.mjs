@@ -33,9 +33,14 @@ export function id(event_data) {
                     return client.query(id_query.query_id)
                 })
                 .then((res) => {
+                    if(res.rows.length == 0){
+                        console.error(e.stack)
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                        return
+                    }
+
                     console.log('処理２')
 
-                    let result = date_format(res.rows[0].qr_expiration_date)
                     let QrTime = new Date()
                     let newQrTime = date_fns_timezone.formatToTimeZone(QrTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
                     let qrdate = date_format(newQrTime)
@@ -58,6 +63,8 @@ export function id(event_data) {
                             }
 
                             let idmessage = message()
+
+                            let result = date_format(res.rows[0].qr_expiration_date)
 
                             let lifemessage = arg_message('有効期限：' + result.dataDate_id + " " + result.dataTime)
 
