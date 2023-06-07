@@ -78,6 +78,8 @@ export function list(event_data) {
                             let new_result = date_format(newdate)
                             let f_result = date_format(res.rows[i].first_day)
 
+                            let address = res.rows[i].place_address
+
                             if(new_result.dataDate <= f_result.dataDate){
 
                                 let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
@@ -85,7 +87,6 @@ export function list(event_data) {
                                 firstEventJson.body.contents[0].text = f_result.formattedDate
                                 firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
                                 firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
-                                let address = res.rows[i].place_address
                                 firstEventJson.body.contents[3].action.label = address
                                 firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
                                 if (res.rows[i].t1_id != null) {
@@ -114,32 +115,35 @@ export function list(event_data) {
 
                                 let s_result = date_format(res.rows[i].second_day)
 
-                                let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
-                                secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                secondEventJson.body.contents[0].text = s_result.formattedDate
-                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
-                                secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
-                                secondEventJson.body.contents[3].action.label = address
-                                secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
-                                if (res.rows[i].t2_id != null) {
-                                    secondEventJson.footer.contents = []
-                                    secondEventJson.footer.contents[0] = {
-                                        "type": "button",
-                                        "action": {
-                                            "type": "postback",
-                                            "label": "予約済み",
-                                            "data": "dummy"
+                                if(new_result.dataDate <= s_result.dataDate){
+
+                                    let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
+                                    secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
+                                    secondEventJson.body.contents[0].text = s_result.formattedDate
+                                    secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
+                                    secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
+                                    secondEventJson.body.contents[3].action.label = address
+                                    secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
+                                    if (res.rows[i].t2_id != null) {
+                                        secondEventJson.footer.contents = []
+                                        secondEventJson.footer.contents[0] = {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "postback",
+                                                "label": "予約済み",
+                                                "data": "dummy"
+                                            }
                                         }
                                     }
-                                }
-                                else {
-                                    secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
-                                }
+                                    else {
+                                        secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
+                                    }
 
-                                let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
+                                    let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
 
-                                secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
-                                data[0].contents.contents.push({ ...secondEventJson })
+                                    secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
+                                    data[0].contents.contents.push({ ...secondEventJson })
+                                    }
                             }
                         }
 
