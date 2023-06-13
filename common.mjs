@@ -109,17 +109,21 @@ export function date_format(previous_date){
     let year = date.getFullYear()
     let month = (date.getMonth() + 1).toString().padStart(2, '0')
     let day = (date.getDate()).toString().padStart(2, '0')
+    let hour = (date.getHours()).toString().padStart(2, '0')
+    let minute = (date.getMinutes()).toString().padStart(2, '0')
     let dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
     let formattedDate = `${year}年${month}月${day}日（${dayOfWeek}）`
     let dataDate = `${year}/${month}/${day}`
     let dataTime = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
     let dataDate_id = `${month}/${day}`
+    let dataDate_qr = `${year}${month}${day}${hour}${minute}`
 
     return {
         formattedDate: formattedDate,
         dataDate: dataDate,
         dataTime: dataTime,
-        dataDate_id : dataDate_id
+        dataDate_id : dataDate_id,
+        dateDate_qr : dataDate_qr
     }
 }
 

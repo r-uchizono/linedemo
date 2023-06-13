@@ -91,7 +91,10 @@
                                 "type": "datetimepicker",
                                 "label": "日時を選択してください",
                                 "data": "event_id=100",
-                                "mode": "time"
+                                "mode": "time",
+                                "initial": "00:00",
+                                "min": "00:00",
+                                "max": "23:59"
                             },
                             "color": "#FFFFFF"
                         }

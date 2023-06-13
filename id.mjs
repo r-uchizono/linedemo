@@ -3,7 +3,7 @@ import QRCode from 'qrcode'
 import path from 'path'
 import { date_format, random } from './common.mjs'
 import { arg_message, message } from './message.mjs'
-import { getuserquery, lifetimequery } from './query.mjs'
+import { getuserquery, lifetimequery, qrcodequery } from './query.mjs'
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
@@ -33,15 +33,27 @@ export function id(event_data) {
                     return client.query(id_query.query_id)
                 })
                 .then((res) => {
-                    console.log('処理２')
-                    const userid = res.rows[0].user_id
+                    if(res.rows.length == 0){
+                        console.error(e.stack)
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                        return
+                    }
 
+                    console.log('処理２')
+
+                    let QrTime = new Date()
+                    let newQrTime = date_fns_timezone.formatToTimeZone(QrTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
+                    let qrdate = date_format(newQrTime)
+                    let qrcode = qrdate.dateDate_qr + random_data.file
                     //フォルダに保存
-                    QRCode.toFile(path.join(event_data.imageDir, random_data.file + '.png'), userid, (error) => {
+                    QRCode.toFile(path.join(event_data.imageDir, random_data.file + '.png'), qrcode, (error) => {
                         try {
                             console.log('処理３')
 
                             if (error) { throw error }
+
+                            let qr_query = qrcodequery(qrcode, event_data.event.source.userId)
+                            client.query(qr_query.query_qr)
 
                             //ファイルのURLを生成し送信・拡張子注意
                             let qrmessage = {

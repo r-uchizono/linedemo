@@ -19,10 +19,15 @@ export function info(event_data) {
                     let event_cd = res.rows[0].event_cd
 
                     let userquery = u_infoquery(event_data.event.source.userId, event_cd)
-                    return Promise.all([client.query(userquery.query_user), event_cd])
-                }).then(([res, event_cd]) => {
-                    let lifeTime = new Date()
-                    let newTime = date_fns_timezone.formatToTimeZone(lifeTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
+                    return client.query(userquery.query_user)
+                }).then((res) => {
+                    if(res.rows.length == 0){
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                        return
+                    }
+
+                    let lnfoTime = new Date()
+                    let newTime = date_fns_timezone.formatToTimeZone(lnfoTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
 
                     let info_query = infoquery(newTime)
 

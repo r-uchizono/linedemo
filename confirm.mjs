@@ -29,6 +29,7 @@ export function confirm(event_data){
                     return Promise.all([client.query(userquery.query_user), event_cd])
 
                 }).then(([res, event_cd]) => {
+                    console.log("res.rows", res.rows);
                     let yoyakuquery = y_confirmquery(res.rows[0].user_id, event_cd)
 
                     return client.query(yoyakuquery.query_yoyaku)
@@ -71,9 +72,15 @@ export function confirm(event_data){
 
                             if(result.dataDate == f_result.dataDate){
                                 EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.initial = F_SformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.min = F_SformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.max = F_EformattedTime.formattedTime
                             }
                             else{
                                 EventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.initial = S_SformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.min = S_SformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.max = S_EformattedTime.formattedTime
                             }
                             EventJson.body.contents[2].text = '開催場所　' + res.rows[i].place_name
                             let address = res.rows[i].place_address

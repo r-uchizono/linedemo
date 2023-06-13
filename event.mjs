@@ -2,8 +2,13 @@ import fs from 'fs'
 import {date_format, random, graph, time_format} from './common.mjs'
 import {message} from './message.mjs'
 import { b_eventquery, countquery, e_eventquery, entryquery, setidquery, u_eventquery } from './query.mjs'
+import date_fns_timezone from 'date-fns-timezone'
+
+const FORMAT = 'YYYY/MM/DD HH:mm:ss'
+const TIME_ZONE_TOKYO = 'Asia/Tokyo'
 
 export function list(event_data) {
+    let errmessage = message()
     //データを取りだす
     let bufferData = fs.readFileSync('yoyaku.json')
     // データを文字列に変換
@@ -22,14 +27,17 @@ export function list(event_data) {
             client
                 .query(basequery.query_base)
                 .then((res) => {
-
+                    console.log("1res.rows:", res.rows);
                     let userquery = u_eventquery(event_data.event.source.userId, res.rows[0].event_cd,"")
 
                     let event_nm = res.rows[0].event_nm
-
+                    
+                    console.log("userquery:", userquery);
+                    console.log("userquery.query_user:", userquery.query_user);
                     return Promise.all([client.query(userquery.query_user), event_nm])
 
                 }).then(([res, event_nm]) => {
+                    console.log("2res.rows:", res.rows);
                     let eventquery = e_eventquery(event_data.event.source.userId, res.rows[0].event_cd, res.rows[0].eigyo_cd)
 
                     return Promise.all([client.query(eventquery.query_event), event_nm])
@@ -66,67 +74,83 @@ export function list(event_data) {
                             let S_SformattedTime = time_format(res.rows[i].second_start_time)
                             let S_EformattedTime = time_format(res.rows[i].second_end_time)
 
+                            let date = new Date()
+                            let newdate = date_fns_timezone.formatToTimeZone(date, FORMAT, { timeZone: TIME_ZONE_TOKYO })
+                            let new_result = date_format(newdate)
                             let f_result = date_format(res.rows[i].first_day)
 
-                            let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
-                            firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                            firstEventJson.body.contents[0].text = f_result.formattedDate
-                            firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
-                            firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
                             let address = res.rows[i].place_address
-                            firstEventJson.body.contents[3].action.label = address
-                            firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
-                            if (res.rows[i].t1_id != null) {
-                                firstEventJson.footer.contents = []
-                                firstEventJson.footer.contents[0] = {
-                                    "type": "button",
-                                    "action": {
-                                        "type": "postback",
-                                        "label": "予約済みです",
-                                        "data": "dummy"
-                                    }
-                                }
-                            }
-                            else {
-                                firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
-                            }
 
-                            let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
+                            if(new_result.dataDate <= f_result.dataDate){
 
-                            firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
-
-                            data[0].contents.contents.push({ ...firstEventJson })
-
-                            if (res.rows[i].second_day != null) {
-
-                                let s_result = date_format(res.rows[i].second_day)
-
-                                let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
-                                secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
-                                secondEventJson.body.contents[0].text = s_result.formattedDate
-                                secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
-                                secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
-                                secondEventJson.body.contents[3].action.label = address
-                                secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
-                                if (res.rows[i].t2_id != null) {
-                                    secondEventJson.footer.contents = []
-                                    secondEventJson.footer.contents[0] = {
+                                let firstEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
+                                firstEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
+                                firstEventJson.body.contents[0].text = f_result.formattedDate
+                                firstEventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
+                                firstEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
+                                firstEventJson.body.contents[3].action.label = address
+                                firstEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
+                                if (res.rows[i].t1_id != null) {
+                                    firstEventJson.footer.contents = []
+                                    firstEventJson.footer.contents[0] = {
                                         "type": "button",
                                         "action": {
                                             "type": "postback",
-                                            "label": "予約済みです",
+                                            "label": "予約済み",
                                             "data": "dummy"
                                         }
                                     }
                                 }
                                 else {
-                                    secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
+                                    firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
+                                    firstEventJson.footer.contents[0].action.initial = F_SformattedTime.formattedTime
+                                    firstEventJson.footer.contents[0].action.min = F_SformattedTime.formattedTime
+                                    firstEventJson.footer.contents[0].action.max = F_EformattedTime.formattedTime
                                 }
 
-                                let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
+                                let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
 
-                                secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
-                                data[0].contents.contents.push({ ...secondEventJson })
+                                firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
+
+                                data[0].contents.contents.push({ ...firstEventJson })
+                            }
+
+                            if (res.rows[i].second_day != null) {
+
+                                let s_result = date_format(res.rows[i].second_day)
+
+                                if(new_result.dataDate <= s_result.dataDate){
+
+                                    let secondEventJson = JSON.parse(dataJSON)[0].contents.contents[0]
+                                    secondEventJson.header.contents[0].text = event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
+                                    secondEventJson.body.contents[0].text = s_result.formattedDate
+                                    secondEventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
+                                    secondEventJson.body.contents[2].text = '場所　' + res.rows[i].place_name
+                                    secondEventJson.body.contents[3].action.label = address
+                                    secondEventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
+                                    if (res.rows[i].t2_id != null) {
+                                        secondEventJson.footer.contents = []
+                                        secondEventJson.footer.contents[0] = {
+                                            "type": "button",
+                                            "action": {
+                                                "type": "postback",
+                                                "label": "予約済み",
+                                                "data": "dummy"
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
+                                        secondEventJson.footer.contents[0].action.initial = S_SformattedTime.formattedTime
+                                        secondEventJson.footer.contents[0].action.min = S_SformattedTime.formattedTime
+                                        secondEventJson.footer.contents[0].action.max = S_EformattedTime.formattedTime
+                                    }
+
+                                    let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
+
+                                    secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
+                                    data[0].contents.contents.push({ ...secondEventJson })
+                                    }
                             }
                         }
 
@@ -134,12 +158,16 @@ export function list(event_data) {
                         data = JSON.parse(dataJSON)
                         data[0].contents.contents = []
                     }
-                    // replyMessage()で返信し、そのプロミスをevents_processedに追加。
-                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
 
+                    if(row == 0)
+                    {
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.noenent_errmessage))
+                    }
+                    else{
+                        event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
+                    }
                 }).catch((e) => {
                     console.error(e.stack)
-                    let errmessage = message()
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
                 })
                 
@@ -217,7 +245,7 @@ export function a_ninzu(event_data){
 export function c_ninzu(event_data){
     let post = event_data.event.postback.data.replace(/,/g, '=')
     let c_query = countquery(post.split('=')[1], post.split('=')[2])
-
+    console.log(post)
     event_data.client.connect(function (err, client) {
         if (err) {
             console.log(err)
