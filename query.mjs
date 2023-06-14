@@ -111,12 +111,35 @@ export function e_eventquery(argument, argument2, argument3){
     }
 }
 
-export function entryquery(argument, argument2, argument3, argument4){
+export function getentryquery(argument, argument2){
+    let query = {
+        text: "SELECT m1.user_nm" +
+            "     , m2.tcd" +
+            "     , m2.tname" +
+            "     , m3.incd" +
+            "     , m3.inname" +
+            "  FROM m_user m1 " +
+            "  LEFT OUTER JOIN" +
+            "       m_tkfl m2" +
+            "    ON m1.tokuisaki_cd = m2.tcd" +
+            "  LEFT OUTER JOIN" +
+            "       m_kifl m3" +
+            "    ON m2.incd = m3.incd" +
+            " WHERE m1.user_id = $1" +
+            "   AND m1.event_cd = $2",
+        values: [argument, argument2],
+    }
+    return{
+        query_getentry : query
+    }
+}
+
+export function entryquery(argument, argument2, argument3, argument4, argument5, argument6, argument7, argument8, argument9){
     let query = {
         text: 'INSERT' + 
-            '  INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, reserve_time) ' +
-            'VALUES($1, $2, $3, $4)',
-        values: [argument, argument2, argument3, argument4],
+            '  INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, user_nm, tokuisaki_cd, tokuisaki_nm, tanto_cd, tanto_nm, reserve_time) ' +
+            'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+        values: [argument, argument2, argument3, argument4, argument5, argument6, argument7, argument8, argument9],
     }
     return{
         query_entry : query
