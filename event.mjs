@@ -1,7 +1,7 @@
 import fs from 'fs'
 import {date_format, random, graph, time_format} from './common.mjs'
 import {message} from './message.mjs'
-import { b_eventquery, countquery, e_eventquery, entryquery, setidquery, u_eventquery } from './query.mjs'
+import { b_eventquery, countquery, e_eventquery, getentryquery, entryquery, setidquery, u_eventquery } from './query.mjs'
 import date_fns_timezone from 'date-fns-timezone'
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
@@ -176,8 +176,11 @@ export function list(event_data) {
 }
 
 export function yoyaku(event_data){
+    let eventcd = event_data.event.postback.data.split('=')[1]
+    let kaisaicd = event_data.event.postback.data.split('=')[2]
+    let reservetime = event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000'
     // DB登録処理
-    let entry_query = entryquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2], event_data.event.source.userId, event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000')
+    let get_query = getentryquery(event_data.event.source.userId, eventcd)
 
     let setid_query = setidquery()
 
@@ -186,8 +189,12 @@ export function yoyaku(event_data){
             console.log(err)
         } else {
             client
-                .query(entry_query.query_entry)
-                .then(() => {
+                .query(get_query.query_getentry)
+                .then((res) => {
+                    let entry_query = entryquery(eventcd, kaisaicd, event_data.event.source.userId, res.rows[0].user_nm, res.rows[0].tcd, res.rows[0].tname, res.rows[0].incd, res.rows[0].inname, reservetime)
+                    
+                    return client.query(entry_query.query_entry)
+                }).then(() => {
                     console.log('Data Inserted.')
 
                     return client.query(setid_query.query_id)
