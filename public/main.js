@@ -56,7 +56,6 @@ window.onload = () => {
       const idToken = liff.getIDToken();
       console.log("urlQuery.kain_cdÅF", urlQuery.kain_cd);
       if (!urlQuery.kain_cd) {
-
         const jsonData = JSON.stringify({
           id_token: idToken
         });
