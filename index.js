@@ -160,6 +160,7 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/api', (req, res) => getUserInfo(req, res));
 app.post('/toroku', (req, res) => addUserInfo(req, res));
 app.post('/koshin', (req, res) => updateUserInfo(req, res));
+app.post('/getTantoInfo', (req, res) => getTantoInfo(req, res));
 
 const getUserInfo = (req, res) => {
   const data = req.body;
@@ -265,28 +266,44 @@ const updateUserInfo = (req, res) => {
 
 const getTantoInfo = (req, res) => {
   const data = req.body;
-  const query = {
-    text: "SELECT *" +
-      "  FROM m_syain" +
-      " WHERE kain_cd = $1",
-    values: [data.kain_cd],
-  }
-  client.query(query)
-    .then(data => {
-      let obj;
-      if (data.rows.length > 0) {
-        obj = {
-          id: data.rows[0].id,
-          name: data.rows[0].name,
-        }
-      } else {
-        console.log("GetData failed");
-        obj = {
-          id: "",
-          name: "",
-        }
+  const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
+  console.log('postData:', postData);
+  fetch('https://api.line.me/oauth2/v2.1/verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: postData
+  }).then(response => {
+    response.json().then(json => {
+      //let lineId = createHash('sha256').update(json.sub).digest('hex');
+      let lineId = json.sub;
+      const query = {
+        text: "SELECT *" +
+          "  FROM m_syain" +
+          " WHERE kain_cd = $1",
+        values: [data.kain_cd],
       }
+      client.query(query)
+        .then(data => {
+          let obj;
+          if (data.rows.length > 0) {
+            obj = {
+              id: data.rows[0].id,
+              name: data.rows[0].name,
+              lineId: lineId,
+            }
+          } else {
+            console.log("GetData failed");
+            obj = {
+              id: "",
+              name: "",
+              lineId: lineId,
+            }
+          }
 
-      res.status(200).send(obj);
-    }).catch(e => console.log(e));
+          res.status(200).send(obj);
+        }).catch(e => console.log(e));
+    });
+  }).catch(e => console.log(e));
 }

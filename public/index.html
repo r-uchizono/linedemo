@@ -92,36 +92,23 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-6">
                             <h2 class="mb-4">担当者情報登録</h2>
-                            <div id="succesLbl" class="alert alert-success" role="alert">
+                            <div id="succesLbl2" class="alert alert-success" role="alert">
                                 登録しました
                             </div>
-                            <div id="failedLbl" class="alert alert-danger" role="alert">
+                            <div id="failedLbl2" class="alert alert-danger" role="alert">
                                 登録失敗しました
-                            </div>
-                            <div id="notQRlbl" class="alert alert-danger" role="alert">
-                                招待QRコードから登録してください
                             </div>
                             <form id="form">
                                 <div class="mb-3">
-                                    <label for="customerName" class="form-label">氏名 <span class="badge badge-danger">必須</span></label>
-                                    <input type="text" class="form-control" id="user_nm" name="user_nm" placeholder="例：山田 太郎" required="required">
+                                    <label for="customerName" class="form-label">課員CD <span class="badge badge-danger">必須</span></label>
+                                    <input type="text" class="form-control" id="kain_cd" name="user_nm" placeholder="例：123" required="required">
+                                    <label for="customerName" class="form-label">担当者名 <span class="badge badge-danger">必須</span></label>
+                                    <input type="text" class="form-control" id="tanto_nm" name="user_nm" placeholder="例：山田 太郎" required="required">
                                 </div>
                                 <div class="hiddenItems">
                                     <div class="mb-3">
-                                        <label for="contactPerson" class="form-label">ユーザーID(非表示)</label>
-                                        <input type="text" class="form-control" id="user_id" name="user_id">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="contactPerson" class="form-label">イベントコード(非表示)</label>
-                                        <input type="text" class="form-control" id="event_cd" name="event_cd">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="contactPerson" class="form-label">営業コード(非表示)</label>
-                                        <input type="text" class="form-control" id="eigyo_cd" name="eigyo_cd">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="contactPerson" class="form-label">登録フラグ(非表示)</label>
-                                        <input type="text" class="form-control" id="add_flg" name="add_flg">
+                                        <label for="contactPerson" class="form-label">担当ID(非表示)</label>
+                                        <input type="text" class="form-control" id="tanto_id" name="user_id">
                                     </div>
                                 </div>
                                 <button type="submit" id="toroku_btn" class="btn btn-primary">登録</button>

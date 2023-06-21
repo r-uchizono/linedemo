@@ -90,6 +90,7 @@ window.onload = () => {
                 displayAddFlg.value = json.add_flg;
               }
 
+              document.getElementById('wrap').style.display = 'block';
               stopload();
             })
         }).catch((e) => {
@@ -100,6 +101,7 @@ window.onload = () => {
 
         console.log("getTantoInfo");
         const jsonData = JSON.stringify({
+          id_token: idToken,
           kain_cd: json.kain_cd
         });
         fetch('/getTantoInfo', {
@@ -112,26 +114,14 @@ window.onload = () => {
         }).then(res => {
           res.json()
             .then(json => {
-              //const displayName = document.getElementById('user_nm');
-              //const displayUserId = document.getElementById('user_id');
-              //const displayCompanyName = document.getElementById('tokuisaki_nm');
-              //const displayContactPerson = document.getElementById('tokuisaki_cd');
-              //const displayEventCd = document.getElementById('event_cd');
-              //const displayEigyoCd = document.getElementById('eigyo_cd');
-              //const displayAddFlg = document.getElementById('add_flg');
-              //if (!json.user_nm && !urlQuery.event_cd) {
-              //  document.getElementById('form').style.display = 'none';
-              //  document.getElementById('notQRlbl').style.display = 'block';
-              //} else {
-              //  displayName.value = json.user_nm;
-              //  displayUserId.value = json.user_id;
-              //  displayCompanyName.value = json.tokuisaki_nm;
-              //  displayContactPerson.value = json.tokuisaki_cd;
-              //  displayEventCd.value = urlQuery.event_cd ? urlQuery.event_cd : json.event_cd;
-              //  displayEigyoCd.value = urlQuery.eigyo_cd ? urlQuery.eigyo_cd : json.eigyo_cd;
-              //  displayAddFlg.value = json.add_flg;
-              //}
+              const displayKainCd = document.getElementById('kain_cd');
+              const displayTantoNm = document.getElementById('tanto_nm');
+              const displayTantoId = document.getElementById('tanto_id');
+              displayKainCd.value = json.id;
+              displayTantoNm.value = json.name;
+              displayTantoId.value = json.lineId;
 
+              document.getElementById('wrap2').style.display = 'block';
               stopload();
             })
         }).catch((e) => {
@@ -189,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
   document.getElementById('wrap').style.display = 'none';
+  document.getElementById('wrap2').style.display = 'none';
   document.getElementById('succesLbl').style.display = 'none';
   document.getElementById('failedLbl').style.display = 'none';
   document.getElementById('notQRlbl').style.display = 'none';
@@ -199,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function stopload() {
-  document.getElementById('wrap').style.display = 'block';
   setTimeout(function () {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('spinner').style.display = 'none';
