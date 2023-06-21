@@ -262,3 +262,35 @@ const updateUserInfo = (req, res) => {
             res.status(200).send({ status: "OK" });
         }).catch(e => console.log(e));
 }
+
+const getTantoInfo = (req, res) => {
+  const data = req.body;
+  response.json().then(json => {
+    console.log("json", json);
+    const userName = json.;
+    const query = {
+      text: "SELECT *" +
+        "  FROM m_syain" +
+        " WHERE kain_cd = $1",
+      values: [data.kain_cd],
+    }
+    client.query(query)
+      .then(data => {
+        let obj;
+        if (data.rows.length > 0) {
+          obj = {
+            id: data.rows[0].id,
+            name: data.rows[0].name,
+          }
+        } else {
+          console.log("GetData failed");
+          obj = {
+            id: "",
+            name: "",
+          }
+        }
+
+        res.status(200).send(obj);
+      }).catch(e => console.log(e));
+  }).catch(e => console.log(e));
+}
