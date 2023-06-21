@@ -266,6 +266,7 @@ const updateUserInfo = (req, res) => {
 
 const getTantoInfo = (req, res) => {
   const data = req.body;
+  console.log("getTantoInfo data:", data);
   const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
   console.log('postData:', postData);
   fetch('https://api.line.me/oauth2/v2.1/verify', {
