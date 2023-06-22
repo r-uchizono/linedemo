@@ -133,6 +133,9 @@ window.onload = () => {
       console.log(err);
       stopload();
     });
+  } else {
+    document.getElementById('wrap_web').style.display = 'block';
+    stopload();
   }
 }
 
@@ -179,6 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById('wrap').style.display = 'none';
   document.getElementById('wrap2').style.display = 'none';
+  document.getElementById('wrap_web').style.display = 'none';
   document.getElementById('succesLbl').style.display = 'none';
   document.getElementById('failedLbl').style.display = 'none';
   document.getElementById('notQRlbl').style.display = 'none';
