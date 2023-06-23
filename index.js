@@ -264,6 +264,7 @@ const updateUserInfo = (req, res) => {
     }).catch(e => console.log(e));
 }
 
+
 const getTantoInfo = (req, res) => {
   const data = req.body;
   console.log("getTantoInfo data:", data);
