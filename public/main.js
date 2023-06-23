@@ -54,8 +54,8 @@ window.onload = () => {
     }).then(() => {
       //idトークンによる年齢情報の取得
       const idToken = liff.getIDToken();
-      console.log("urlQuery.kain_cd：", urlQuery.kain_cd);
-      if (!urlQuery.kain_cd) {
+      //console.log("urlQuery.kain_cd：", urlQuery.kain_cd);
+      //if (!urlQuery.kain_cd) {
         const jsonData = JSON.stringify({
           id_token: idToken
         });
@@ -96,38 +96,38 @@ window.onload = () => {
           console.log(e);
           stopload();
         });
-      } else {
+      //} else {
 
-        console.log("getTantoInfo");
-        const jsonData = JSON.stringify({
-          id_token: idToken,
-          kain_cd: json.kain_cd
-        });
-        fetch('/getTantoInfo', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: jsonData,
-          creadentials: 'same-origin'
-        }).then(res => {
-          res.json()
-            .then(json => {
-              const displayKainCd = document.getElementById('kain_cd');
-              const displayTantoNm = document.getElementById('tanto_nm');
-              const displayTantoId = document.getElementById('tanto_id');
-              displayKainCd.value = json.id;
-              displayTantoNm.value = json.name;
-              displayTantoId.value = json.lineId;
+      //  console.log("getTantoInfo");
+      //  const jsonData = JSON.stringify({
+      //    id_token: idToken,
+      //    kain_cd: json.kain_cd
+      //  });
+      //  fetch('/getTantoInfo', {
+      //    method: 'POST',
+      //    headers: {
+      //      'Content-Type': 'application/json'
+      //    },
+      //    body: jsonData,
+      //    creadentials: 'same-origin'
+      //  }).then(res => {
+      //    res.json()
+      //      .then(json => {
+      //        const displayKainCd = document.getElementById('kain_cd');
+      //        const displayTantoNm = document.getElementById('tanto_nm');
+      //        const displayTantoId = document.getElementById('tanto_id');
+      //        displayKainCd.value = json.id;
+      //        displayTantoNm.value = json.name;
+      //        displayTantoId.value = json.lineId;
 
-              document.getElementById('wrap2').style.display = 'block';
-              stopload();
-            })
-        }).catch((e) => {
-          console.log(e);
-          stopload();
-        });
-      }
+      //        document.getElementById('wrap2').style.display = 'block';
+      //        stopload();
+      //      })
+      //  }).catch((e) => {
+      //    console.log(e);
+      //    stopload();
+      //  });
+      //}
 
     }).catch((err) => {
       console.log(err);
