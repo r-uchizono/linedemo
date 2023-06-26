@@ -45,7 +45,7 @@ window.onload = () => {
   })();
   const myLiffId = '1660863634-BnGNVK4d';
 
-  console.log("testLog");
+  console.log("urlQuery.kain_cd：" + urlQuery.kain_cd);
   //p要素の取得
   //LIFFで立ち上げているかどうかの判定
   if (liff.isInClient()) {
@@ -55,7 +55,6 @@ window.onload = () => {
     }).then(() => {
       //idトークンによる年齢情報の取得
       const idToken = liff.getIDToken();
-      console.log("urlQuery.kain_cd：" + urlQuery.kain_cd);
       //if (!urlQuery.kain_cd) {
         const jsonData = JSON.stringify({
           id_token: idToken
