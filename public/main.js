@@ -45,7 +45,9 @@ window.onload = () => {
   })();
   const myLiffId = '1660863634-BnGNVK4d';
 
-  console.log("urlQuery.kain_cd：" + urlQuery.kain_cd);
+  //console.log("urlQuery.kain_cd：" + urlQuery.kain_cd);
+  console.log("urlQuery.event_cd：" + urlQuery.event_cd);
+  console.log("urlQuery.eigyo_cd：" + urlQuery.eigyo_cd);
   //p要素の取得
   //LIFFで立ち上げているかどうかの判定
   if (liff.isInClient()) {
