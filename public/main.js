@@ -54,7 +54,7 @@ window.onload = () => {
     }).then(() => {
       //idトークンによる年齢情報の取得
       const idToken = liff.getIDToken();
-      //console.log("urlQuery.kain_cd：", urlQuery.kain_cd);
+      console.log("urlQuery.kain_cd：", urlQuery.kain_cd);
       //if (!urlQuery.kain_cd) {
         const jsonData = JSON.stringify({
           id_token: idToken
