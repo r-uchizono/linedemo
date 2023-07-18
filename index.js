@@ -29,19 +29,10 @@ log4js.configure({
   }
 })
 
-logger.level = 'all'
-
-logger.trace('Some trace messages')
-logger.debug('Some debug messages')
-logger.info('Some info messages')
-logger.warn('Some warn messages')
-logger.error('Some error messages')
-logger.fatal('Some fatal messages')
-
-log4js.shutdown((err) => {
-  if (err) throw err
-  process.exit(0)
-})
+//log4js.shutdown((err) => {
+//  if (err) throw err
+//  process.exit(0)
+//})
 // -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
@@ -93,6 +84,17 @@ app.post("/", (req, res) => {
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
+
+
+  logger.level = 'all'
+
+  logger.trace('Some trace messages')
+  logger.debug('Some debug messages')
+  logger.info('Some info messages')
+  logger.warn('Some warn messages')
+  logger.error('Some error messages')
+  logger.fatal('Some fatal messages')
+
   // 先行してLINE側にステータスコード200でレスポンスする。
   res.sendStatus(200)
 
