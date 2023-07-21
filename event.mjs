@@ -8,6 +8,10 @@ const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
 
 export function list(event_data) {
+    console.log('function list Start▼')
+    console.log('取得前 event_data.client.totalCount:', event_data.client.totalCount)
+    console.log('取得前 event_data.client.idleCount:', event_data.client.idleCount)
+    console.log('取得前 event_data.client.waitingCount:', event_data.client.waitingCount)
     let errmessage = message()
     //データを取りだす
     let bufferData = fs.readFileSync('yoyaku.json')
@@ -21,9 +25,14 @@ export function list(event_data) {
     let basequery = b_eventquery()
 
     event_data.client.connect(function (err, client) {
+        console.log('取得後 event_data.client.totalCount:', event_data.client.totalCount)
+        console.log('取得後 event_data.client.idleCount:', event_data.client.idleCount)
+        console.log('取得後 event_data.client.waitingCount:', event_data.client.waitingCount)
         if (err) {
-            console.log(err)
+            console.log('DBConnectError:', err)
+            console.log('function list End▲')
         } else {
+            console.log('DBConnectSuccess')
             client
                 .query(basequery.query_base)
                 .then((res) => {
@@ -166,9 +175,13 @@ export function list(event_data) {
                     else{
                         event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
                     }
+                    client.release();
+                    console.log('function list End▲')
                 }).catch((e) => {
                     console.error(e.stack)
+                    console.log('function list End▲')
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                    client.release();
                 })
                 
         }
@@ -211,7 +224,9 @@ export function yoyaku(event_data){
                         data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res.rows[0].setval + '=' + post.slice(1)
                     }
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
+                    client.release();
                 }).catch((e) => {
+                    client.release();
                     console.error(e.stack)
                 })
         }
@@ -242,7 +257,9 @@ export function a_ninzu(event_data){
                     }
 
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
+                    client.release();
                 }).catch((e) => {
+                    client.release();
                     console.error(e.stack)
                 })
         }
@@ -263,8 +280,10 @@ export function c_ninzu(event_data){
                     console.log('Data Updated.')
 
                     graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'), client, event_data.graphDir)
+                    client.release();
 
                 }).catch((e) => {
+                    client.release();
                     console.error(e.stack)
                 })
         }

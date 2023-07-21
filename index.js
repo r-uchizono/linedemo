@@ -13,21 +13,7 @@ import { confirm, cancel, change } from './confirm.mjs'
 import { id } from './id.mjs'
 import { info } from './info.mjs'
 import { held } from './held.mjs'
-import log4js from 'log4js'
 
-const logger = log4js.getLogger()
-
-
-
-log4js.configure({
-  appenders: {
-    out: { type: 'stdout' },
-    app: { type: 'file', filename: 'application.log' }
-  },
-  categories: {
-    default: { appenders: ['out', 'app'], level: 'debug' }
-  }
-})
 
 //log4js.shutdown((err) => {
 //  if (err) throw err
@@ -84,16 +70,6 @@ app.post("/", (req, res) => {
 // -----------------------------------------------------------------------------
 // ルーター設定
 app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
-
-
-  logger.level = 'all'
-
-  logger.trace('Some trace messages')
-  logger.debug('Some debug messages')
-  logger.info('Some info messages')
-  logger.warn('Some warn messages')
-  logger.error('Some error messages')
-  logger.fatal('Some fatal messages')
 
   // 先行してLINE側にステータスコード200でレスポンスする。
   res.sendStatus(200)
@@ -245,6 +221,7 @@ const getUserInfo = (req, res) => {
 }
 
 const addUserInfo = (req, res) => {
+  console.log("addUserInfo Strat");
   const data = req.body;
   const query = {
     text: " INSERT " +
@@ -270,11 +247,13 @@ const addUserInfo = (req, res) => {
 
   client.query(query)
     .then(() => {
+      console.log("addUserInfo End");
       res.status(200).send({ status: "OK" });
     }).catch(e => console.log(e));
 }
 
 const updateUserInfo = (req, res) => {
+  console.log("updateUserInfo Strat");
   const data = req.body;
   const query = {
     text: " UPDATE public.m_user" +
@@ -289,6 +268,7 @@ const updateUserInfo = (req, res) => {
 
   client.query(query)
     .then(() => {
+      console.log("updateUserInfo End");
       res.status(200).send({ status: "OK" });
     }).catch(e => console.log(e));
 }

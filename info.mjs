@@ -37,15 +37,18 @@ export function info(event_data) {
                             let infomessage = arg_message(res.rows[0].naiyo)
 
                             event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, infomessage.info_message))
+                            client.release();
                         }).catch((e) => {
                             console.error(e.stack)
 
                             event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.info_errmessage))
+                    client.release();
                         })
                 }).catch((e) => {
                     console.error(e.stack)
                 
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                    client.release();
                 })
         }
     })

@@ -108,11 +108,13 @@ export function confirm(event_data){
                     else{
                         event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
                     }
+                    client.release();
                     
                 }).catch((e) => {
                     console.error(e.stack)
 
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                    client.release();
                 })
             }
         })
@@ -142,10 +144,12 @@ export function cancel(event_data){
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, cancelmessage.cancel_message))
 
                     graph(event_cd, kaisaiti_cd, event_data.event.postback.data.split('=')[2].replace(/\//g, '_'), client, event_data.graphDir)
+                    client.release();
                        
                 })
                 .catch((e) => {
                     console.error(e.stack)
+                    client.release();
                 })
         }
     })
@@ -176,10 +180,12 @@ export function change(event_data){
                     let kaisaiti_cd = res.rows[0].kaisaiti_cd
 
                     graph(event_cd, kaisaiti_cd, event_data.event.postback.data.split('=')[2].replace(/\//g, '_'), client, event_data.graphDir)
+                    client.release();
                         
                 })
                 .catch((e) => {
                     console.error(e.stack)
+                    client.release();
                 })
         }
     })

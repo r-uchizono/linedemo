@@ -26,7 +26,6 @@ export function id(event_data) {
             client
                 .query(time_query.query_time)
                 .then(() => {
-                    console.log('処理１')
 
                     const id_query = getuserquery(event_data.event.source.userId)
 
@@ -39,8 +38,6 @@ export function id(event_data) {
                         return
                     }
 
-                    console.log('処理２')
-
                     let QrTime = new Date()
                     let newQrTime = date_fns_timezone.formatToTimeZone(QrTime, FORMAT, { timeZone: TIME_ZONE_TOKYO })
                     let qrdate = date_format(newQrTime)
@@ -48,7 +45,6 @@ export function id(event_data) {
                     //フォルダに保存
                     QRCode.toFile(path.join(event_data.imageDir, random_data.file + '.png'), qrcode, (error) => {
                         try {
-                            console.log('処理３')
 
                             if (error) { throw error }
 
@@ -69,15 +65,18 @@ export function id(event_data) {
                             let lifemessage = arg_message('有効期限：' + result.dataDate_id + " " + result.dataTime)
 
                             event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, [qrmessage, idmessage.qr_message, lifemessage.life_message]))
+                            client.release();
 
                         } catch (e) {
                             console.error(e.stack)
                             event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.qr_errmessage))
+                            client.release();
                         }
                     })
                 }).catch((e) => {
                     console.error(e.stack)
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                    client.release();
                 })
         }
     })

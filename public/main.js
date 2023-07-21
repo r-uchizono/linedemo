@@ -43,7 +43,7 @@ window.onload = () => {
 
     return params;
   })();
-  const myLiffId = '1660863634-BnGNVK4d';
+  const myLiffId = '1661543487-bm2E5QkG';
 
   //console.log("urlQuery.kain_cd:" + urlQuery.kain_cd);
   //console.log("urlQuery.event_cd:" + urlQuery.event_cd);

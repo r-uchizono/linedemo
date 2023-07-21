@@ -81,16 +81,19 @@ export function held(event_data) {
                             else{
                                 event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, [data, errmessage.held_message]))
                             }
+                            client.release();
 
                         }).catch((e) => {
                             console.error(e.stack)
 
                             event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.info_errmessage))
+                            client.release();
                         })
                 }).catch((e) => {
                     console.error(e.stack)
 
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
+                    client.release();
                 })
         }
     })

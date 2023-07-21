@@ -97,9 +97,11 @@ export function graph(event_cd, kaisaiti_cd, g_date, client, graphDir){
             let out = fs.createWriteStream(graphDir + '/' + file +'.png');
             let stream = canvas.createPNGStream();
             stream.pipe(out);
+            client.release();
     
         }).catch((e) => {
             console.error(e.stack)
+            client.release();
         })
 }
 
