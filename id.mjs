@@ -4,6 +4,9 @@ import path from 'path'
 import { date_format, random } from './common.mjs'
 import { arg_message, message } from './message.mjs'
 import { getuserquery, lifetimequery, qrcodequery } from './query.mjs'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'

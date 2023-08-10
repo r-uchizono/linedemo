@@ -13,6 +13,9 @@ import { confirm, cancel, change } from './confirm.mjs'
 import { id } from './id.mjs'
 import { info } from './info.mjs'
 import { held } from './held.mjs'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 
 //log4js.shutdown((err) => {
@@ -32,8 +35,13 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 //publicとgraphはlanchにもたせる
+
+console.log('path:', path);
 const __filename = fileURLToPath(import.meta.url)
+console.log('__filename:', __filename);
+console.log('path.dirname:', path.dirname);
 const __dirname = path.dirname(__filename)
+console.log('__dirname:', __dirname);
 const imageDir = path.join(__dirname, process.env.QR_FILE)
 if (!fs.existsSync(imageDir)) {
   fs.mkdirSync(imageDir)
@@ -166,6 +174,8 @@ app.post('/api', (req, res) => getUserInfo(req, res));
 app.post('/toroku', (req, res) => addUserInfo(req, res));
 app.post('/koshin', (req, res) => updateUserInfo(req, res));
 app.post('/getTantoInfo', (req, res) => getTantoInfo(req, res));
+app.post('/koshinTanto', (req, res) => updateTantoInfo(req, res));
+app.post('/getTantoLineId', (req, res) => getTantoLineInfo(req, res));
 
 const getUserInfo = (req, res) => {
   const data = req.body;
@@ -193,7 +203,6 @@ const getUserInfo = (req, res) => {
           let obj;
           if (data.rows.length > 0) {
             console.log("GetData Succes");
-            console.log('data.rows[0]:', data.rows[0]);
             obj = {
               tokuisaki_nm: data.rows[0].tokuisaki_nm,
               user_nm: data.rows[0].user_nm,
@@ -221,7 +230,7 @@ const getUserInfo = (req, res) => {
 }
 
 const addUserInfo = (req, res) => {
-  console.log("addUserInfo Strat");
+  console.log("addUserInfo Strat▼");
   const data = req.body;
   const query = {
     text: " INSERT " +
@@ -247,13 +256,13 @@ const addUserInfo = (req, res) => {
 
   client.query(query)
     .then(() => {
-      console.log("addUserInfo End");
+      console.log("addUserInfo End▲");
       res.status(200).send({ status: "OK" });
     }).catch(e => console.log(e));
 }
 
 const updateUserInfo = (req, res) => {
-  console.log("updateUserInfo Strat");
+  console.log("updateUserInfo Strat▼");
   const data = req.body;
   const query = {
     text: " UPDATE public.m_user" +
@@ -268,15 +277,13 @@ const updateUserInfo = (req, res) => {
 
   client.query(query)
     .then(() => {
-      console.log("updateUserInfo End");
+      console.log("updateUserInfo End▲");
       res.status(200).send({ status: "OK" });
     }).catch(e => console.log(e));
 }
 
-
-const getTantoInfo = (req, res) => {
+const getTantoLineInfo = (req, res) => {
   const data = req.body;
-  console.log("getTantoInfo data:", data);
   const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
   console.log('postData:', postData);
   fetch('https://api.line.me/oauth2/v2.1/verify', {
@@ -287,34 +294,59 @@ const getTantoInfo = (req, res) => {
     body: postData
   }).then(response => {
     response.json().then(json => {
-      //let lineId = createHash('sha256').update(json.sub).digest('hex');
+      console.log("json", json);
       let lineId = json.sub;
-      const query = {
-        text: "SELECT *" +
-          "  FROM m_syain" +
-          " WHERE kain_cd = $1",
-        values: [data.kain_cd],
+      let obj;
+      obj = {
+        lineId: lineId,
       }
-      client.query(query)
-        .then(data => {
-          let obj;
-          if (data.rows.length > 0) {
-            obj = {
-              id: data.rows[0].id,
-              name: data.rows[0].name,
-              lineId: lineId,
-            }
-          } else {
-            console.log("GetData failed");
-            obj = {
-              id: "",
-              name: "",
-              lineId: lineId,
-            }
-          }
-
-          res.status(200).send(obj);
-        }).catch(e => console.log(e));
+      res.status(200).send(obj);
     });
   }).catch(e => console.log(e));
+}
+
+const getTantoInfo = (req, res) => {
+  const data = req.body;
+  console.log("getTantoInfo data:", data);
+  const query = {
+    text: "SELECT *" +
+      "  FROM m_syain" +
+      " WHERE id = $1",
+    values: [data.kain_cd],
+  }
+  client.query(query)
+    .then(data => {
+      let obj;
+      if (data.rows.length > 0) {
+        obj = {
+          id: data.rows[0].id,
+          name: data.rows[0].name,
+        }
+      } else {
+        console.log("GetData failed");
+        obj = {
+          id: "",
+          name: "",
+        }
+      }
+
+      res.status(200).send(obj);
+    }).catch(e => console.log(e));
+}
+
+const updateTantoInfo = (req, res) => {
+  console.log("updateTantoInfo Strat▼");
+  const data = req.body;
+  const query = {
+    text: " UPDATE public.m_syain" +
+      "    SET line = $1 " +
+      "  WHERE id = $2",
+    values: [data.line, data.id],
+  }
+
+  client.query(query)
+    .then(() => {
+      console.log("updateTantoInfo End▲");
+      res.status(200).send({ status: "OK" });
+    }).catch(e => console.log(e));
 }

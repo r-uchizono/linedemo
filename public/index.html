@@ -87,7 +87,6 @@
     <div id="wrap2">
         <section class="container">
             <div class="contents">
-
                 <div class="container mt-5">
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-6">
@@ -98,25 +97,25 @@
                             <div id="failedLbl2" class="alert alert-danger" role="alert">
                                 登録失敗しました
                             </div>
-                            <form id="form2">
+                            <div id="tantofailedLbl" class="alert alert-danger" role="alert">
+                                社員マスタに存在しない社員CDです
+                            </div>
+                            <form id="form_tanto">
                                 <div class="mb-3">
-                                    <label for="customerName" class="form-label">課員CD <span class="badge badge-danger">必須</span></label>
-                                    <input type="text" class="form-control" id="kain_cd" name="user_nm" placeholder="例：123" required="required">
-                                    <label for="customerName" class="form-label">担当者名 <span class="badge badge-danger">必須</span></label>
-                                    <input type="text" class="form-control" id="tanto_nm" name="user_nm" placeholder="例：山田 太郎" required="required">
+                                    <label for="customerName" class="form-label">社員CD <span class="badge badge-danger">必須</span></label>
+                                    <input type="text" class="form-control" id="kain_cd" name="kain_cd" placeholder="例：123" required="required">
                                 </div>
                                 <div class="hiddenItems">
                                     <div class="mb-3">
-                                        <label for="contactPerson" class="form-label">担当ID(非表示)</label>
-                                        <input type="text" class="form-control" id="tanto_id" name="user_id">
+                                        <label for="contactPerson" class="form-label">Line(非表示)</label>
+                                        <input type="text" class="form-control" id="tanto_id" name="tanto_id">
                                     </div>
                                 </div>
-                                <button type="submit" id="toroku_btn2" class="btn btn-primary">登録</button>
+                                <button type="submit" id="toroku_btn_tanto" class="btn btn-primary">登録</button>
                             </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
     </div>

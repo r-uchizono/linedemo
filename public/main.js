@@ -57,7 +57,31 @@ window.onload = () => {
     }).then(() => {
       //idトークンによる年齢情報の取得
       const idToken = liff.getIDToken();
-      if (!urlQuery.kain_cd) {
+      if (urlQuery.mode == "tanto") {
+        const jsonData = JSON.stringify({
+          id_token: idToken,
+        });
+        fetch('/getTantoLineId', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: jsonData,
+          creadentials: 'same-origin'
+        }).then(res => {
+          res.json()
+            .then(json => {
+              const displayTantoId = document.getElementById('tanto_id');
+              displayTantoId.value = json.lineId;
+
+              document.getElementById('wrap2').style.display = 'block';
+              stopload();
+            })
+        }).catch((e) => {
+          console.log(e);
+          stopload();
+        });
+      } else {
         const jsonData = JSON.stringify({
           id_token: idToken
         });
@@ -98,37 +122,7 @@ window.onload = () => {
           console.log(e);
           stopload();
         });
-      } else {
-
-        console.log("getTantoInfo");
-        const jsonData = JSON.stringify({
-          id_token: idToken,
-          kain_cd: json.kain_cd
-        });
-        fetch('/getTantoInfo', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: jsonData,
-          creadentials: 'same-origin'
-        }).then(res => {
-          res.json()
-            .then(json => {
-              const displayKainCd = document.getElementById('kain_cd');
-              const displayTantoNm = document.getElementById('tanto_nm');
-              const displayTantoId = document.getElementById('tanto_id');
-              displayKainCd.value = json.id;
-              displayTantoNm.value = json.name;
-              displayTantoId.value = json.lineId;
-
-              document.getElementById('wrap2').style.display = 'block';
-              stopload();
-            })
-        }).catch((e) => {
-          console.log(e);
-          stopload();
-        });
+        
       }
 
     }).catch((err) => {
@@ -179,6 +173,71 @@ form.onsubmit = function (event) {
   });
 }
 
+// submitイベント取得のため
+let form_tanto = document.getElementById('form_tanto');
+form_tanto.onsubmit = function (event) {
+  document.getElementById('toroku_btn_tanto').disabled = "disabled";
+  event.preventDefault();
+
+  const jsonData = JSON.stringify({
+          kain_cd: form_tanto.kain_cd.value
+        });
+        fetch('/getTantoInfo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: jsonData,
+          creadentials: 'same-origin'
+        }).then(res => {
+          res.json()
+            .then(json => {
+              if (json.id) {
+
+                const koshinjsonData = JSON.stringify({
+                  line: form_tanto.tanto_id.value,
+                  id: form_tanto.kain_cd.value,
+                });
+                let apiString = '/koshinTanto';
+
+                fetch(apiString, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: koshinjsonData,
+                  creadentials: 'same-origin'
+                }).then(res => {
+                  res.json()
+                    .then(json => {
+                      document.getElementById('succesLbl2').style.display = 'block';
+                      document.getElementById('failedLbl2').style.display = 'none';
+                      document.getElementById('tantofailedLbl').style.display = 'none';
+                      document.getElementById('toroku_btn_tanto').disabled = null;
+                    })
+                }).catch((e) => {
+                  console.log(e);
+                  document.getElementById('succesLbl2').style.display = 'none';
+                  document.getElementById('failedLbl2').style.display = 'block';
+                  document.getElementById('tantofailedLbl').style.display = 'none';
+                  document.getElementById('toroku_btn_tanto').disabled = null;
+                });
+              } else {
+                document.getElementById('succesLbl2').style.display = 'none';
+                document.getElementById('failedLbl2').style.display = 'none';
+                document.getElementById('tantofailedLbl').style.display = 'block';
+                document.getElementById('toroku_btn_tanto').disabled = null;
+              }
+            })
+        }).catch((e) => {
+          console.log(e);
+          document.getElementById('succesLbl2').style.display = 'none';
+          document.getElementById('failedLbl2').style.display = 'block';
+          document.getElementById('tantofailedLbl').style.display = 'none';
+          document.getElementById('toroku_btn_tanto').disabled = null;
+        });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
@@ -187,6 +246,9 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('wrap_web').style.display = 'none';
   document.getElementById('succesLbl').style.display = 'none';
   document.getElementById('failedLbl').style.display = 'none';
+  document.getElementById('succesLbl2').style.display = 'none';
+  document.getElementById('failedLbl2').style.display = 'none';
+  document.getElementById('tantofailedLbl').style.display = 'none';
   document.getElementById('notQRlbl').style.display = 'none';
   document.getElementById('loading').style.height = h + "px";
   document.getElementById('loading').style.display = 'block';

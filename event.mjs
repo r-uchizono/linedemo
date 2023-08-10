@@ -3,15 +3,16 @@ import {date_format, random, graph, time_format} from './common.mjs'
 import {message} from './message.mjs'
 import { b_eventquery, countquery, e_eventquery, getentryquery, entryquery, setidquery, u_eventquery } from './query.mjs'
 import date_fns_timezone from 'date-fns-timezone'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 const FORMAT = 'YYYY/MM/DD HH:mm:ss'
 const TIME_ZONE_TOKYO = 'Asia/Tokyo'
 
 export function list(event_data) {
     console.log('function list Start▼')
-    console.log('取得前 event_data.client.totalCount:', event_data.client.totalCount)
-    console.log('取得前 event_data.client.idleCount:', event_data.client.idleCount)
-    console.log('取得前 event_data.client.waitingCount:', event_data.client.waitingCount)
+    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
     let errmessage = message()
     //データを取りだす
     let bufferData = fs.readFileSync('yoyaku.json')
@@ -25,9 +26,7 @@ export function list(event_data) {
     let basequery = b_eventquery()
 
     event_data.client.connect(function (err, client) {
-        console.log('取得後 event_data.client.totalCount:', event_data.client.totalCount)
-        console.log('取得後 event_data.client.idleCount:', event_data.client.idleCount)
-        console.log('取得後 event_data.client.waitingCount:', event_data.client.waitingCount)
+        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
         if (err) {
             console.log('DBConnectError:', err)
             console.log('function list End▲')
@@ -176,9 +175,11 @@ export function list(event_data) {
                         event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data_message))
                     }
                     client.release();
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
                     console.log('function list End▲')
                 }).catch((e) => {
                     console.error(e.stack)
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
                     console.log('function list End▲')
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, errmessage.errmessage))
                     client.release();
@@ -189,6 +190,8 @@ export function list(event_data) {
 }
 
 export function yoyaku(event_data){
+    console.log('function yoyaku Start▼')
+    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
     let eventcd = event_data.event.postback.data.split('=')[1]
     let kaisaicd = event_data.event.postback.data.split('=')[2]
     let reservetime = event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000'
@@ -198,9 +201,12 @@ export function yoyaku(event_data){
     let setid_query = setidquery()
 
     event_data.client.connect(function (err, client) {
+        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
         if (err) {
-            console.log(err)
+            console.log('DBConnectError:', err)
+            console.log('function yoyaku End▲')
         } else {
+            console.log('DBConnectSuccess')
             client
                 .query(get_query.query_getentry)
                 .then((res) => {
@@ -225,21 +231,30 @@ export function yoyaku(event_data){
                     }
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
                     client.release();
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
+                    console.log('function yoyaku End▲')
                 }).catch((e) => {
                     client.release();
                     console.error(e.stack)
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
+                    console.log('function yoyaku End▲')
                 })
         }
     })
 }
 
 export function a_ninzu(event_data){
+    console.log('function a_ninzu Start▼')
+    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
     let a_query = countquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2])
 
     event_data.client.connect(function (err, client) {
+        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
         if (err) {
-            console.log(err)
+            console.log('DBConnectError:', err)
+            console.log('function a_ninzu End▲')
         } else {
+            console.log('DBConnectSuccess')
             client
                 .query(a_query.query_a)
                 .then(() => {
@@ -258,22 +273,31 @@ export function a_ninzu(event_data){
 
                     event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
                     client.release();
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
+                    console.log('function a_ninzu End▲')
                 }).catch((e) => {
                     client.release();
                     console.error(e.stack)
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
+                    console.log('function a_ninzu End▲')
                 })
         }
     })
 }
 
 export function c_ninzu(event_data){
+    console.log('function c_ninzu Start▼')
+    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
     let post = event_data.event.postback.data.replace(/,/g, '=')
     let c_query = countquery(post.split('=')[1], post.split('=')[2])
     console.log(post)
     event_data.client.connect(function (err, client) {
+        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
         if (err) {
-            console.log(err)
+            console.log('DBConnectError:', err)
+            console.log('function c_ninzu End▲')
         } else {
+            console.log('DBConnectSuccess')
             client
                 .query(c_query.query_c)
                 .then(() => {
@@ -281,10 +305,14 @@ export function c_ninzu(event_data){
 
                     graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'), client, event_data.graphDir)
                     client.release();
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
+                    console.log('function c_ninzu End▲')
 
                 }).catch((e) => {
                     client.release();
                     console.error(e.stack)
+                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
+                    console.log('function c_ninzu End▲')
                 })
         }
     })
