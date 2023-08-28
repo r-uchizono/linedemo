@@ -37,7 +37,7 @@
                         },
                         {
                             "type": "text",
-                            "text": "場所",
+                            "text": "開催場所",
                             "size": "16px"
                         },
                         {
@@ -58,19 +58,13 @@
                         },
                         {
                           "type": "text",
-                          "text": "予約人数",
+                          "text": "来場予定者人数",
                           "size": "16px",
                           "offsetTop": "-30px"
                         },
                         {
                           "type": "text",
-                          "text": "大人",
-                          "size": "16px",
-                          "offsetTop": "-30px"
-                        },
-                        {
-                          "type": "text",
-                          "text": "小人",
+                          "text": "うち小人（小学生以下）",
                           "size": "16px",
                           "offsetTop": "-30px"
                         }

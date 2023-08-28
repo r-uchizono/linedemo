@@ -87,14 +87,12 @@
                     "contents": [
                         {
                             "type": "button",
+                            "style": "link",
+                            "height": "sm",
                             "action": {
-                                "type": "datetimepicker",
-                                "label": "日時を選択してください",
-                                "data": "event_id=100",
-                                "mode": "time",
-                                "initial": "00:00",
-                                "min": "00:00",
-                                "max": "23:59"
+                                "type": "uri",
+                                "label": "予約する",
+                                "uri": "https://liff.line.me/1661543487-qvPZ7elR"
                             },
                             "color": "#FFFFFF"
                         }
