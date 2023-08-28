@@ -1,7 +1,10 @@
 import fs from 'fs'
-import {date_format, graph, time_format} from './common.mjs'
+import {date_format, graph, time_format, time_format_end} from './common.mjs'
 import {message} from './message.mjs'
 import { b_confirmquery, cancelquery, changequery, getquery, u_confirmquery, y_confirmquery } from './query.mjs'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 export function confirm(event_data){
     let errmessage = message()
@@ -63,8 +66,10 @@ export function confirm(event_data){
 
                             let F_SformattedTime = time_format(res.rows[i].first_start_time)
                             let F_EformattedTime = time_format(res.rows[i].first_end_time)
+                            let F_EformattedEndTime = time_format_end(res.rows[i].first_end_time)
                             let S_SformattedTime = time_format(res.rows[i].second_start_time)
                             let S_EformattedTime = time_format(res.rows[i].second_end_time)
+                            let S_EformattedEndTime = time_format_end(res.rows[i].second_end_time)
 
                             let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                             EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
@@ -74,21 +79,21 @@ export function confirm(event_data){
                                 EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
                                 EventJson.footer.contents[1].action.initial = F_SformattedTime.formattedTime
                                 EventJson.footer.contents[1].action.min = F_SformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.max = F_EformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.max = F_EformattedEndTime.formattedTime 
                             }
                             else{
                                 EventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
                                 EventJson.footer.contents[1].action.initial = S_SformattedTime.formattedTime
                                 EventJson.footer.contents[1].action.min = S_SformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.max = S_EformattedTime.formattedTime
+                                EventJson.footer.contents[1].action.max = S_EformattedEndTime.formattedTime
                             }
                             EventJson.body.contents[2].text = '開催場所　' + res.rows[i].place_name
                             let address = res.rows[i].place_address
                             EventJson.body.contents[3].action.label = address
                             EventJson.body.contents[3].action.uri = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address)
                             EventJson.body.contents[4].text = '予約時間　' + result.dataTime
-                            EventJson.body.contents[6].text = '　　大人：' + res.rows[i].reserve_a_count + '名'
-                            EventJson.body.contents[7].text = '　　小人：' + res.rows[i].reserve_c_count + '名'
+                            EventJson.body.contents[5].text = '来場予定者数　' + (Number(res.rows[i].reserve_a_count) + Number(res.rows[i].reserve_c_count)) + '人'
+                            EventJson.body.contents[6].text = 'うち小人（小学生以下） ' + res.rows[i].reserve_c_count + '人'
 
                             EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id  + '=' + result.dataDate
                             EventJson.footer.contents[1].action.data = 'henko=' + res.rows[i].id + '=' + result.dataDate

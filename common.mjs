@@ -149,3 +149,13 @@ export function time_format(time){
         formattedTime: formattedTime
     }
 }
+
+export function time_format_end(time){
+    let datetime = new Date('2023-04-01T' + time)
+    datetime.setMinutes(datetime.getMinutes() - 30)
+    let formattedTime = datetime.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' }) 
+
+    return {
+        formattedTime: formattedTime
+    }
+}

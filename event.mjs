@@ -40,7 +40,7 @@ export function list(event_data) {
 
                     let event_nm = res.rows[0].event_nm
                     
-                    console.log("userquery:", userquery);
+                    console.log("userquery:", userquery); 
                     console.log("userquery.query_user:", userquery.query_user);
                     return Promise.all([client.query(userquery.query_user), event_nm])
 
@@ -109,16 +109,15 @@ export function list(event_data) {
                                         }
                                     }
                                 }
-                                else {
-                                    firstEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + f_result.dataDate
-                                    firstEventJson.footer.contents[0].action.initial = F_SformattedTime.formattedTime
-                                    firstEventJson.footer.contents[0].action.min = F_SformattedTime.formattedTime
-                                    firstEventJson.footer.contents[0].action.max = F_EformattedTime.formattedTime
+                                else
+                                {
+                                    firstEventJson.footer.contents[0].action.uri = "https://liff.line.me/1661543487-qvPZ7elR?event_cd=" + res.rows[i].event_cd + "&event_nm=" + encodeURIComponent(event_nm) + "&kaisaiti_cd=" + res.rows[i].kaisaiti_cd + "&kaisaiti_nm=" + encodeURIComponent(res.rows[i].kaisaiti_nm) + "&kaisaiDay=" + encodeURIComponent(res.rows[i].first_day) + "&kaisaiStartTime=" + res.rows[i].first_start_time + "&kaisaiEndTime=" + res.rows[i].first_end_time
                                 }
-
+                                                                    
                                 let f_file = res.rows[i].kaisaiti_cd + f_result.dataDate.replace(/\//g, '_')
 
-                                firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
+                                firstEventJson.hero.url = 'https://' + process.env.HOST_NAME + '/' + f_file + '.png?xxx=' + random_data.file 
+                                // firstEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + f_file + '.png?xxx=' + random_data.file 
 
                                 data[0].contents.contents.push({ ...firstEventJson })
                             }
@@ -147,16 +146,15 @@ export function list(event_data) {
                                             }
                                         }
                                     }
-                                    else {
-                                        secondEventJson.footer.contents[0].action.data = 'event_id=' + res.rows[i].event_cd + '=' + res.rows[i].kaisaiti_cd + '=' + s_result.dataDate
-                                        secondEventJson.footer.contents[0].action.initial = S_SformattedTime.formattedTime
-                                        secondEventJson.footer.contents[0].action.min = S_SformattedTime.formattedTime
-                                        secondEventJson.footer.contents[0].action.max = S_EformattedTime.formattedTime
+                                    else
+                                    {
+                                        secondEventJson.footer.contents[0].action.uri = "https://liff.line.me/1661543487-qvPZ7elR?event_cd=" + res.rows[i].event_cd + "&event_nm=" + encodeURIComponent(event_nm) + "&kaisaiti_cd=" + res.rows[i].kaisaiti_cd + "&kaisaiti_nm=" + encodeURIComponent(res.rows[i].kaisaiti_nm) + "&kaisaiDay=" + encodeURIComponent(res.rows[i].second_day) + "&kaisaiStartTime=" + res.rows[i].second_start_time + "&kaisaiEndTime=" + res.rows[i].second_end_time
                                     }
-
+                                    
                                     let s_file = res.rows[i].kaisaiti_cd + s_result.dataDate.replace(/\//g, '_')
 
-                                    secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
+                                    secondEventJson.hero.url = 'https://' + process.env.HOST_NAME + '/' + s_file + '.png?xxx=' + random_data.file
+                                    // secondEventJson.hero.url = 'https://' + event_data.req.get('host') + '/' + s_file + '.png?xxx=' + random_data.file
                                     data[0].contents.contents.push({ ...secondEventJson })
                                     }
                             }
@@ -187,137 +185,4 @@ export function list(event_data) {
                 
         }
     })
-}
-
-export function yoyaku(event_data){
-    console.log('function yoyaku Start▼')
-    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-    let eventcd = event_data.event.postback.data.split('=')[1]
-    let kaisaicd = event_data.event.postback.data.split('=')[2]
-    let reservetime = event_data.event.postback.data.split('=')[3] + ' ' + event_data.event.postback.params.time + ':00.000'
-    // DB登録処理
-    let get_query = getentryquery(event_data.event.source.userId, eventcd)
-
-    let setid_query = setidquery()
-
-    event_data.client.connect(function (err, client) {
-        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-        if (err) {
-            console.log('DBConnectError:', err)
-            console.log('function yoyaku End▲')
-        } else {
-            console.log('DBConnectSuccess')
-            client
-                .query(get_query.query_getentry)
-                .then((res) => {
-                    let entry_query = entryquery(eventcd, kaisaicd, event_data.event.source.userId, res.rows[0].user_nm, res.rows[0].tcd, res.rows[0].tname, res.rows[0].incd, res.rows[0].inname, reservetime)
-                    
-                    return client.query(entry_query.query_entry)
-                }).then(() => {
-                    console.log('Data Inserted.')
-
-                    return client.query(setid_query.query_id)
-                }).then((res) => {
-                    //データを取りだす
-                    let bufferData = fs.readFileSync('a_ninzu.json')
-                    // データを文字列に変換
-                    let dataJSON = bufferData.toString()
-                    //JSONのデータをJavascriptのオブジェクトに
-                    let data = JSON.parse(dataJSON)
-
-                    var post = event_data.event.postback.data.split('=')
-                    for (let i = 1; i < 11; i++) {
-                        data.contents.body.contents[i].action.data = 'a_ninzu=' + i + '=' + res.rows[0].setval + '=' + post.slice(1)
-                    }
-                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
-                    client.release();
-                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-                    console.log('function yoyaku End▲')
-                }).catch((e) => {
-                    client.release();
-                    console.error(e.stack)
-                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-                    console.log('function yoyaku End▲')
-                })
-        }
-    })
-}
-
-export function a_ninzu(event_data){
-    console.log('function a_ninzu Start▼')
-    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-    let a_query = countquery(event_data.event.postback.data.split('=')[1], event_data.event.postback.data.split('=')[2])
-
-    event_data.client.connect(function (err, client) {
-        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-        if (err) {
-            console.log('DBConnectError:', err)
-            console.log('function a_ninzu End▲')
-        } else {
-            console.log('DBConnectSuccess')
-            client
-                .query(a_query.query_a)
-                .then(() => {
-                    console.log('Data Updated.')
-                    //データを取りだす
-                    let bufferData = fs.readFileSync('c_ninzu.json')
-                    // データを文字列に変換
-                    let dataJSON = bufferData.toString()
-                    //JSONのデータをJavascriptのオブジェクトに
-                    let data = JSON.parse(dataJSON)
-
-                    var post = event_data.event.postback.data.split('=')
-                    for (let i = 0; i < 10; i++) {
-                        data.contents.body.contents[i + 1].action.data = 'c_ninzu=' + i + '=' + post.slice(2)
-                    }
-
-                    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, data))
-                    client.release();
-                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-                    console.log('function a_ninzu End▲')
-                }).catch((e) => {
-                    client.release();
-                    console.error(e.stack)
-                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-                    console.log('function a_ninzu End▲')
-                })
-        }
-    })
-}
-
-export function c_ninzu(event_data){
-    console.log('function c_ninzu Start▼')
-    console.log('接続前 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-    let post = event_data.event.postback.data.replace(/,/g, '=')
-    let c_query = countquery(post.split('=')[1], post.split('=')[2])
-    console.log(post)
-    event_data.client.connect(function (err, client) {
-        console.log('接続後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-        if (err) {
-            console.log('DBConnectError:', err)
-            console.log('function c_ninzu End▲')
-        } else {
-            console.log('DBConnectSuccess')
-            client
-                .query(c_query.query_c)
-                .then(() => {
-                    console.log('Data Updated.')
-
-                    graph(post.split('=')[3], post.split('=')[4], post.split('=')[5].replace(/\//g, '_'), client, event_data.graphDir)
-                    client.release();
-                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-                    console.log('function c_ninzu End▲')
-
-                }).catch((e) => {
-                    client.release();
-                    console.error(e.stack)
-                    console.log('切断後 totalCount:' + event_data.client.totalCount + ' idleCount:' + event_data.client.idleCount + ' waitingCount:' + event_data.client.waitingCount)
-                    console.log('function c_ninzu End▲')
-                })
-        }
-    })
-
-    let eventmessage = message()
-
-    event_data.events_processed.push(event_data.bot.replyMessage(event_data.event.replyToken, eventmessage.event_message))    
 }

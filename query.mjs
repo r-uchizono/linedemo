@@ -134,12 +134,12 @@ export function getentryquery(argument, argument2){
     }
 }
 
-export function entryquery(argument, argument2, argument3, argument4, argument5, argument6, argument7, argument8, argument9){
+export function entryquery(argument, argument2, argument3, argument4, argument5, argument6, argument7, argument8, argument9, argument10, argument11){
     let query = {
         text: 'INSERT' + 
-            '  INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, user_nm, tokuisaki_cd, tokuisaki_nm, tanto_cd, tanto_nm, reserve_time) ' +
-            'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-        values: [argument, argument2, argument3, argument4, argument5, argument6, argument7, argument8, argument9],
+            '  INTO t_yoyaku(event_cd, kaisaiti_cd, user_id, user_nm, tokuisaki_cd, tokuisaki_nm, tanto_cd, tanto_nm, reserve_time, reserve_a_count, reserve_c_count) ' +
+            'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
+        values: [argument, argument2, argument3, argument4, argument5, argument6, argument7, argument8, argument9, argument10, argument11],
     }
     return{
         query_entry : query

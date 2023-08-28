@@ -8,11 +8,12 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { createHash } from 'crypto'
 
-import { list, yoyaku, a_ninzu, c_ninzu } from './event.mjs'
+import { list } from './event.mjs'
 import { confirm, cancel, change } from './confirm.mjs'
 import { id } from './id.mjs'
 import { info } from './info.mjs'
 import { held } from './held.mjs'
+import { getentryquery, entryquery } from './query.mjs'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
@@ -35,13 +36,8 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 //publicとgraphはlanchにもたせる
-
-console.log('path:', path);
 const __filename = fileURLToPath(import.meta.url)
-console.log('__filename:', __filename);
-console.log('path.dirname:', path.dirname);
 const __dirname = path.dirname(__filename)
-console.log('__dirname:', __dirname);
 const imageDir = path.join(__dirname, process.env.QR_FILE)
 if (!fs.existsSync(imageDir)) {
   fs.mkdirSync(imageDir)
@@ -131,23 +127,8 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
       }
       // この処理の対象をイベントタイプがポストバックだった場合。
     } else if (event.type == "postback") {
-      // 予約テーブルへの挿入
-      if (event.postback.data.split('=')[0] == "event_id") {
-
-        yoyaku(event_data)
-      }
-      //　大人人数登録
-      else if (event.postback.data.split('=')[0] == "a_ninzu") {
-
-        a_ninzu(event_data)
-      }
-      //　小人人数登録
-      else if (event.postback.data.split('=')[0] == "c_ninzu") {
-
-        c_ninzu(event_data)
-      }
       //　予約取消
-      else if (event.postback.data.split('=')[0] == "torikesi") {
+      if (event.postback.data.split('=')[0] == "torikesi") {
 
         cancel(event_data)
       }
@@ -176,6 +157,8 @@ app.post('/koshin', (req, res) => updateUserInfo(req, res));
 app.post('/getTantoInfo', (req, res) => getTantoInfo(req, res));
 app.post('/koshinTanto', (req, res) => updateTantoInfo(req, res));
 app.post('/getTantoLineId', (req, res) => getTantoLineInfo(req, res));
+app.post('/getYoyakuUserInfo', (req, res) => getYoyakuUserInfo(req, res));
+app.post('/addYoyakuInfo', (req, res) => addYoyakuInfo(req, res));
 
 const getUserInfo = (req, res) => {
   const data = req.body;
@@ -349,4 +332,61 @@ const updateTantoInfo = (req, res) => {
       console.log("updateTantoInfo End▲");
       res.status(200).send({ status: "OK" });
     }).catch(e => console.log(e));
+}
+
+const getYoyakuUserInfo = (req, res) => {
+  const bodyData = req.body;
+  const postData = `id_token=${bodyData.id_token}&client_id=${process.env.LIFF_LOGIN}`;
+  fetch('https://api.line.me/oauth2/v2.1/verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: postData
+  }).then(response => {
+    response.json().then(json => {
+      let lineId = createHash('sha256').update(json.sub).digest('hex');
+      const query = getentryquery(lineId, bodyData.event_cd)
+      client.query(query.query_getentry)
+        .then(data => {
+          let obj;
+          if (data.rows.length > 0) {
+            console.log("GetData Succes");
+            obj = {
+              user_id: lineId,
+              user_nm: data.rows[0].user_nm,
+              tokuisaki_cd: data.rows[0].tcd,
+              tokuisaki_nm: data.rows[0].tname,
+              tanto_cd: data.rows[0].incd,
+              tanto_nm: data.rows[0].inname,
+            }
+          } else {
+            console.log("GetData failed");
+            obj = {
+              user_id: lineId,
+              user_nm: "",
+              tokuisaki_cd: "",
+              tokuisaki_nm: "",
+              tanto_cd: "",
+              tanto_nm: "",
+            }
+          }
+
+          res.status(200).send(obj);
+        }).catch(e => console.log(e));
+    });
+  }).catch(e => console.log(e));
+}
+
+const addYoyakuInfo = (req, res) => {
+  const bodyData = req.body;
+
+  const query = entryquery(bodyData.event_cd, bodyData.kaisaicd, bodyData.user_id, bodyData.user_nm, bodyData.tcd, bodyData.tname, bodyData.incd, bodyData.inname, bodyData.reservetime, bodyData.aCount, bodyData.cCount);
+  client.query(query.query_entry)
+    .then(() => {
+      res.status(200).send({ status: "OK" });
+    }).catch((e) => {
+      console.log(e)
+      res.status(500).send({ status: "NG" })
+    });
 }

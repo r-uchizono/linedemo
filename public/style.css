@@ -23,3 +23,24 @@
 .hiddenItems {
     display: none;
 }
+
+input[type="number"] {
+  width: 100px;
+}
+
+input + span {
+  padding-right: 30px;
+}
+
+input:invalid + span::after {
+  /*position: absolute;*/
+  content: "\4e88\7d04\53ef\80fd\6642\9593\5916\3067\3059";
+  color: red;
+  padding-left: 5px;
+}
+
+input:valid + span::after {
+  position: absolute;
+  content: "";
+  padding-left: 5px;
+}
