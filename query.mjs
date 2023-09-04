@@ -266,6 +266,20 @@ export function changequery(argument, argument2){
     }
 }
 
+export function yoyakuChangequery(argument, argument2, argument3, argument4){
+    let query = {
+        text: 'UPDATE t_yoyaku' +
+            '   SET reserve_time = $1' +
+            '     , reserve_a_count = $2' +
+            '     , reserve_c_count = $3' +
+            ' WHERE id = $4',
+        values: [argument, argument2, argument3, argument4],
+    }
+    return{
+        query_yoyakuChange: query
+    }
+}
+
 // 会員IDメッセージ
 export function lifetimequery(argument, argument2){
     let query = {

@@ -87,14 +87,12 @@
                         },
                         {
                             "type": "button",
+                            "style": "link",
+                            "height": "sm",
                             "action": {
-                                "type": "datetimepicker",
-                                "label": "時間変更",
-                                "data": "henko=id",
-                                "mode": "time",
-                                "initial": "00:00",
-                                "min": "00:00",
-                                "max": "23:59"
+                                "type": "uri",
+                                "label": "予約変更",
+                                "uri": "https://liff.line.me/1661543487-qvPZ7elR"
                             },
                             "color": "#FFFFFF"
                         }

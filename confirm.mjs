@@ -66,10 +66,8 @@ export function confirm(event_data){
 
                             let F_SformattedTime = time_format(res.rows[i].first_start_time)
                             let F_EformattedTime = time_format(res.rows[i].first_end_time)
-                            let F_EformattedEndTime = time_format_end(res.rows[i].first_end_time)
                             let S_SformattedTime = time_format(res.rows[i].second_start_time)
                             let S_EformattedTime = time_format(res.rows[i].second_end_time)
-                            let S_EformattedEndTime = time_format_end(res.rows[i].second_end_time)
 
                             let EventJson = JSON.parse(dataJSON)[0].contents.contents[0]
                             EventJson.header.contents[0].text = res.rows[i].event_nm + '/' + res.rows[i].kaisaiti_nm + '会場'
@@ -77,15 +75,9 @@ export function confirm(event_data){
 
                             if(result.dataDate == f_result.dataDate){
                                 EventJson.body.contents[1].text = '開催時間　' + F_SformattedTime.formattedTime + '～' + F_EformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.initial = F_SformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.min = F_SformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.max = F_EformattedEndTime.formattedTime 
                             }
                             else{
                                 EventJson.body.contents[1].text = '開催時間　' + S_SformattedTime.formattedTime + '～' + S_EformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.initial = S_SformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.min = S_SformattedTime.formattedTime
-                                EventJson.footer.contents[1].action.max = S_EformattedEndTime.formattedTime
                             }
                             EventJson.body.contents[2].text = '開催場所　' + res.rows[i].place_name
                             let address = res.rows[i].place_address
@@ -96,7 +88,13 @@ export function confirm(event_data){
                             EventJson.body.contents[6].text = 'うち小人（小学生以下） ' + res.rows[i].reserve_c_count + '人'
 
                             EventJson.footer.contents[0].action.data = 'torikesi=' + res.rows[i].id  + '=' + result.dataDate
-                            EventJson.footer.contents[1].action.data = 'henko=' + res.rows[i].id + '=' + result.dataDate
+                            if(result.dataDate == f_result.dataDate){
+                              EventJson.footer.contents[1].action.uri = "https://liff.line.me/1661543487-qvPZ7elR?yoyaku_id=" + res.rows[i].id + "&event_nm=" + encodeURIComponent(res.rows[i].event_nm) + "&kaisaiti_nm=" + encodeURIComponent(res.rows[i].kaisaiti_nm) + "&kaisaiDay=" + encodeURIComponent(res.rows[i].first_day) + "&kaisaiStartTime=" + res.rows[i].first_start_time + "&kaisaiEndTime=" + res.rows[i].first_end_time
+                            }
+                            else{
+                              EventJson.footer.contents[1].action.uri = "https://liff.line.me/1661543487-qvPZ7elR?yoyaku_id=" + res.rows[i].id + "&event_nm=" + encodeURIComponent(res.rows[i].event_nm) + "&kaisaiti_nm=" + encodeURIComponent(res.rows[i].kaisaiti_nm) + "&kaisaiDay=" + encodeURIComponent(res.rows[i].second_day) + "&kaisaiStartTime=" + res.rows[i].second_start_time + "&kaisaiEndTime=" + res.rows[i].second_end_time
+                            }
+                            
 
                             data[0].contents.contents.push({ ...EventJson })
                         }

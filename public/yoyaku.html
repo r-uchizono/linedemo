@@ -49,13 +49,15 @@
                                     <label class="form-label">開催地名 </label>
                                     <input type="text" class="form-control" id="kaisai_nm" name="kaisai_nm" readonly="readonly">
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">予約時間 <span class="badge badge-danger">必須</span></label>
-                                    <input type="time" class="form-control" id="reserveTime" name="reserveTime" required="required"><span class="validity"></span>
+                                <div class="row">
+                                    <label class="col-12 form-label">予約時間 <span class="badge badge-danger">必須</span></label>
+                                    <input type="date" class="col-3 ml-3 mb-3 form-control h-100" id="kaisaiDateDisplay" name="kaisaiDateDisplay" readonly="readonly" disabled>
+                                    <input type="time" class="col-3 ml-2 mb-3 form-control h-100" id="reserveTime" name="reserveTime" required="required">
+                                    <!--<span class="validity"></span>-->
                                 </div>
                                 <div class="row">
-                                    <label class="col-4 mb-3 form-label">大人 <span class="badge badge-danger">必須</span></label>
-                                    <label class="col-6 mb-3 form-label">小人（小学生以下） <span class="badge badge-danger">必須</span></label>
+                                    <label class="col-4 form-label">大人 <span class="badge badge-danger">必須</span></label>
+                                    <label class="col-8 form-label">小人（小学生以下） <span class="badge badge-danger">必須</span></label>
                                     <input type="number" class="col-2 mb-3 ml-3 form-control" id="aCount" name="aCount" style="max-width:80px" min="0" max="99" required="required">
                                     <input type="number" class="col-2 mb-3 offset-2 form-control" id="cCount" name="cCount" style="max-width:80px" min="0" max="99" required="required">
                                 </div>
@@ -104,6 +106,10 @@
                                     <div class="mb-3">
                                         <label class="form-label">開催時間 終了</label>
                                         <input type="text" class="form-control" id="kaisaiEndTime" name="kaisaiEndTime">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">予約ID</label>
+                                        <input type="text" class="form-control" id="yoyakuId" name="yoyakuId">
                                     </div>
                                 </div>
                                 <button type="submit" id="toroku_btn" class="btn btn-primary">登録</button>

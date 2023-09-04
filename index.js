@@ -13,7 +13,7 @@ import { confirm, cancel, change } from './confirm.mjs'
 import { id } from './id.mjs'
 import { info } from './info.mjs'
 import { held } from './held.mjs'
-import { getentryquery, entryquery } from './query.mjs'
+import { getentryquery, entryquery, getquery, yoyakuChangequery } from './query.mjs'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
@@ -132,11 +132,6 @@ app.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
 
         cancel(event_data)
       }
-      //  予約日時変更
-      else if (event.postback.data.split('=')[0] == "henko") {
-
-        change(event_data)
-      }
     }
     else {
       return
@@ -159,8 +154,11 @@ app.post('/koshinTanto', (req, res) => updateTantoInfo(req, res));
 app.post('/getTantoLineId', (req, res) => getTantoLineInfo(req, res));
 app.post('/getYoyakuUserInfo', (req, res) => getYoyakuUserInfo(req, res));
 app.post('/addYoyakuInfo', (req, res) => addYoyakuInfo(req, res));
+app.post('/getYoyakuInfo', (req, res) => getYoyakuInfo(req, res));
+app.post('/updateYoyakuInfo', (req, res) => updateYoyakuInfo(req, res));
 
 const getUserInfo = (req, res) => {
+  console.log("getUserInfo Strat▼");
   const data = req.body;
   const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
   console.log('postData:', postData);
@@ -206,10 +204,15 @@ const getUserInfo = (req, res) => {
             }
           }
 
+          console.log("getUserInfo End▲");
           res.status(200).send(obj);
         }).catch(e => console.log(e));
     });
-  }).catch(e => console.log(e));
+  }).catch((e) => {
+    console.log(e)
+    console.log("getUserInfo End▲");
+    res.status(500).send({ status: "NG" });
+  });
 }
 
 const addUserInfo = (req, res) => {
@@ -241,7 +244,11 @@ const addUserInfo = (req, res) => {
     .then(() => {
       console.log("addUserInfo End▲");
       res.status(200).send({ status: "OK" });
-    }).catch(e => console.log(e));
+    }).catch((e) => {
+      console.log(e)
+      console.log("addUserInfo End▲");
+      res.status(500).send({ status: "NG" });
+    });
 }
 
 const updateUserInfo = (req, res) => {
@@ -262,10 +269,15 @@ const updateUserInfo = (req, res) => {
     .then(() => {
       console.log("updateUserInfo End▲");
       res.status(200).send({ status: "OK" });
-    }).catch(e => console.log(e));
+    }).catch((e) => {
+      console.log(e)
+      console.log("updateUserInfo End▲");
+      res.status(500).send({ status: "NG" });
+    });
 }
 
 const getTantoLineInfo = (req, res) => {
+  console.log("getTantoLineInfo Strat▼");
   const data = req.body;
   const postData = `id_token=${data.id_token}&client_id=${process.env.LIFF_LOGIN}`;
   console.log('postData:', postData);
@@ -283,12 +295,18 @@ const getTantoLineInfo = (req, res) => {
       obj = {
         lineId: lineId,
       }
+      console.log("getTantoLineInfo End▲");
       res.status(200).send(obj);
     });
-  }).catch(e => console.log(e));
+  }).catch((e) => {
+    console.log(e)
+    console.log("getTantoLineInfo End▲");
+    res.status(500).send({ status: "NG" });
+  });
 }
 
 const getTantoInfo = (req, res) => {
+  console.log("getTantoInfo Strat▼");
   const data = req.body;
   console.log("getTantoInfo data:", data);
   const query = {
@@ -313,8 +331,13 @@ const getTantoInfo = (req, res) => {
         }
       }
 
+      console.log("getTantoInfo End▲");
       res.status(200).send(obj);
-    }).catch(e => console.log(e));
+    }).catch((e) => {
+      console.log(e)
+      console.log("getTantoInfo End▲");
+      res.status(500).send({ status: "NG" });
+    });
 }
 
 const updateTantoInfo = (req, res) => {
@@ -331,10 +354,16 @@ const updateTantoInfo = (req, res) => {
     .then(() => {
       console.log("updateTantoInfo End▲");
       res.status(200).send({ status: "OK" });
-    }).catch(e => console.log(e));
+    }).catch((e) => {
+      console.log(e)
+      console.log("updateTantoInfo End▲");
+      res.status(500).send({ status: "NG" });
+    });
 }
 
+// 予約情報画面 ユーザー情報取得
 const getYoyakuUserInfo = (req, res) => {
+  console.log("getYoyakuUserInfo Strat▼");
   const bodyData = req.body;
   const postData = `id_token=${bodyData.id_token}&client_id=${process.env.LIFF_LOGIN}`;
   fetch('https://api.line.me/oauth2/v2.1/verify', {
@@ -372,21 +401,89 @@ const getYoyakuUserInfo = (req, res) => {
             }
           }
 
+          console.log("getYoyakuUserInfo End▲");
           res.status(200).send(obj);
-        }).catch(e => console.log(e));
+        }).catch((e) => {
+          console.log(e)
+          console.log("getYoyakuUserInfo End▲");
+          res.status(500).send({ status: "NG" });
+        });
     });
-  }).catch(e => console.log(e));
+  }).catch((e) => {
+    console.log(e)
+    console.log("getYoyakuUserInfo End▲");
+    res.status(500).send({ status: "NG" });
+  });
 }
 
+// 予約情報取得
+const getYoyakuInfo = (req, res) => {
+  console.log("getYoyakuInfo Strat▼");
+  const bodyData = req.body;
+
+  const query = getquery(bodyData.yoyaku_id);
+  client.query(query.query_get)
+    .then(data => {
+      let obj;
+      if (data.rows.length > 0) {
+        console.log("GetData Succes");
+        obj = {
+          event_cd: data.rows[0].event_cd,
+          kaisaiti_cd: data.rows[0].kaisaiti_cd,
+          reserve_a_count: data.rows[0].reserve_a_count,
+          reserve_c_count: data.rows[0].reserve_c_count,
+          reserve_time: data.rows[0].reserve_time
+        }
+      } else {
+        console.log("GetData failed");
+        obj = {
+          event_cd: "",
+          kaisaiti_cd: "",
+          reserve_a_count: "",
+          reserve_c_count: "",
+          reserve_time: ""
+        }
+      }
+
+      console.log("getYoyakuInfo End▲");
+      res.status(200).send(obj);
+    }).catch((e) => {
+      console.log(e)
+      console.log("getYoyakuInfo End▲");
+      res.status(500).send({ status: "NG" });
+    });
+}
+
+// 予約追加
 const addYoyakuInfo = (req, res) => {
+  console.log("addYoyakuInfo Strat▼");
   const bodyData = req.body;
 
   const query = entryquery(bodyData.event_cd, bodyData.kaisaicd, bodyData.user_id, bodyData.user_nm, bodyData.tcd, bodyData.tname, bodyData.incd, bodyData.inname, bodyData.reservetime, bodyData.aCount, bodyData.cCount);
   client.query(query.query_entry)
     .then(() => {
+      console.log("addYoyakuInfo End▲");
       res.status(200).send({ status: "OK" });
     }).catch((e) => {
       console.log(e)
+      console.log("addYoyakuInfo End▲");
+      res.status(500).send({ status: "NG" })
+    });
+}
+
+// 予約更新
+const updateYoyakuInfo = (req, res) => {
+  console.log("updateYoyakuInfo Strat▼");
+  const bodyData = req.body;
+
+  const query = yoyakuChangequery(bodyData.reservetime, bodyData.aCount, bodyData.cCount, bodyData.yoyaku_id);
+  client.query(query.query_yoyakuChange)
+    .then(() => {
+      console.log("updateYoyakuInfo End▲");
+      res.status(200).send({ status: "OK" });
+    }).catch((e) => {
+      console.log(e)
+      console.log("updateYoyakuInfo End▲");
       res.status(500).send({ status: "NG" })
     });
 }
